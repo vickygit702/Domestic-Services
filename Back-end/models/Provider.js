@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const userSchema = new Schema({
+const providerSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -24,19 +24,26 @@ const userSchema = new Schema({
     type: "Point",
     coordinates: [Number, Number],
   },
-  userType: {
-    type: String,
-    default: "Normal",
+  worksKnown: {
+    type: Array,
+    default: [],
   },
-
-  isVerified: {
-    type: Boolean,
-    default: false,
+  experience: {
+    type: Number,
+    default: 0,
   },
-  isAdmin: {
+  ratingAvg: {
+    type: Number,
+    default: 0,
+  },
+  jobsCompleted: {
+    type: Number,
+    default: 0,
+  },
+  isPro: {
     type: Boolean,
     default: false,
   },
 });
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("Provider", providerSchema);
