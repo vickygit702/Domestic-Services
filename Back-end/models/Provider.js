@@ -13,21 +13,15 @@ const providerSchema = new Schema({
   },
   password: {
     type: String,
-    unique: true,
+
     required: true,
   },
   contact: {
     type: Number,
     required: true,
   },
-  location: {
-    type: "Point",
-    coordinates: [Number, Number],
-  },
-  worksKnown: {
-    type: Array,
-    default: [],
-  },
+  location: { type: { lat: Number, lng: Number }, required: true },
+  servicesOffered: [{ type: String, required: true }],
   experience: {
     type: Number,
     default: 0,

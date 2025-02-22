@@ -14,26 +14,15 @@ const userSchema = new Schema({
   password: {
     type: String,
     unique: true,
-    required: true,
   },
   contact: {
     type: Number,
     required: true,
   },
-  location: {
-    type: "Point",
-    coordinates: [Number, Number],
-  },
-  userType: {
-    type: String,
-    default: "Normal",
-  },
+  location: { type: { lat: Number, lng: Number }, required: true },
+  userType: { type: String, enum: ["normal", "premium"], default: "normal" },
 
   isVerified: {
-    type: Boolean,
-    default: false,
-  },
-  isAdmin: {
     type: Boolean,
     default: false,
   },

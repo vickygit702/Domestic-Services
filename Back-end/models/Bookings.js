@@ -1,30 +1,30 @@
 const mongoose = require("mongoose");
-const { Schema } = mongoose;
 
-const bookingSchema = new Schema({
-  user_id: {
-    type: ObjectId,
+const bookingSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  providerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Provider",
+    required: true,
   },
-  provider_id: {
-    type: ObjectId,
+  serviceId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Services",
+    required: true,
   },
-  service_id: {
-    type: ObjectId,
-  },
+  bookingDate: { type: Date, default: Date.now },
   status: {
     type: String,
-    default: "Pending",
+    enum: ["pending", "confirmed", "completed", "cancelled"],
+    default: "pending",
   },
   isUrgent: {
     type: Boolean,
     default: false,
   },
-  totalPrice: {
-    type: Number,
-  },
-  date: {
-    type: Date,
-    default: Date.now,
+  price: {
+    type: mongoose.Types.Decimal128,
+    required: true,
   },
 });
 
