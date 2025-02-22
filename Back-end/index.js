@@ -2,12 +2,14 @@ const express = require("express");
 const { connectToDB } = require("./database/db");
 const authRoutes = require("./routes/Auth");
 const adminRoutes = require("./routes/admin/AdminPage");
+const userRoutes = require("./routes/user/userPage");
 
 const server = express();
 
 server.use(express.json());
 server.use("/auth/api", authRoutes);
 server.use("/admin", adminRoutes);
+server.use("/user/:id", userRoutes);
 
 server.get("/", (req, res) => {
   res.status(200).json({ message: " server is running" });
