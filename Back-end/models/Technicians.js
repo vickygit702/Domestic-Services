@@ -1,34 +1,33 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const providerSchema = new Schema({
-  name: {
+const technicianSchema = new Schema({
+  tech_name: {
     type: String,
     required: true,
   },
-  email: {
+  tech_email: {
     type: String,
     unique: true,
     required: true,
   },
-  password: {
+  tech_password: {
     type: String,
 
     required: true,
   },
-  contact: {
+  tech_contact: {
     type: Number,
     required: true,
   },
-  location: { type: { lat: Number, lng: Number }, required: true },
-  servicesOffered: [{ type: String, required: true }],
-  experience: {
+
+  tech_location: { type: { lat: Number, lng: Number }, required: true },
+  worksKnown: [{ type: String, required: true }],
+  tech_experience: {
     type: Number,
-    default: 0,
   },
-  ratingAvg: {
+  tech_ratingAvg: {
     type: Number,
-    default: 0,
   },
   jobsCompleted: {
     type: Number,
@@ -38,6 +37,12 @@ const providerSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  bookedSlots: [
+    {
+      startTime: Date,
+      endTime: Date,
+    },
+  ],
 });
 
-module.exports = mongoose.model("Provider", providerSchema);
+module.exports = mongoose.model("Technicians", technicianSchema);

@@ -5,7 +5,8 @@ const authController = require("../controllers/Auth");
 router
   .post("/signupUser", authController.signupUser)
   .post("/loginUser", authController.loginUser)
-  .post("/signupProvider", authController.signupProvider)
-  .post("/loginProvider", authController.loginProvider);
+
+  .post("/signupTechnician", authController.signupTechnician)
+  .post("/loginTechnician", authController.loginTechnician);
 
 module.exports = router;

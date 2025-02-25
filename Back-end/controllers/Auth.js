@@ -1,5 +1,5 @@
 const User = require("../models/User");
-const Provider = require("../models/Provider");
+const Technician = require("../models/Technicians");
 
 exports.signupUser = async (req, res) => {
   try {
@@ -40,18 +40,20 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-exports.signupProvider = async (req, res) => {
+exports.signupTechnician = async (req, res) => {
   try {
-    const existingProvider = await Provider.findOne({ email: req.body.email });
+    const existingTechnician = await Technician.findOne({
+      email: req.body.email,
+    });
 
     // if user already exists
-    if (existingProvider) {
+    if (existingTechnician) {
       return res.status(400).json({ message: "Provider already exists" });
     }
     // create new user
-    const createdProvider = new Provider(req.body);
-    await createdProvider.save();
-    res.status(201).json({ createdProvider, message: "user signup success" });
+    const newTechnician = new Technician(req.body);
+    await newTechnician.save();
+    res.status(201).json({ newTechnician, message: "user signup success" });
   } catch (error) {
     console.log(error);
     res
@@ -59,23 +61,25 @@ exports.signupProvider = async (req, res) => {
       .json({ message: "Error occured during signup, please try again later" });
   }
 };
-exports.loginProvider = async (req, res) => {
+exports.loginTechnician = async (req, res) => {
   try {
-    const existingProvider = await Provider.findOne({ email: req.body.email });
-    if (!existingProvider) {
+    const existingTechnician = await Technician.findOne({
+      email: req.body.email,
+    });
+    if (!existingTechnician) {
       return res.status(404).json({ message: "Provider not found" });
     }
     // if user already exists
-    if (existingProvider.password === req.body.password) {
+    if (existingTechnician.password === req.body.password) {
       return res
         .status(200)
-        .json({ existingProvider, message: "Login success.." });
+        .json({ existingTechnician, message: "Login success.." });
     } else {
       return res.status(400).json({ message: "Password is incorrect" });
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+    return res.status(500).json({
       message: "Error occured during logging in, please try again later",
     });
   }

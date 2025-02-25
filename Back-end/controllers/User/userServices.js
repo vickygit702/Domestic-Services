@@ -1,6 +1,7 @@
 const Services = require("../../models/Services");
 const User = require("../../models/User");
 const Bookings = require("../../models/Bookings");
+
 exports.updateUser = async (req, res) => {
   try {
     await User.findByIdAndUpdate(req.params.id, req.body);
@@ -41,7 +42,7 @@ exports.allServices = async (req, res) => {
 };
 exports.myBookings = async (req, res) => {
   try {
-    const user = await Bookings.find({ userId: req.params.id });
+    const user = await Bookings.find({ user_Id: req.params.id });
     res.status(200).json({ user, message: "Bookings fetched successfully" });
   } catch (error) {
     console.log(error);
