@@ -17,13 +17,16 @@ exports.bookService = async (req, res) => {
       return res.status(400).json({ message: "No technicians available" });
     }
 
+    const formattedUserLocation = [userLocation.lng, userLocation.lat];
+    const formattedTechnician = availableTechnicians.map((p) => ({
+      id: p._id,
+      location: [p.location.lng, p.location.lat],
+    }));
+
     // Step 2: Call AI model to find the nearest technician
     const response = await axios.post("http://127.0.0.1:5000/find-provider", {
-      userLocation,
-      providers: availableTechnicians.map((tech) => ({
-        id: tech._id,
-        location: tech.location,
-      })),
+      formattedUserLocation,
+      formattedTechnician,
     });
 
     const nearestTechnicianId = response.data.nearestProviderId;
@@ -44,7 +47,7 @@ exports.bookService = async (req, res) => {
       bookingDate,
       duration,
       endDate,
-      price: selectedTechnician.baseRate * duration, // Adjust pricing logic
+      price: selectedTechnician.baseRate * duration,
       status: "Confirmed",
     });
 
