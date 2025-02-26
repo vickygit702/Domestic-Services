@@ -12,8 +12,8 @@ const server = express();
 server.use(express.json());
 server.use("/auth/api", authRoutes);
 server.use("/admin", adminRoutes);
-server.use("/service/booking", bookingRoute);
 server.use("/user", userRoutes);
+server.use("/service/booking", bookingRoute);
 
 server.get("/", (req, res) => {
   res.status(200).json({ message: " server is running" });

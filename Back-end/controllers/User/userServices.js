@@ -14,19 +14,6 @@ exports.updateUser = async (req, res) => {
   }
 };
 
-exports.setPremiumUser = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    user.userType = "premium";
-    await user.save();
-    res.status(200).json({ message: "User updated successfully" });
-  } catch (error) {
-    console.log(error);
-    res
-      .status(500)
-      .json({ message: "Error occured in server please try again later" });
-  }
-};
 exports.allServices = async (req, res) => {
   try {
     const servicesList = await Services.find();

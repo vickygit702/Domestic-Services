@@ -28,6 +28,7 @@ const technicianSchema = new Schema({
   },
   tech_ratingAvg: {
     type: Number,
+    default: 0,
   },
   jobsCompleted: {
     type: Number,

@@ -3,7 +3,7 @@ const Technician = require("../models/Technicians");
 
 exports.signupUser = async (req, res) => {
   try {
-    const existingUser = await User.findOne({ email: req.body.email });
+    const existingUser = await User.findOne({ user_email: req.body.email });
 
     // if user already exists
     if (existingUser) {
@@ -22,12 +22,12 @@ exports.signupUser = async (req, res) => {
 };
 exports.loginUser = async (req, res) => {
   try {
-    const existingUser = await User.findOne({ email: req.body.email });
+    const existingUser = await User.findOne({ user_email: req.body.email });
     if (!existingUser) {
       return res.status(404).json({ message: "User not found" });
     }
     // if user already exists
-    if (existingUser.password === req.body.password) {
+    if (existingUser.user_password === req.body.password) {
       return res.status(200).json({ message: "Login success.." });
     } else {
       return res.status(400).json({ message: "Password is incorrect" });
@@ -43,7 +43,7 @@ exports.loginUser = async (req, res) => {
 exports.signupTechnician = async (req, res) => {
   try {
     const existingTechnician = await Technician.findOne({
-      email: req.body.email,
+      tech_email: req.body.email,
     });
 
     // if user already exists
@@ -64,13 +64,13 @@ exports.signupTechnician = async (req, res) => {
 exports.loginTechnician = async (req, res) => {
   try {
     const existingTechnician = await Technician.findOne({
-      email: req.body.email,
+      tech_email: req.body.email,
     });
     if (!existingTechnician) {
       return res.status(404).json({ message: "Provider not found" });
     }
     // if user already exists
-    if (existingTechnician.password === req.body.password) {
+    if (existingTechnician.tech_password === req.body.password) {
       return res
         .status(200)
         .json({ existingTechnician, message: "Login success.." });
