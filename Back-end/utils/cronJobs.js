@@ -1,4 +1,4 @@
-const cron = require("cron");
+const cron = require("node-cron");
 const Technician = require("../models/Technicians");
 
 // Run every day at midnight (00:00)

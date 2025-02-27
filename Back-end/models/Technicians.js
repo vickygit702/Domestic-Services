@@ -40,8 +40,8 @@ const technicianSchema = new Schema({
   },
   bookedSlots: [
     {
-      startTime: Date,
-      endTime: Date,
+      start: Date,
+      end: Date,
     },
   ],
 });

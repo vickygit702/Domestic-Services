@@ -16,18 +16,15 @@ const bookingSchema = new mongoose.Schema({
     ref: "Services",
     required: true,
   },
-  bookingDate: { type: Date, default: Date.now },
-  endDate: { type: Date, required: true },
-  duration: { type: Number, required: true },
+  bookingTime: { type: Date, default: Date.now },
+  serviceDate: { start: Date, end: Date },
+
   status: {
     type: String,
     enum: ["Confirmed", "Completed", "Cancelled"],
     default: "Confirmed",
   },
-  isUrgent: {
-    type: Boolean,
-    default: false,
-  },
+
   price: {
     type: Number,
     required: true,
