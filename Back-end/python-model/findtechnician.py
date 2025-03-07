@@ -26,9 +26,9 @@ def find_technicians():
     kmeans.fit(technicians_locations)
 
     closest_index = np.argmin(np.linalg.norm(technicians_locations - user_location, axis=1))
-    res = technicians[closest_index]  # Get nearest provider details
+    details = technicians[closest_index]  
 
-    return jsonify({"nearestTechnician": res})
+    return jsonify( details)
 
 
     

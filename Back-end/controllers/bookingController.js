@@ -1,5 +1,6 @@
 const Booking = require("../models/Bookings");
 const Technician = require("../models/Technicians");
+const Service = require("../models/Services");
 const axios = require("axios");
 
 // Book a service
@@ -44,37 +45,53 @@ exports.bookService = async (req, res) => {
     }));
 
     // Step 2: Call AI model to find the nearest technician
-    const response = await axios.post("http://127.0.0.1:5000/find-provider", {
-      userLocation: formattedUserLocation,
-      technicians: formattedTechnician,
-    });
+    const response = await axios.post(
+      "http://127.0.0.1:5000/find-technicians",
+      {
+        userLocation: formattedUserLocation,
+        technicians: formattedTechnician,
+      }
+    );
 
-    const nearestTechnicianId = response.data.nearestProviderId;
-    const selectedTechnician = await Technician.findById(nearestTechnicianId);
+    const nearestTechnician = response.data;
+    const selectedTechnician = await Technician.findById(nearestTechnician.id);
 
     if (!selectedTechnician) {
-      return res.status(400).json({ message: "No nearby technician found" });
+      return res.status(400).json({ message: "invalid technician detail" });
     }
 
-    // Step 3: Create Booking
-    const endDate = new Date(bookingDate);
-    endDate.setDate(endDate.getDate() + duration);
+    const serviceDetail = await Service.findOne({ service_name: serviceName });
+
+    let tot_price = serviceDetail.baseRate;
+
+    if (selectedTechnician.isPro) {
+      tot_price *= 1.2;
+    } else {
+      tot_price *= 1;
+    }
+    console.log("Final Price Before Saving:", tot_price);
+    if (isNaN(tot_price) || tot_price <= 0) {
+      return res.status(400).json({ message: "Invalid price calculation" });
+    }
 
     const newBooking = new Booking({
-      userId,
-      technicianId: selectedTechnician._id,
+      user_Id: userId,
+      tech_Id: selectedTechnician._id,
       serviceName,
-      bookingDate,
-      duration,
-      endDate,
-      price: selectedTechnician.baseRate * duration,
-      status: "Confirmed",
+      bookedDate: {
+        start: bookingStartTime,
+        end: overallEndTime,
+      },
+      price: tot_price,
     });
 
     await newBooking.save();
 
     // Step 4: Update Technician Availability
-    selectedTechnician.bookedSlots.push({ start: bookingDate, end: endDate });
+    selectedTechnician.bookedSlots.push({
+      start: bookingStartTime,
+      end: overallEndTime,
+    });
     await selectedTechnician.save();
 
     res

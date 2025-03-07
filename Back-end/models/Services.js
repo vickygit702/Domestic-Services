@@ -21,12 +21,11 @@ const servicesSchema = new Schema({
     type: String,
     required: true,
   },
-  isUrgent: {
-    type: Boolean,
-    default: false,
-  },
-  urgencyMultiplier: { type: Number, default: 1.5 },
-  proMultiplier: { type: Number, default: 1.2 },
+  // isUrgent: {
+  //   type: Boolean,
+  //   default: false,
+  // },
+  // urgencyMultiplier: { type: Number, default: 1.5 },
 });
 
 module.exports = mongoose.model("Services", servicesSchema);

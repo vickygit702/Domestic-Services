@@ -11,13 +11,12 @@ const bookingSchema = new mongoose.Schema({
     ref: "Technicians",
     required: true,
   },
-  serviceId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Services",
+  serviceName: {
+    type: String,
     required: true,
   },
-  bookingTime: { type: Date, default: Date.now },
-  serviceDate: { start: Date, end: Date },
+  createdAt: { type: Date, default: Date.now },
+  bookedDate: { start: Date, end: Date },
 
   status: {
     type: String,
