@@ -2,10 +2,14 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const reviewSchema = new Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  providerId: {
+  user_Id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Provider",
+    ref: "User",
+    required: true,
+  },
+  tech_Id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Technicians",
     required: true,
   },
   rating: {
