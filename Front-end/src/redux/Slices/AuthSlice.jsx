@@ -50,39 +50,6 @@ const authSlice = createSlice({
     clearLoginError: (state) => {
       state.loginError = null;
     },
-    resetOtpVerificationStatus: (state) => {
-      state.otpVerificationStatus = "idle";
-    },
-    clearOtpVerificationError: (state) => {
-      state.otpVerificationError = null;
-    },
-    resetResendOtpStatus: (state) => {
-      state.resendOtpStatus = "idle";
-    },
-    clearResendOtpError: (state) => {
-      state.resendOtpError = null;
-    },
-    clearResendOtpSuccessMessage: (state) => {
-      state.resendOtpSuccessMessage = null;
-    },
-    resetForgotPasswordStatus: (state) => {
-      state.forgotPasswordStatus = "idle";
-    },
-    clearForgotPasswordSuccessMessage: (state) => {
-      state.forgotPasswordSuccessMessage = null;
-    },
-    clearForgotPasswordError: (state) => {
-      state.forgotPasswordError = null;
-    },
-    resetResetPasswordStatus: (state) => {
-      state.resetPasswordStatus = "idle";
-    },
-    clearResetPasswordSuccessMessage: (state) => {
-      state.resetPasswordSuccessMessage = null;
-    },
-    clearResetPasswordError: (state) => {
-      state.resetPasswordError = null;
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -111,3 +78,25 @@ const authSlice = createSlice({
       });
   },
 });
+
+export const selectAuthStatus = (state) => state.AuthSlice.status;
+export const selectAuthErrors = (state) => state.AuthSlice.errors;
+export const selectLoggedInUser = (state) => state.AuthSlice.loggedInUser;
+export const selectAuthSuccessMessage = (state) =>
+  state.AuthSlice.successMessage;
+export const selectSignupStatus = (state) => state.AuthSlice.signupStatus;
+export const selectSignupError = (state) => state.AuthSlice.signupError;
+export const selectLoginStatus = (state) => state.AuthSlice.loginStatus;
+export const selectLoginError = (state) => state.AuthSlice.loginError;
+
+export const {
+  clearAuthSuccessMessage,
+  clearAuthErrors,
+  resetAuthStatus,
+  clearSignupError,
+  resetSignupStatus,
+  clearLoginError,
+  resetLoginStatus,
+} = authSlice.actions;
+
+export default authSlice.reducer;
