@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 require("./utils/cronJobs");
 
 const { connectToDB } = require("./database/db");
@@ -10,6 +11,7 @@ const bookingRoute = require("./routes/booking/booking-service");
 const server = express();
 
 server.use(express.json());
+server.use(cors());
 server.use("/auth/api", authRoutes);
 server.use("/admin", adminRoutes);
 server.use("/user", userRoutes);

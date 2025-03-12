@@ -32,7 +32,8 @@ exports.loginUser = async (req, res) => {
     }
     // if user already exists
     if (existingUser.user_password === req.body.user_password) {
-      return res.status(200).json({ message: "Login success.." });
+      existingUser.isVerified == true;
+      return res.status(200).json(existingUser);
     } else {
       return res.status(400).json({ message: "Password is incorrect" });
     }

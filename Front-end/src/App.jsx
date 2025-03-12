@@ -15,35 +15,33 @@ import {
 } from "./pages/index";
 
 function App() {
-  return <>Hii</>;
+  const routes = createBrowserRouter(
+    createRoutesFromElements(
+      <>
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+        <Route
+          path="/admin"
+          element={
+            <Protected>
+              <AdminHomePage />
+            </Protected>
+          }
+        />
+        <Route
+          path="/user/dashboard"
+          element={
+            <Protected>
+              <HomePage />
+            </Protected>
+          }
+        />
+      </>
+    )
+  );
 
-  // const routes = createBrowserRouter(
-  //   createRoutesFromElements(
-  //     <>
-  //       <Route path="/signup" element={<SignupPage />} />
-  //       <Route path="/login" element={<LoginPage />} />
-  //       <Route path="*" element={<NotFoundPage />} />
-  //       <Route
-  //         path="/admin"
-  //         element={
-  //           <Protected>
-  //             <AdminHomePage />
-  //           </Protected>
-  //         }
-  //       />
-  //       <Route
-  //         path="/"
-  //         element={
-  //           <Protected>
-  //             <HomePage />
-  //           </Protected>
-  //         }
-  //       />
-  //     </>
-  //   )
-  // );
-
-  // return <RouterProvider router={routes} />;
+  return <RouterProvider router={routes} />;
 }
 
 export default App;
