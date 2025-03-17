@@ -1,5 +1,6 @@
 const express = require("express");
 require("./utils/cronJobs");
+const cors = require("cors");
 
 const { connectToDB } = require("./database/db");
 const authRoutes = require("./routes/Auth");
@@ -8,6 +9,13 @@ const userRoutes = require("./routes/user/userPage");
 const bookingRoute = require("./routes/booking/booking-service");
 
 const server = express();
+
+server.use(
+  cors({
+    origin: "http://localhost:5173", // Allow requests from this origin
+    credentials: true, // Allow cookies and credentials
+  })
+);
 
 server.use(express.json());
 server.use("/auth/api", authRoutes);

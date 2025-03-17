@@ -44,11 +44,6 @@ const userSchema = new Schema({
 
   user_location: { type: { lat: Number, lng: Number }, required: true },
   userType: { type: String, enum: ["normal", "premium"], default: "normal" },
-
-  isVerified: {
-    type: Boolean,
-    default: false,
-  },
 });
 
 module.exports = mongoose.model("User", userSchema);

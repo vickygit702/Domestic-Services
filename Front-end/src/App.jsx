@@ -5,41 +5,51 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 
-import Protected from "./pages/Auth/Protected";
 import {
-  HomePage,
+  UserHomePage,
+  UserLoginPage,
+  UserSignupPage,
+  UserProtected,
+  TechnicianHomePage,
+  TechnicianLogin,
+  TechnicianProtected,
+  TechnicianSignup,
   NotFoundPage,
-  LoginPage,
-  SignupPage,
-  AdminHomePage,
+  Welcome,
 } from "./pages/index";
 
 function App() {
-  // const loggedInUser=useSelector(selectLoggedInUser)
-
-  // useAuthCheck();
-  // useFetchLoggedInUserDetails(loggedInUser);
-
   const routes = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<Welcome />} />
+        <Route path="/my-project/user/signup" element={<UserSignupPage />} />
+        <Route path="/my-project/user/login" element={<UserLoginPage />} />
+
+        <Route
+          path="/my-project/technician/signup"
+          element={<TechnicianSignup />}
+        />
+        <Route
+          path="/my-project/technician/login"
+          element={<TechnicianLogin />}
+        />
+
         <Route path="*" element={<NotFoundPage />} />
         <Route
-          path="/admin"
+          path="/my-project/technician/:id"
           element={
-            <Protected>
-              <AdminHomePage />
-            </Protected>
+            <TechnicianProtected>
+              <TechnicianHomePage />
+            </TechnicianProtected>
           }
         />
         <Route
-          path="/"
+          path="/my-project/user/:id"
           element={
-            <Protected>
-              <HomePage />
-            </Protected>
+            <UserProtected>
+              <UserHomePage />
+            </UserProtected>
           }
         />
       </>
