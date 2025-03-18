@@ -14,7 +14,6 @@ const authSlice = createSlice({
   reducers: {
     signupUserStart(state) {
       state.loading = true;
-      state.error = null;
     },
     signupUserSuccess(state, action) {
       state.user = action.payload;
@@ -22,11 +21,9 @@ const authSlice = createSlice({
     },
     signupUserFailure(state, action) {
       state.error = action.payload;
-      state.loading = false;
     },
     signupTechnicianStart(state) {
       state.loading = true;
-      state.error = null;
     },
     signupTechnicianSuccess(state, action) {
       state.technician = action.payload;
@@ -34,7 +31,6 @@ const authSlice = createSlice({
     },
     signupTechnicianFailure(state, action) {
       state.error = action.payload;
-      state.loading = false;
     },
     loginUserStart(state) {
       state.loading = true;

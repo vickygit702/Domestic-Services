@@ -20,7 +20,28 @@ const technicianSchema = new Schema({
     type: Number,
     required: true,
   },
-
+  tech_address: {
+    flatNo: {
+      type: String,
+      required: true,
+    },
+    street: {
+      type: String,
+      required: true,
+    },
+    city: {
+      type: String,
+      required: true,
+    },
+    state: {
+      type: String,
+      required: true,
+    },
+    pincode: {
+      type: Number,
+      required: true,
+    },
+  },
   tech_location: { type: { lat: Number, lng: Number }, required: true },
   worksKnown: [{ type: String, required: true }],
   tech_experience: {

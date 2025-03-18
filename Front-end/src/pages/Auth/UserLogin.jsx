@@ -8,6 +8,7 @@ import {
   loginUserFailure,
   loginUserSuccess,
 } from "../../redux/slices/authSlice";
+import { toast } from "react-toastify";
 
 const UserLogin = () => {
   const [email, setEmail] = useState("");
@@ -32,6 +33,7 @@ const UserLogin = () => {
       const { userDetail } = response.data;
       if (userDetail) {
         dispatch(loginUserSuccess(userDetail));
+        toast.success(response.data.message);
       }
     } catch (e) {
       const errorMessage = e.response?.data?.message || "Login failed";
@@ -51,6 +53,8 @@ const UserLogin = () => {
     }
     if (error) {
       console.log("Error occurred:", error);
+      toast.error(error);
+
       // Display error to the user (e.g., using a toast or alert)
     }
   }, [error]);

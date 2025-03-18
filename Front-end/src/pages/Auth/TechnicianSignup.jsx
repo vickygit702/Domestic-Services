@@ -1,9 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import {
+  signupTechnicianStart,
+  signupTechnicianFailure,
+  signupTechnicianSuccess,
+} from "../../redux/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const TechnicianSignup = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isInitialRender = useRef(true);
+  const { technician, error } = useSelector((state) => state.auth);
 
   // State for form fields
   const [formData, setFormData] = useState({
@@ -11,14 +21,20 @@ const TechnicianSignup = () => {
     tech_email: "",
     tech_password: "",
     tech_contact: "",
-    lat: "",
-    long: "",
+    tech_location: { lat: "", lng: "" },
+    tech_address: {
+      flatNo: "",
+      street: "",
+      city: "",
+      state: "",
+      pincode: "",
+    },
+    tech_location: { lat: "", lng: "" },
     worksKnown: [],
     tech_experience: "",
   });
 
   // State for error handling
-  const [error, setError] = useState("");
 
   // Handle input changes
   const handleChange = (e) => {
@@ -45,7 +61,7 @@ const TechnicianSignup = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    dispatch(signupTechnicianStart());
     try {
       // Send form data to the backend
       const response = await axios.post(
@@ -54,14 +70,37 @@ const TechnicianSignup = () => {
       );
 
       // Handle successful signup
-      console.log("Signup successful:", response.data);
-      navigate("/login"); // Redirect to login page
-    } catch (err) {
+      const { techDetail } = response.data;
+      if (techDetail) {
+        dispatch(signupTechnicianSuccess(techDetail));
+        toast.success(response.data.message);
+      }
+    } catch (e) {
       // Handle errors
-      setError(err.response?.data?.message || "Signup failed");
-      console.error("Signup error:", err);
+
+      const errorMessage = e.response?.data?.message || "Signup failed";
+      dispatch(signupTechnicianFailure(errorMessage));
     }
   };
+
+  useEffect(() => {
+    if (technician?.id) {
+      navigate(`/my-project/technician/${technician.id}`);
+    }
+  }, [technician, navigate]);
+
+  useEffect(() => {
+    if (isInitialRender.current) {
+      // Skip the effect on initial render
+      isInitialRender.current = false;
+      return;
+    }
+    if (error) {
+      console.log("Error occurred:", error);
+      toast.error(error);
+      // Display error to the user (e.g., using a toast or alert)
+    }
+  }, [error]);
 
   return (
     <div>
@@ -73,8 +112,8 @@ const TechnicianSignup = () => {
         <label>Name:</label>
         <input
           type="text"
-          name="name"
-          value={formData.name}
+          name="tech_name"
+          value={formData.tech_name}
           onChange={handleChange}
           required
         />
@@ -84,8 +123,8 @@ const TechnicianSignup = () => {
         <label>Email:</label>
         <input
           type="email"
-          name="email"
-          value={formData.email}
+          name="tech_email"
+          value={formData.tech_email}
           onChange={handleChange}
           required
         />
@@ -95,8 +134,8 @@ const TechnicianSignup = () => {
         <label>Password:</label>
         <input
           type="password"
-          name="password"
-          value={formData.password}
+          name="tech_password"
+          value={formData.tech_password}
           onChange={handleChange}
           required
         />
@@ -106,9 +145,76 @@ const TechnicianSignup = () => {
         <label>Contact:</label>
         <input
           type="text"
-          name="contact"
-          value={formData.contact}
+          name="tech_contact"
+          value={formData.tech_contact}
           onChange={handleChange}
+          required
+        />
+
+        {/* Address */}
+        <label>FlatNo:</label>
+        <input
+          type="text"
+          name="flatNo"
+          value={formData.tech_address.flatNo}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              tech_address: { ...prev.tech_address, flatNo: e.target.value },
+            }))
+          }
+          required
+        />
+        <label>Street:</label>
+        <input
+          type="text"
+          name="street"
+          value={formData.tech_address.street}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              tech_address: { ...prev.tech_address, street: e.target.value },
+            }))
+          }
+          required
+        />
+        <label>City:</label>
+        <input
+          type="text"
+          name="city"
+          value={formData.tech_address.city}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              tech_address: { ...prev.tech_address, city: e.target.value },
+            }))
+          }
+          required
+        />
+        <label>State:</label>
+        <input
+          type="text"
+          name="state"
+          value={formData.tech_address.state}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              tech_address: { ...prev.tech_address, state: e.target.value },
+            }))
+          }
+          required
+        />
+        <label>Pincode:</label>
+        <input
+          type="text"
+          name="pincode"
+          value={formData.tech_address.pincode}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              tech_address: { ...prev.tech_address, pincode: e.target.value },
+            }))
+          }
           required
         />
 
@@ -118,16 +224,26 @@ const TechnicianSignup = () => {
         <input
           type="text"
           name="lat"
-          value={formData.lat}
-          onChange={handleChange}
+          value={formData.tech_location.lat}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              tech_location: { ...prev.tech_location, lat: e.target.value },
+            }))
+          }
           required
         />
         <label>Longitude:</label>
         <input
           type="text"
-          name="long"
-          value={formData.long}
-          onChange={handleChange}
+          name="lng"
+          value={formData.tech_location.lng}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              tech_location: { ...prev.tech_location, lng: e.target.value },
+            }))
+          }
           required
         />
 
@@ -154,8 +270,8 @@ const TechnicianSignup = () => {
         <label>Experience (in years):</label>
         <input
           type="number"
-          name="experience"
-          value={formData.experience}
+          name="tech_experience"
+          value={formData.tech_experience}
           onChange={handleChange}
           required
         />

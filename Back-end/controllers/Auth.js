@@ -14,7 +14,16 @@ exports.signupUser = async (req, res) => {
     // create new user
     const createdUser = new User(req.body);
     await createdUser.save();
-    res.status(201).json({ createdUser, message: "user signup success" });
+    const userDetail = {
+      id: createdUser._id,
+      name: createdUser.user_name,
+      email: createdUser.user_email,
+      contact: createdUser.user_contact,
+      address: createdUser.user_address,
+      location: createdUser.user_location,
+      usertype: createdUser.userType,
+    };
+    res.status(201).json({ userDetail, message: "user signup success" });
   } catch (error) {
     console.log(error);
     res
@@ -66,7 +75,20 @@ exports.signupTechnician = async (req, res) => {
     // create new user
     const newTechnician = new Technician(req.body);
     await newTechnician.save();
-    res.status(201).json({ newTechnician, message: "user signup success" });
+    const techDetail = {
+      id: newTechnician._id,
+      name: newTechnician.tech_name,
+      email: newTechnician.tech_email,
+      contact: newTechnician.tech_contact,
+      address: newTechnician.tech_address,
+      location: newTechnician.tech_location,
+      techtype: newTechnician.isPro,
+      workKnown: newTechnician.worksKnown,
+      experience: newTechnician.tech_experience,
+      ratingAvg: newTechnician.tech_ratingAvg,
+      completions: newTechnician.jobsCompleted,
+    };
+    res.status(201).json({ techDetail, message: "user signup success" });
   } catch (error) {
     console.log(error);
     res
