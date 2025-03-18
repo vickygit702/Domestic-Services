@@ -3,18 +3,27 @@ const Technician = require("../models/Technicians");
 
 exports.signupUser = async (req, res) => {
   try {
-    const existingUser = await User.findOne({
+    const user = await User.findOne({
       user_email: req.body.user_email,
     });
 
     // if user already exists
-    if (existingUser) {
+    if (user) {
       return res.status(400).json({ message: "User already exists" });
     }
     // create new user
     const createdUser = new User(req.body);
     await createdUser.save();
-    res.status(201).json({ createdUser, message: "user signup success" });
+    const userDetail = {
+      id: createdUser._id,
+      name: createdUser.user_name,
+      email: createdUser.user_email,
+      contact: createdUser.user_contact,
+      address: createdUser.user_address,
+      location: createdUser.user_location,
+      usertype: createdUser.userType,
+    };
+    res.status(201).json({ userDetail, message: "user signup success" });
   } catch (error) {
     console.log(error);
     res
@@ -24,15 +33,24 @@ exports.signupUser = async (req, res) => {
 };
 exports.loginUser = async (req, res) => {
   try {
-    const existingUser = await User.findOne({
+    const user = await User.findOne({
       user_email: req.body.user_email,
     });
-    if (!existingUser) {
+    if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
     // if user already exists
-    if (existingUser.user_password === req.body.user_password) {
-      return res.status(200).json({ message: "Login success.." });
+    if (user.user_password === req.body.user_password) {
+      const userDetail = {
+        id: user._id,
+        name: user.user_name,
+        email: user.user_email,
+        contact: user.user_contact,
+        address: user.user_address,
+        location: user.user_location,
+        usertype: user.userType,
+      };
+      return res.status(200).json({ userDetail, message: "Login success.." });
     } else {
       return res.status(400).json({ message: "Password is incorrect" });
     }
@@ -46,18 +64,31 @@ exports.loginUser = async (req, res) => {
 
 exports.signupTechnician = async (req, res) => {
   try {
-    const existingTechnician = await Technician.findOne({
+    const technician = await Technician.findOne({
       tech_email: req.body.tech_email,
     });
 
     // if user already exists
-    if (existingTechnician) {
+    if (technician) {
       return res.status(400).json({ message: "Provider already exists" });
     }
     // create new user
     const newTechnician = new Technician(req.body);
     await newTechnician.save();
-    res.status(201).json({ newTechnician, message: "user signup success" });
+    const techDetail = {
+      id: newTechnician._id,
+      name: newTechnician.tech_name,
+      email: newTechnician.tech_email,
+      contact: newTechnician.tech_contact,
+      address: newTechnician.tech_address,
+      location: newTechnician.tech_location,
+      techtype: newTechnician.isPro,
+      workKnown: newTechnician.worksKnown,
+      experience: newTechnician.tech_experience,
+      ratingAvg: newTechnician.tech_ratingAvg,
+      completions: newTechnician.jobsCompleted,
+    };
+    res.status(201).json({ techDetail, message: "user signup success" });
   } catch (error) {
     console.log(error);
     res
@@ -67,17 +98,28 @@ exports.signupTechnician = async (req, res) => {
 };
 exports.loginTechnician = async (req, res) => {
   try {
-    const existingTechnician = await Technician.findOne({
+    const technician = await Technician.findOne({
       tech_email: req.body.tech_email,
     });
-    if (!existingTechnician) {
-      return res.status(404).json({ message: "Provider not found" });
+    if (!technician) {
+      return res.status(404).json({ message: "Technician not found" });
     }
     // if user already exists
-    if (existingTechnician.tech_password === req.body.tech_password) {
-      return res
-        .status(200)
-        .json({ existingTechnician, message: "Login success.." });
+    if (technician.tech_password === req.body.tech_password) {
+      const techDetail = {
+        id: technician._id,
+        name: technician.tech_name,
+        email: technician.tech_email,
+        contact: technician.tech_contact,
+        address: technician.tech_address,
+        location: technician.tech_location,
+        techtype: technician.isPro,
+        workKnown: technician.worksKnown,
+        experience: technician.tech_experience,
+        ratingAvg: technician.tech_ratingAvg,
+        completions: technician.jobsCompleted,
+      };
+      return res.status(200).json({ techDetail, message: "Login success.." });
     } else {
       return res.status(400).json({ message: "Password is incorrect" });
     }

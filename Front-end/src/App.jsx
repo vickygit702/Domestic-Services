@@ -5,43 +5,96 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 
-import Protected from "./pages/Auth/Protected";
 import {
-  HomePage,
+  UserDashboard,
+  UserLoginPage,
+  UserSignupPage,
+  UserProtected,
+  TechnicianHomePage,
+  TechnicianLogin,
+  TechnicianProtected,
+  TechnicianSignup,
   NotFoundPage,
-  LoginPage,
-  SignupPage,
-  AdminHomePage,
+  Welcome,
+  Dashboard,
+  MyBookings,
+  Profile,
+  ServiceDetails,
 } from "./pages/index";
 
 function App() {
-  // const loggedInUser=useSelector(selectLoggedInUser)
-
-  // useAuthCheck();
-  // useFetchLoggedInUserDetails(loggedInUser);
-
   const routes = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<Welcome />} />
+        <Route path="/my-project/user/signup" element={<UserSignupPage />} />
+        <Route path="/my-project/user/login" element={<UserLoginPage />} />
+
+        <Route
+          path="/my-project/technician/signup"
+          element={<TechnicianSignup />}
+        />
+        <Route
+          path="/my-project/technician/login"
+          element={<TechnicianLogin />}
+        />
+
         <Route path="*" element={<NotFoundPage />} />
         <Route
-          path="/admin"
+          path="/my-project/technician/:id"
           element={
-            <Protected>
-              <AdminHomePage />
-            </Protected>
+            <TechnicianProtected>
+              <TechnicianHomePage />
+            </TechnicianProtected>
+          }
+        />
+        {/* <Route
+          path="/my-project/user/:id"
+          element={
+            <UserProtected>
+              <UserHomePage />
+            </UserProtected>
+          }
+        /> */}
+        {/* <Route
+          path="/my-project/user/:id/dashboard"
+          element={
+            <UserProtected>
+              <Dashboard />
+            </UserProtected>
           }
         />
         <Route
-          path="/"
+          path="/my-project/user/:id/my-bookings"
           element={
-            <Protected>
-              <HomePage />
-            </Protected>
+            <UserProtected>
+              <MyBookings />
+            </UserProtected>
           }
         />
+        <Route
+          path="/my-project/user/:id/profile"
+          element={
+            <UserProtected>
+              <Profile />
+            </UserProtected>
+          }
+        /> */}
+
+        <Route
+          path="/my-project/user/:id"
+          element={
+            <UserProtected>
+              <UserDashboard />
+            </UserProtected>
+          }
+        >
+          <Route index element={<Dashboard />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="dashboard/:serviceName" element={<ServiceDetails />} />
+          <Route path="my-bookings" element={<MyBookings />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
       </>
     )
   );
