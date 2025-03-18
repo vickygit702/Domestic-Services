@@ -13,7 +13,7 @@ const TechnicianSignup = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isInitialRender = useRef(true);
-  const { technician, error } = useSelector((state) => state.auth);
+  const { technician, error, loading } = useSelector((state) => state.auth);
 
   // State for form fields
   const [formData, setFormData] = useState({
@@ -101,7 +101,7 @@ const TechnicianSignup = () => {
       // Display error to the user (e.g., using a toast or alert)
     }
   }, [error]);
-
+  if (loading) return <div>Loading.....</div>;
   return (
     <div>
       <h2>Technician Signup</h2>

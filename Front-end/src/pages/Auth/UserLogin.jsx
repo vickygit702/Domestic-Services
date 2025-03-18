@@ -15,7 +15,7 @@ const UserLogin = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const isInitialRender = useRef(true);
-  const { user, error } = useSelector((state) => state.auth);
+  const { user, error, loading } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -58,7 +58,7 @@ const UserLogin = () => {
       // Display error to the user (e.g., using a toast or alert)
     }
   }, [error]);
-
+  if (loading) return <div>Loading.....</div>;
   return (
     <div>
       <form onSubmit={handleSubmit}>

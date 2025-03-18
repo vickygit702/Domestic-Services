@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 
 import {
-  UserHomePage,
+  UserDashboard,
   UserLoginPage,
   UserSignupPage,
   UserProtected,
@@ -16,6 +16,10 @@ import {
   TechnicianSignup,
   NotFoundPage,
   Welcome,
+  Dashboard,
+  MyBookings,
+  Profile,
+  ServiceDetails,
 } from "./pages/index";
 
 function App() {
@@ -44,14 +48,53 @@ function App() {
             </TechnicianProtected>
           }
         />
-        <Route
+        {/* <Route
           path="/my-project/user/:id"
           element={
             <UserProtected>
               <UserHomePage />
             </UserProtected>
           }
+        /> */}
+        {/* <Route
+          path="/my-project/user/:id/dashboard"
+          element={
+            <UserProtected>
+              <Dashboard />
+            </UserProtected>
+          }
         />
+        <Route
+          path="/my-project/user/:id/my-bookings"
+          element={
+            <UserProtected>
+              <MyBookings />
+            </UserProtected>
+          }
+        />
+        <Route
+          path="/my-project/user/:id/profile"
+          element={
+            <UserProtected>
+              <Profile />
+            </UserProtected>
+          }
+        /> */}
+
+        <Route
+          path="/my-project/user/:id"
+          element={
+            <UserProtected>
+              <UserDashboard />
+            </UserProtected>
+          }
+        >
+          <Route index element={<Dashboard />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="dashboard/:serviceName" element={<ServiceDetails />} />
+          <Route path="my-bookings" element={<MyBookings />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
       </>
     )
   );
