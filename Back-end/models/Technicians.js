@@ -13,7 +13,6 @@ const technicianSchema = new Schema({
   },
   tech_password: {
     type: String,
-
     required: true,
   },
   tech_contact: {

@@ -1,16 +1,27 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserProfile } from "../../../redux/slices/authSlice";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.auth);
-  // Sample user data (replace with data from Redux or API)
+  const dispatch = useDispatch();
+
+  // Initialize userData with fallback values
   const [userData, setUserData] = useState({
-    username: user.name,
-    email: user.email,
-    password: "********", // Masked password
-    address: "123 Main St, City, Country",
-    contact: user.contact,
+    user_name: user?.name || "",
+    user_email: user?.email || "",
+    user_password: user?.password || "",
+    user_address: {
+      flatNo: user?.address?.flatNo || "",
+      street: user?.address?.street || "",
+      city: user?.address?.city || "",
+      state: user?.address?.state || "",
+      pincode: user?.address?.pincode || "",
+    },
+    user_contact: user?.contact || "",
   });
+
+  console.log("User:", user);
 
   // State to manage edit mode
   const [isEditing, setIsEditing] = useState(false);
@@ -25,8 +36,7 @@ const Profile = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsEditing(false);
-    // Add logic to update profile (e.g., API call)
-    console.log("Updated Profile:", userData);
+    dispatch(updateUserProfile({ userId: user.id, updatedData: userData }));
   };
 
   return (
@@ -40,8 +50,8 @@ const Profile = () => {
             <label>Username:</label>
             <input
               type="text"
-              name="username"
-              value={userData.username}
+              name="user_name"
+              value={userData.user_name}
               onChange={handleChange}
               required
             />
@@ -50,8 +60,8 @@ const Profile = () => {
             <label>Email:</label>
             <input
               type="email"
-              name="email"
-              value={userData.email}
+              name="user_email"
+              value={userData.user_email}
               onChange={handleChange}
               required
             />
@@ -60,18 +70,8 @@ const Profile = () => {
             <label>Password:</label>
             <input
               type="password"
-              name="password"
-              value={userData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div style={styles.formGroup}>
-            <label>Address:</label>
-            <input
-              type="text"
-              name="address"
-              value={userData.address}
+              name="user_password"
+              value={userData.user_password}
               onChange={handleChange}
               required
             />
@@ -80,9 +80,93 @@ const Profile = () => {
             <label>Contact:</label>
             <input
               type="text"
-              name="contact"
-              value={userData.contact}
+              name="user_contact"
+              value={userData.user_contact}
               onChange={handleChange}
+              required
+            />
+          </div>
+          <div style={styles.formGroup}>
+            <label>Flat No:</label>
+            <input
+              type="text"
+              name="flatNo"
+              value={userData.user_address.flatNo}
+              onChange={(e) =>
+                setUserData((prev) => ({
+                  ...prev,
+                  user_address: {
+                    ...prev.user_address,
+                    flatNo: e.target.value,
+                  },
+                }))
+              }
+              required
+            />
+          </div>
+          <div style={styles.formGroup}>
+            <label>Street:</label>
+            <input
+              type="text"
+              name="street"
+              value={userData.user_address.street}
+              onChange={(e) =>
+                setUserData((prev) => ({
+                  ...prev,
+                  user_address: {
+                    ...prev.user_address,
+                    street: e.target.value,
+                  },
+                }))
+              }
+              required
+            />
+          </div>
+          <div style={styles.formGroup}>
+            <label>City:</label>
+            <input
+              type="text"
+              name="city"
+              value={userData.user_address.city}
+              onChange={(e) =>
+                setUserData((prev) => ({
+                  ...prev,
+                  user_address: { ...prev.user_address, city: e.target.value },
+                }))
+              }
+              required
+            />
+          </div>
+          <div style={styles.formGroup}>
+            <label>State:</label>
+            <input
+              type="text"
+              name="state"
+              value={userData.user_address.state}
+              onChange={(e) =>
+                setUserData((prev) => ({
+                  ...prev,
+                  user_address: { ...prev.user_address, state: e.target.value },
+                }))
+              }
+              required
+            />
+          </div>
+          <div style={styles.formGroup}>
+            <label>Pincode:</label>
+            <input
+              type="text"
+              name="pincode"
+              value={userData.user_address.pincode}
+              onChange={(e) =>
+                setUserData((prev) => ({
+                  ...prev,
+                  user_address: {
+                    ...prev.user_address,
+                    pincode: e.target.value,
+                  },
+                }))
+              }
               required
             />
           </div>
@@ -101,19 +185,26 @@ const Profile = () => {
         // View Mode
         <div style={styles.profileDetails}>
           <p>
-            <strong>Username:</strong> {userData.username}
+            <strong>Username:</strong> {userData.user_name}
           </p>
           <p>
-            <strong>Email:</strong> {userData.email}
+            <strong>Email:</strong> {userData.user_email}
           </p>
           <p>
-            <strong>Password:</strong> {userData.password}
+            <strong>Password:</strong> {userData.user_password}
           </p>
           <p>
-            <strong>Address:</strong> {userData.address}
+            <strong>Address:</strong>
+          </p>
+          <p>Flat No: {userData.user_address.flatNo}</p>
+          <p>Street: {userData.user_address.street}</p>
+          <p>City: {userData.user_address.city}</p>
+          <p>
+            State: {userData.user_address.state} -{" "}
+            {userData.user_address.pincode}
           </p>
           <p>
-            <strong>Contact:</strong> {userData.contact}
+            <strong>Contact:</strong> {userData.user_contact}
           </p>
           <button onClick={() => setIsEditing(true)} style={styles.editButton}>
             Edit Profile
@@ -138,7 +229,7 @@ const styles = {
     marginBottom: "15px",
   },
   profileDetails: {
-    maxWidth: "400px",
+    maxWidth: "800px",
   },
   editButton: {
     padding: "10px 20px",

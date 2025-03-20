@@ -1,4 +1,21 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+
+// Async thunk to update user profile
+export const updateUserProfile = createAsyncThunk(
+  "update-profile",
+  async ({ userId, updatedData }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/user/${userId}/update-profile`,
+        updatedData
+      );
+      return response.data; // Return updated user data
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 const initialState = {
   user: null,
@@ -66,6 +83,21 @@ const authSlice = createSlice({
       state.technician = null;
       state.isVerified = false; // Set isVerified to false on logout
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(updateUserProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUserProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.upd_user;
+      })
+      .addCase(updateUserProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to update services";
+      });
   },
 });
 

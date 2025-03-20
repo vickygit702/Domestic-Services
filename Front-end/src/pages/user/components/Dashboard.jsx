@@ -1,46 +1,36 @@
 import React from "react";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
+import { fetchServices } from "../../../redux/slices/servicesSlice";
 const Dashboard = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
   const { user } = useSelector((state) => state.auth);
-  // Services data
-  const services = [
-    {
-      id: 1,
-      title: "Home Repair & Maintenance",
-      categories: ["Plumbing", "Electrical Work", "Carpentry", "Roofing"],
-    },
-    {
-      id: 2,
-      title: "Appliance & Gadget Services",
-      categories: [
-        "HVAC Technicians",
-        "Refrigeration Experts",
-        "Washing Machine & Dryer Repair",
-        "Home Automation Experts",
-      ],
-    },
-    {
-      id: 3,
-      title: "Outdoor & Home Improvement",
-      categories: ["Painters", "Movers & Packers"],
-    },
-  ];
+  const { serviceList, categories, loading, error } = useSelector(
+    (state) => state.services
+  );
+
+  // Fetch services on component mount
+  useEffect(() => {
+    const url = `http://localhost:8000/user/${user.id}/services/fetchAllServices`; // Dynamic URL
+    dispatch(fetchServices(url)); // Pass the URL as an argument
+  }, [dispatch]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   // Handle service card click
-  const handleServiceClick = (serviceTitle) => {
-    const formattedTitle = serviceTitle
+  const handleServiceClick = (category) => {
+    const formattedTitle = category
       .toLowerCase()
       .replace(/ & /g, "_")
       .replace(/\s+/g, "-");
     navigate(`/my-project/user/${user.id}/dashboard/${formattedTitle}`);
   };
-  const filteredServices = services.filter((service) =>
-    service.title.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredCategory = categories.filter((service) =>
+    service.toLowerCase().includes(searchQuery.toLowerCase())
   );
   return (
     <div style={styles.container}>
@@ -71,13 +61,13 @@ const Dashboard = () => {
           </div>
         ))} */}
 
-        {filteredServices.map((service) => (
+        {filteredCategory.map((service, index) => (
           <div
-            key={service.id}
+            key={index}
             style={styles.serviceCard}
-            onClick={() => handleServiceClick(service.title)}
+            onClick={() => handleServiceClick(service)}
           >
-            <h3>{service.title}</h3>
+            <h3>{service}</h3>
           </div>
         ))}
       </div>

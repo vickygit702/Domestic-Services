@@ -1,49 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBookings } from "../../../redux/slices/userSlice";
 
 const MyBookings = () => {
+  const { user } = useSelector((state) => state.auth);
+  const { userBookings = [] } = useSelector((state) => state.userBooks);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const url = `http://localhost:8000/user/${user.id}/status-page/myBookings`;
+    dispatch(fetchBookings(url));
+  }, [dispatch]);
+
+  const prevBook = userBookings.filter(
+    (bookings) => bookings.status === "Completed"
+  );
+  console.log(prevBook);
+  const upcomeBook = userBookings.filter(
+    (bookings) => bookings.status === "Confirmed"
+  );
+  console.log(upcomeBook);
   // Sample data for upcoming and previous bookings
-  const bookings = {
-    upcoming: [
-      {
-        id: 1,
-        bookDate: "2023-10-15",
-        technicianName: "John Doe",
-        technicianId: "TECH123",
-        rating: 4.5,
-        status: "Scheduled",
-        price: "$50",
-      },
-      {
-        id: 2,
-        bookDate: "2023-10-20",
-        technicianName: "Jane Smith",
-        technicianId: "TECH456",
-        rating: 4.7,
-        status: "Confirmed",
-        price: "$60",
-      },
-    ],
-    previous: [
-      {
-        id: 3,
-        bookDate: "2023-09-25",
-        technicianName: "Mike Johnson",
-        technicianId: "TECH789",
-        rating: 4.3,
-        status: "Completed",
-        price: "$45",
-      },
-      {
-        id: 4,
-        bookDate: "2023-09-30",
-        technicianName: "Emily Brown",
-        technicianId: "TECH101",
-        rating: 4.8,
-        status: "Completed",
-        price: "$70",
-      },
-    ],
-  };
 
   return (
     <div style={styles.container}>
@@ -52,20 +28,16 @@ const MyBookings = () => {
       {/* Upcoming Bookings */}
       <h3>Upcoming Bookings</h3>
       <div style={styles.bookingList}>
-        {bookings.upcoming.map((booking) => (
+        {upcomeBook.map((booking) => (
           <div key={booking.id} style={styles.bookingCard}>
             <p>
-              <strong>Booking Date:</strong> {booking.bookDate}
+              <strong>Booking Date:</strong> {booking.bookeddate.start}
             </p>
+
             <p>
-              <strong>Technician Name:</strong> {booking.technicianName}
+              <strong>Technician ID:</strong> {booking.technicianid}
             </p>
-            <p>
-              <strong>Technician ID:</strong> {booking.technicianId}
-            </p>
-            <p>
-              <strong>Rating:</strong> ⭐ {booking.rating}
-            </p>
+
             <p>
               <strong>Status:</strong> {booking.status}
             </p>
@@ -79,20 +51,16 @@ const MyBookings = () => {
       {/* Previous Bookings */}
       <h3>Previous Bookings</h3>
       <div style={styles.bookingList}>
-        {bookings.previous.map((booking) => (
+        {prevBook.map((booking) => (
           <div key={booking.id} style={styles.bookingCard}>
             <p>
-              <strong>Booking Date:</strong> {booking.bookDate}
+              <strong>Booking Date:</strong> {booking.bookeddate.start}
             </p>
+
             <p>
-              <strong>Technician Name:</strong> {booking.technicianName}
+              <strong>Technician ID:</strong> {booking.technicianid}
             </p>
-            <p>
-              <strong>Technician ID:</strong> {booking.technicianId}
-            </p>
-            <p>
-              <strong>Rating:</strong> ⭐ {booking.rating}
-            </p>
+
             <p>
               <strong>Status:</strong> {booking.status}
             </p>

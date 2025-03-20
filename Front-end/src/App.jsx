@@ -91,7 +91,7 @@ function App() {
         >
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="dashboard/:serviceName" element={<ServiceDetails />} />
+          <Route path="dashboard/:categoryName" element={<ServiceDetails />} />
           <Route path="my-bookings" element={<MyBookings />} />
           <Route path="profile" element={<Profile />} />
         </Route>
