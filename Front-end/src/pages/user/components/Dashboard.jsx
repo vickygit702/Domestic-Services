@@ -15,7 +15,9 @@ const Dashboard = () => {
   // Fetch services on component mount
   useEffect(() => {
     const url = `http://localhost:8000/user/${user.id}/services/fetchAllServices`; // Dynamic URL
-    dispatch(fetchServices(url)); // Pass the URL as an argument
+    dispatch(fetchServices(url));
+    // Pass the URL as an argument
+    console.log(user);
   }, [dispatch]);
 
   if (loading) return <p>Loading...</p>;

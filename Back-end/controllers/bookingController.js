@@ -6,7 +6,8 @@ const axios = require("axios");
 // Book a service
 exports.bookService = async (req, res) => {
   try {
-    const { userId, serviceName, startDate, duration, userLocation } = req.body;
+    const { userId, serviceName, startDate, duration, userLocation } =
+      req.body.bookingData;
 
     //const dates = getBookingDate("2025-02-25T11:00:00Z", 20);
     const dates = getBookingDate(startDate, duration);

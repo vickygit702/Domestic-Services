@@ -10,6 +10,7 @@ export const updateUserProfile = createAsyncThunk(
         `http://localhost:8000/user/${userId}/update-profile`,
         updatedData
       );
+
       return response.data; // Return updated user data
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -92,7 +93,17 @@ const authSlice = createSlice({
       })
       .addCase(updateUserProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.upd_user;
+
+        // Ensure that action.payload.upd_user contains the updated user data
+        if (action.payload.userUptodate) {
+          state.user = { ...state.user, ...action.payload.userUptodate };
+          console.log("updated user data :", state.user);
+        } else {
+          console.error(
+            "Updated user data not found in response:",
+            action.payload
+          );
+        }
       })
       .addCase(updateUserProfile.rejected, (state, action) => {
         state.loading = false;

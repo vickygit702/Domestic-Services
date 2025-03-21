@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { bookService } from "../../../redux/slices/userSlice";
 
 const ServiceDetails = () => {
   const { categoryName } = useParams();
   const { serviceList = [] } = useSelector((state) => state.services);
   const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
@@ -58,7 +60,8 @@ const ServiceDetails = () => {
     };
 
     console.log("Booking Data:", bookingData);
-
+    const url = "http://localhost:8000/service/booking/book-service";
+    dispatch(bookService(url, bookingData));
     // Here, you can send the booking data to an API or perform other actions
     // Example:
     // axios.post("/api/bookings", bookingData)

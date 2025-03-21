@@ -4,8 +4,40 @@ const Bookings = require("../../models/Bookings");
 
 exports.updateUser = async (req, res) => {
   try {
-    upd_user = await User.findByIdAndUpdate(req.params.id, req.body);
-    res.status(200).json({ upd_user, message: "User updated successfully" });
+    const id = req.params.id;
+    const data = req.body;
+
+    const updateObject = {};
+    for (const key in data) {
+      if (typeof data[key] === "object" && !Array.isArray(data[key])) {
+        // Handle nested objects (e.g., user_address)
+        for (const nestedKey in data[key]) {
+          updateObject[`${key}.${nestedKey}`] = data[key][nestedKey];
+        }
+      } else {
+        // Handle top-level fields (e.g., user_name, user_email)
+        updateObject[key] = data[key];
+      }
+    }
+
+    upd_user = await User.findByIdAndUpdate(
+      id,
+      { $set: updateObject },
+      { new: true }
+    );
+    const userUptodate = {
+      id: upd_user._id,
+      name: upd_user.user_name,
+      email: upd_user.user_email,
+      password: upd_user.user_password,
+      contact: upd_user.user_contact,
+      address: upd_user.user_address,
+      location: upd_user.user_location,
+      usertype: upd_user.userType,
+    };
+    res
+      .status(200)
+      .json({ userUptodate, message: "User updated successfully" });
   } catch (error) {
     console.log(error);
     res
