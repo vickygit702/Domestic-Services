@@ -18,9 +18,12 @@ export const fetchBookings = createAsyncThunk(
 
 export const bookService = createAsyncThunk(
   "booking/book-service", // Action type prefix
-  async ({ url, bookingData }, { rejectWithValue }) => {
+  async (bookingData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(url, bookingData); // Use the dynamic URL
+      const response = await axios.post(
+        "http://localhost:8000/service/booking/book-service",
+        bookingData
+      ); // Use the dynamic URL
       console.log(response.data);
       // Return the fetched data
       return response.data;

@@ -14,11 +14,16 @@ const MyBookings = () => {
   const prevBook = userBookings.filter(
     (bookings) => bookings.status === "Completed"
   );
-  console.log(prevBook);
+
   const upcomeBook = userBookings.filter(
     (bookings) => bookings.status === "Confirmed"
   );
-  console.log(upcomeBook);
+
+  useEffect(() => {
+    console.log("old ", prevBook);
+    console.log("upcome", upcomeBook);
+  });
+
   // Sample data for upcoming and previous bookings
 
   return (
@@ -37,7 +42,10 @@ const MyBookings = () => {
             <p>
               <strong>Technician ID:</strong> {booking.technicianid}
             </p>
-
+            <p>
+              <strong>About Work :</strong>
+              {booking.jobDetail}
+            </p>
             <p>
               <strong>Status:</strong> {booking.status}
             </p>
@@ -60,7 +68,10 @@ const MyBookings = () => {
             <p>
               <strong>Technician ID:</strong> {booking.technicianid}
             </p>
-
+            <p>
+              <strong>About Work :</strong>
+              {booking.jobDetail}
+            </p>
             <p>
               <strong>Status:</strong> {booking.status}
             </p>

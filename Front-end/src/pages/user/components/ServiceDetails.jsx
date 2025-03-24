@@ -11,9 +11,18 @@ const ServiceDetails = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
-  const [startDate, setStartDate] = useState("");
-  const [duration, setDuration] = useState("");
+
   const itemsPerPage = 6;
+
+  const [bookData, setBookData] = useState({
+    startDate: "",
+    duration: 1,
+    workDetail: "",
+  });
+
+  useEffect(() => {
+    console.log(bookData);
+  });
 
   // Decode the service name
   const formattedTitle = categoryName || "Uncategorized";
@@ -43,25 +52,44 @@ const ServiceDetails = () => {
     setIsModalOpen(true);
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setBookData({ ...bookData, [name]: value });
+  };
+
   // Handle form submission
   const handleBookingSubmit = (e) => {
     e.preventDefault();
 
-    // Create booking data object
     const bookingData = {
       userId: user.id,
       serviceName: selectedService.name,
-      startDate,
-      duration: parseInt(duration, 10), // Convert duration to a number
+      startDate: bookData.startDate + ":00Z",
+      duration: parseInt(bookData.duration, 10),
+      // Convert duration to a number
+      workDetail: bookData.workDetail,
       userLocation: {
         lat: user.location.lat,
         lng: user.location.lng,
       },
     };
 
+    //manual for checking
+    // const bookingData = {
+    //   userId: "67d85abbffa4f7da34890a9a",
+    //   serviceName: "Electrical",
+    //   startDate: "2025-04-25T10:00:00Z",
+    //   duration: 2, // Convert duration to a number
+    //   userLocation: {
+    //     lat: 10.348487518110808,
+    //     lng: 77.97399927581573,
+    //   },
+    // };
+
     console.log("Booking Data:", bookingData);
-    const url = "http://localhost:8000/service/booking/book-service";
-    dispatch(bookService(url, bookingData));
+
+    dispatch(bookService(bookingData));
+
     // Here, you can send the booking data to an API or perform other actions
     // Example:
     // axios.post("/api/bookings", bookingData)
@@ -124,8 +152,9 @@ const ServiceDetails = () => {
                 <input
                   type="datetime-local"
                   id="start-date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
+                  name="startDate"
+                  value={bookData.startDate}
+                  onChange={handleChange}
                   required
                   style={styles.input}
                 />
@@ -136,11 +165,22 @@ const ServiceDetails = () => {
                 <input
                   type="number"
                   id="duration"
-                  value={duration}
-                  onChange={(e) => setDuration(e.target.value)}
+                  name="duration"
+                  value={bookData.duration}
+                  onChange={handleChange}
                   min="1"
                   required
                   style={styles.input}
+                />
+              </div>
+              <div styles={styles.formGroup}>
+                <label htmlFor="aboutwork">Work Description :</label>
+                <textarea
+                  name="workDetail"
+                  id="aboutwork"
+                  rows="5"
+                  value={bookData.workDetail}
+                  onChange={handleChange}
                 />
               </div>
 

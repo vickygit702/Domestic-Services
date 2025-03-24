@@ -48,38 +48,6 @@ function App() {
             </TechnicianProtected>
           }
         />
-        {/* <Route
-          path="/my-project/user/:id"
-          element={
-            <UserProtected>
-              <UserHomePage />
-            </UserProtected>
-          }
-        /> */}
-        {/* <Route
-          path="/my-project/user/:id/dashboard"
-          element={
-            <UserProtected>
-              <Dashboard />
-            </UserProtected>
-          }
-        />
-        <Route
-          path="/my-project/user/:id/my-bookings"
-          element={
-            <UserProtected>
-              <MyBookings />
-            </UserProtected>
-          }
-        />
-        <Route
-          path="/my-project/user/:id/profile"
-          element={
-            <UserProtected>
-              <Profile />
-            </UserProtected>
-          }
-        /> */}
 
         <Route
           path="/my-project/user/:id"
