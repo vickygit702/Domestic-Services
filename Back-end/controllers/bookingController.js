@@ -6,8 +6,14 @@ const axios = require("axios");
 // Book a service
 exports.bookService = async (req, res) => {
   try {
-    const { userId, serviceName, startDate, duration, userLocation } =
-      req.body.bookingData;
+    const {
+      userId,
+      serviceName,
+      startDate,
+      duration,
+      userLocation,
+      workDetail,
+    } = req.body;
 
     //const dates = getBookingDate("2025-02-25T11:00:00Z", 20);
     const dates = getBookingDate(startDate, duration);
@@ -83,6 +89,7 @@ exports.bookService = async (req, res) => {
         start: bookingStartTime,
         end: overallEndTime,
       },
+      workDetail: workDetail,
       price: tot_price,
     });
 

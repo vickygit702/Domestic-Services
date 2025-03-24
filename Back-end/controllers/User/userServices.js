@@ -89,6 +89,7 @@ exports.myBookings = async (req, res) => {
       technicianid: booking.tech_Id,
       servicename: booking.serviceName,
       bookeddate: booking.bookedDate,
+      jobDetail: booking.workDetail,
       status: booking.status,
       price: booking.price,
     }));
