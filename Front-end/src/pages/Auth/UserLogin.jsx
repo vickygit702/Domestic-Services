@@ -58,28 +58,88 @@ const UserLogin = () => {
       // Display error to the user (e.g., using a toast or alert)
     }
   }, [error]);
-  if (loading) return <div>Loading.....</div>;
+  if (loading)
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "100vh" }}
+      >
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <h2>Login User</h2>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
-      <Link to="/my-project/user/signup">New User?</Link>
+    <div className="container py-5">
+      <div className="row justify-content-center">
+        <div className="col-lg-6 col-md-8">
+          <div className="card shadow-lg border-0 rounded-3 overflow-hidden">
+            {/* Card Header */}
+            <div className="card-header bg-primary text-white py-4">
+              <h2 className="text-center mb-0">User Login</h2>
+              <p className="text-center mb-0 opacity-75">Access your account</p>
+            </div>
+
+            {/* Card Body */}
+            <div className="card-body p-4 p-md-5">
+              <form onSubmit={handleSubmit}>
+                {/* Email Field */}
+                <div className="mb-4">
+                  <label htmlFor="email" className="form-label">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    className="form-control form-control-lg"
+                    id="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+
+                {/* Password Field */}
+                <div className="mb-4">
+                  <label htmlFor="password" className="form-label">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    className="form-control form-control-lg"
+                    id="password"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <div className="d-grid mb-3">
+                  <button className="btn btn-primary btn-lg" type="submit">
+                    Login
+                  </button>
+                </div>
+
+                {/* Signup Link */}
+                <div className="text-center">
+                  <p className="mb-0">
+                    New User?{" "}
+                    <Link
+                      to="/my-project/user/signup"
+                      className="text-primary fw-bold"
+                    >
+                      Create an account
+                    </Link>
+                  </p>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

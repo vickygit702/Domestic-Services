@@ -1,5 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import "./scss/main.scss"; // or './main.scss' if using Option A
+
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import { ToastContainer } from "react-toastify";
@@ -12,10 +14,3 @@ createRoot(document.getElementById("root")).render(
     <ToastContainer position="bottom-center" autoClose={1500} closeOnClick />
   </Provider>
 );
-
-// ReactDOM.render(
-//   <Provider store={store}>
-//     <App />
-//   </Provider>,
-//   document.getElementById("root")
-// );

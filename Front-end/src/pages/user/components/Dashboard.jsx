@@ -53,16 +53,6 @@ const Dashboard = () => {
       {/* Our Services Section */}
       <h2 style={styles.sectionTitle}>Our Services</h2>
       <div style={styles.servicesContainer}>
-        {/* {services.map((service) => (
-          <div
-            key={service.id}
-            style={styles.serviceCard}
-            onClick={() => handleServiceClick(service.title)}
-          >
-            <h3>{service.title}</h3>
-          </div>
-        ))} */}
-
         {filteredCategory.map((service, index) => (
           <div
             key={index}
