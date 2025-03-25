@@ -17,7 +17,7 @@ const bookingSchema = new mongoose.Schema({
   },
   createdAt: { type: Date, default: Date.now },
   bookedDate: { start: Date, end: Date },
-
+  workDetail: { type: String },
   status: {
     type: String,
     enum: ["Confirmed", "Completed", "Cancelled"],

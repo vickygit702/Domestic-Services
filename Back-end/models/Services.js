@@ -13,19 +13,11 @@ const servicesSchema = new Schema({
     type: Number,
     required: true,
   },
-  image: {
-    type: String,
-    // required: true,
-  },
+
   category: {
     type: String,
     required: true,
   },
-  // isUrgent: {
-  //   type: Boolean,
-  //   default: false,
-  // },
-  // urgencyMultiplier: { type: Number, default: 1.5 },
 });
 
 module.exports = mongoose.model("Services", servicesSchema);

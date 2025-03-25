@@ -16,6 +16,7 @@ exports.signupUser = async (req, res) => {
     await createdUser.save();
     const userDetail = {
       id: createdUser._id,
+      password: createdUser.user_password,
       name: createdUser.user_name,
       email: createdUser.user_email,
       contact: createdUser.user_contact,
@@ -45,6 +46,7 @@ exports.loginUser = async (req, res) => {
         id: user._id,
         name: user.user_name,
         email: user.user_email,
+        password: user.user_password,
         contact: user.user_contact,
         address: user.user_address,
         location: user.user_location,
@@ -79,6 +81,7 @@ exports.signupTechnician = async (req, res) => {
       id: newTechnician._id,
       name: newTechnician.tech_name,
       email: newTechnician.tech_email,
+      password: newTechnician.tech_password,
       contact: newTechnician.tech_contact,
       address: newTechnician.tech_address,
       location: newTechnician.tech_location,
@@ -110,6 +113,7 @@ exports.loginTechnician = async (req, res) => {
         id: technician._id,
         name: technician.tech_name,
         email: technician.tech_email,
+        password: technician.tech_password,
         contact: technician.tech_contact,
         address: technician.tech_address,
         location: technician.tech_location,

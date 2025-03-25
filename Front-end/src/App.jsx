@@ -48,38 +48,6 @@ function App() {
             </TechnicianProtected>
           }
         />
-        {/* <Route
-          path="/my-project/user/:id"
-          element={
-            <UserProtected>
-              <UserHomePage />
-            </UserProtected>
-          }
-        /> */}
-        {/* <Route
-          path="/my-project/user/:id/dashboard"
-          element={
-            <UserProtected>
-              <Dashboard />
-            </UserProtected>
-          }
-        />
-        <Route
-          path="/my-project/user/:id/my-bookings"
-          element={
-            <UserProtected>
-              <MyBookings />
-            </UserProtected>
-          }
-        />
-        <Route
-          path="/my-project/user/:id/profile"
-          element={
-            <UserProtected>
-              <Profile />
-            </UserProtected>
-          }
-        /> */}
 
         <Route
           path="/my-project/user/:id"
@@ -91,7 +59,7 @@ function App() {
         >
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="dashboard/:serviceName" element={<ServiceDetails />} />
+          <Route path="dashboard/:categoryName" element={<ServiceDetails />} />
           <Route path="my-bookings" element={<MyBookings />} />
           <Route path="profile" element={<Profile />} />
         </Route>

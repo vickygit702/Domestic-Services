@@ -23,7 +23,21 @@ exports.addServices = async (req, res) => {
     console.log(error);
     res
       .status(500)
-      .json({ message: "Error occured in server please try again later" });
+      .json({ message: "Error occured....! please try again later" });
+  }
+};
+exports.addManyServices = async (req, res) => {
+  try {
+    const insertedServices = await Services.insertMany(req.body);
+
+    res
+      .status(201)
+      .json({ message: "Service added successfully", data: insertedServices });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ message: "Error occured...! please try again later" });
   }
 };
 exports.updateService = async (req, res) => {
