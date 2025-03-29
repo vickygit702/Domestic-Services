@@ -2,7 +2,7 @@ import UserLoginPage from "./Auth/UserLogin";
 import UserSignupPage from "./Auth/UserSignup";
 import NotFoundPage from "./Auth/NotFound";
 import UserDashboard from "./user/UserDashboard";
-import TechnicianHomePage from "./technician/TechnicianDashboard";
+import TechnicianHomePage from "./technician/TechnicianHomePage";
 import TechnicianLogin from "./Auth/TechnicianLogin";
 import TechnicianSignup from "./Auth/TechnicianSignup";
 import UserLogout from "./UserLogout";
@@ -15,6 +15,11 @@ import Dashboard from "./user/components/Dashboard";
 import MyBookings from "./user/components/MyBookings";
 import Profile from "./user/components/Profile";
 import ServiceDetails from "./user/components/ServiceDetails";
+
+import JobDetails from "./technician/components/JobDetails";
+import TechnicianProfile from "./technician/components/TechnicianProfile";
+import TechnicianDashboard from "./technician/components/TechnicianDashboard";
+import TechnicianMyJobs from "./technician/components/TechnicianMyJobs";
 
 export {
   UserLoginPage,
@@ -33,4 +38,8 @@ export {
   MyBookings,
   Profile,
   ServiceDetails,
+  JobDetails,
+  TechnicianProfile,
+  TechnicianDashboard,
+  TechnicianMyJobs,
 };

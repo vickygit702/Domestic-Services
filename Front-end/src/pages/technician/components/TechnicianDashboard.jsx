@@ -1,7 +1,7 @@
 import React from "react";
 
 const TechnicianDashboard = () => {
-  return <div>TechnicianHome</div>;
+  return <div>TechnicianDashboard</div>;
 };
 
 export default TechnicianDashboard;

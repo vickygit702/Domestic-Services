@@ -20,6 +20,10 @@ import {
   MyBookings,
   Profile,
   ServiceDetails,
+  TechnicianDashboard,
+  TechnicianMyJobs,
+  JobDetails,
+  TechnicianProfile,
 } from "./pages/index";
 
 function App() {
@@ -40,6 +44,14 @@ function App() {
         />
 
         <Route path="*" element={<NotFoundPage />} />
+        {/* <Route
+          path="/my-project/technician/:id"
+          element={
+            <TechnicianProtected>
+              <TechnicianHomePage />
+            </TechnicianProtected>
+          }
+        /> */}
         <Route
           path="/my-project/technician/:id"
           element={
@@ -47,7 +59,13 @@ function App() {
               <TechnicianHomePage />
             </TechnicianProtected>
           }
-        />
+        >
+          <Route index element={<TechnicianDashboard />} />
+          <Route path="dashboard" element={<TechnicianDashboard />} />
+          <Route path="my-jobs" element={<TechnicianMyJobs />} />
+          <Route path="my-jobs/:jobId" element={<JobDetails />} />
+          <Route path="profile" element={<TechnicianProfile />} />
+        </Route>
 
         <Route
           path="/my-project/user/:id"

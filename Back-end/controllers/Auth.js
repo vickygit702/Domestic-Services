@@ -23,6 +23,7 @@ exports.signupUser = async (req, res) => {
       address: createdUser.user_address,
       location: createdUser.user_location,
       usertype: createdUser.userType,
+      profileImg: createdUser.profileImg,
     };
     res.status(201).json({ userDetail, message: "user signup success" });
   } catch (error) {
@@ -51,6 +52,7 @@ exports.loginUser = async (req, res) => {
         address: user.user_address,
         location: user.user_location,
         usertype: user.userType,
+        profileImg: user.profileImg,
       };
       return res.status(200).json({ userDetail, message: "Login success.." });
     } else {
@@ -90,6 +92,7 @@ exports.signupTechnician = async (req, res) => {
       experience: newTechnician.tech_experience,
       ratingAvg: newTechnician.tech_ratingAvg,
       completions: newTechnician.jobsCompleted,
+      profileImg: newTechnician.profileImg,
     };
     res.status(201).json({ techDetail, message: "user signup success" });
   } catch (error) {
@@ -122,6 +125,7 @@ exports.loginTechnician = async (req, res) => {
         experience: technician.tech_experience,
         ratingAvg: technician.tech_ratingAvg,
         completions: technician.jobsCompleted,
+        profileImg: technician.profileImg,
       };
       return res.status(200).json({ techDetail, message: "Login success.." });
     } else {

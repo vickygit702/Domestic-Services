@@ -58,6 +58,10 @@ const technicianSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  profileImg: {
+    type: String,
+    default: "profile-user.png",
+  },
   bookedSlots: [
     {
       start: Date,

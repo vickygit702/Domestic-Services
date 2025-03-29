@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { bookService } from "../../../redux/slices/userSlice";
+import { Modal } from "react-bootstrap";
 
 const ServiceDetails = () => {
   const { categoryName } = useParams();
@@ -11,6 +12,7 @@ const ServiceDetails = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const itemsPerPage = 6;
 
@@ -20,22 +22,22 @@ const ServiceDetails = () => {
     workDetail: "",
   });
 
-  useEffect(() => {
-    console.log(bookData);
-  });
-
   // Decode the service name
   const formattedTitle = categoryName || "Uncategorized";
   const decodedCategoryName = formattedTitle
     .replace(/-/g, " ")
     .replace(/_/g, " & ");
 
-  // Filter services based on category
-  const filteredServices = serviceList.filter(
-    (service) =>
+  // Filter services based on category and search term
+  const filteredServices = serviceList.filter((service) => {
+    const matchesCategory =
       service.category.trim().toLowerCase() ===
-      decodedCategoryName.trim().toLowerCase()
-  );
+      decodedCategoryName.trim().toLowerCase();
+    const matchesSearch =
+      service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      service.desc.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -46,7 +48,6 @@ const ServiceDetails = () => {
   );
   const totalPages = Math.ceil(filteredServices.length / itemsPerPage);
 
-  // Handle Book Now button click
   const handleBookNow = (service) => {
     setSelectedService(service);
     setIsModalOpen(true);
@@ -57,231 +58,259 @@ const ServiceDetails = () => {
     setBookData({ ...bookData, [name]: value });
   };
 
-  // Handle form submission
   const handleBookingSubmit = (e) => {
     e.preventDefault();
-
     const bookingData = {
       userId: user.id,
       serviceName: selectedService.name,
       startDate: bookData.startDate + ":00Z",
       duration: parseInt(bookData.duration, 10),
-      // Convert duration to a number
       workDetail: bookData.workDetail,
       userLocation: {
         lat: user.location.lat,
         lng: user.location.lng,
       },
     };
-
-    //manual for checking
-    // const bookingData = {
-    //   userId: "67d85abbffa4f7da34890a9a",
-    //   serviceName: "Electrical",
-    //   startDate: "2025-04-25T10:00:00Z",
-    //   duration: 2, // Convert duration to a number
-    //   userLocation: {
-    //     lat: 10.348487518110808,
-    //     lng: 77.97399927581573,
-    //   },
-    // };
-
-    console.log("Booking Data:", bookingData);
-
     dispatch(bookService(bookingData));
-
-    // Here, you can send the booking data to an API or perform other actions
-    // Example:
-    // axios.post("/api/bookings", bookingData)
-    //   .then((response) => console.log("Booking successful:", response.data))
-    //   .catch((error) => console.error("Booking failed:", error));
-
-    // Close the modal after submission
     setIsModalOpen(false);
   };
 
   return (
-    <div style={styles.container}>
-      <h2>{decodedCategoryName.toUpperCase()}</h2>
+    <div className="container-fluid px-4 py-4">
+      {/* Page Header */}
+      <div className="row mb-4">
+        <div className="col-12">
+          <div className="d-flex justify-content-between align-items-center">
+            <h1
+              className="fw-bold text-gradient"
+              style={{
+                backgroundImage:
+                  "linear-gradient(45deg, #6a11cb 0%, #2575fc 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              {decodedCategoryName.toUpperCase()}
+            </h1>
+            <div className="w-25">
+              <div className="input-group">
+                <span className="input-group-text bg-white border-end-0">
+                  <i className="bi bi-search"></i>
+                </span>
+                <input
+                  type="text"
+                  className="form-control border-start-0"
+                  placeholder="Search services..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+          <p className="text-muted">
+            Browse and book available service providers
+          </p>
+        </div>
+      </div>
 
       {/* Service Cards */}
-      <div style={styles.categoriesContainer}>
-        {currentItems.map((service) => (
-          <div key={service.id} style={styles.categoryCard}>
-            <h3>{service.name}</h3>
-            <p>{service.desc}</p>
-            <p style={styles.price}>Rate: ${service.rate}/hr</p>
-            <button
-              style={styles.bookButton}
-              onClick={() => handleBookNow(service)}
-            >
-              Book Now
-            </button>
+      <div className="row g-4">
+        {currentItems.length > 0 ? (
+          currentItems.map((service) => (
+            <div key={service.id} className="col-md-6 col-lg-4">
+              <div className="card border-0 shadow-sm h-100 service-card">
+                <div className="card-body">
+                  <div className="d-flex align-items-start mb-3">
+                    <div className="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
+                      <i className="bi bi-tools fs-4 text-primary"></i>
+                    </div>
+                    <div>
+                      <h3 className="h5 fw-bold mb-1">{service.name}</h3>
+                      <p className="text-muted small mb-2">
+                        Category: {service.category}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="mb-4">{service.desc}</p>
+                  <div className="d-flex justify-content-between align-items-center mt-auto">
+                    <div>
+                      <span className="badge bg-success fs-6">
+                        ${service.rate}/hr
+                      </span>
+                    </div>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => handleBookNow(service)}
+                    >
+                      <i className="bi bi-calendar-plus me-2"></i>Book Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="col-12 text-center py-5">
+            <i className="bi bi-exclamation-circle fs-1 text-muted"></i>
+            <h4 className="mt-3">No services found</h4>
+            <p className="text-muted">
+              Try adjusting your search or check back later
+            </p>
           </div>
-        ))}
+        )}
       </div>
 
       {/* Pagination */}
-      <div style={styles.pagination}>
-        {Array.from({ length: totalPages }, (_, i) => (
-          <button
-            key={i + 1}
-            onClick={() => setCurrentPage(i + 1)}
-            style={{
-              ...styles.pageButton,
-              backgroundColor: currentPage === i + 1 ? "#007bff" : "#f4f4f4",
-              color: currentPage === i + 1 ? "#fff" : "#333",
-            }}
-          >
-            {i + 1}
-          </button>
-        ))}
-      </div>
+      {filteredServices.length > 0 && (
+        <div className="d-flex justify-content-center mt-4">
+          <nav>
+            <ul className="pagination">
+              <li
+                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+              >
+                <button
+                  className="page-link"
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                >
+                  Previous
+                </button>
+              </li>
+              {Array.from({ length: totalPages }, (_, i) => (
+                <li
+                  key={i}
+                  className={`page-item ${
+                    currentPage === i + 1 ? "active" : ""
+                  }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => setCurrentPage(i + 1)}
+                  >
+                    {i + 1}
+                  </button>
+                </li>
+              ))}
+              <li
+                className={`page-item ${
+                  currentPage === totalPages ? "disabled" : ""
+                }`}
+              >
+                <button
+                  className="page-link"
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                >
+                  Next
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      )}
 
       {/* Booking Modal */}
-      {isModalOpen && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modal}>
-            <h3>Book {selectedService.name}</h3>
-            <p>{selectedService.desc}</p>
-            <p>Rate: ${selectedService.rate}/hr</p>
+      <Modal show={isModalOpen} onHide={() => setIsModalOpen(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <i className="bi bi-calendar-plus me-2"></i>
+            Book {selectedService?.name}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="mb-4">
+            <div className="d-flex justify-content-between mb-2">
+              <span className="text-muted">Service Rate:</span>
+              <span className="fw-bold">${selectedService?.rate}/hr</span>
+            </div>
+            <div className="d-flex justify-content-between">
+              <span className="text-muted">Category:</span>
+              <span className="fw-bold">{selectedService?.category}</span>
+            </div>
+          </div>
 
-            <form onSubmit={handleBookingSubmit}>
-              <div style={styles.formGroup}>
-                <label htmlFor="start-date">Start Date:</label>
-                <input
-                  type="datetime-local"
-                  id="start-date"
-                  name="startDate"
-                  value={bookData.startDate}
-                  onChange={handleChange}
-                  required
-                  style={styles.input}
-                />
-              </div>
+          <form onSubmit={handleBookingSubmit}>
+            <div className="mb-3">
+              <label htmlFor="start-date" className="form-label">
+                Start Date & Time
+              </label>
+              <input
+                type="datetime-local"
+                className="form-control"
+                id="start-date"
+                name="startDate"
+                value={bookData.startDate}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-              <div style={styles.formGroup}>
-                <label htmlFor="duration">Duration (in hours):</label>
-                <input
-                  type="number"
-                  id="duration"
-                  name="duration"
-                  value={bookData.duration}
-                  onChange={handleChange}
-                  min="1"
-                  required
-                  style={styles.input}
-                />
-              </div>
-              <div styles={styles.formGroup}>
-                <label htmlFor="aboutwork">Work Description :</label>
-                <textarea
-                  name="workDetail"
-                  id="aboutwork"
-                  rows="5"
-                  value={bookData.workDetail}
-                  onChange={handleChange}
-                />
-              </div>
+            <div className="mb-3">
+              <label htmlFor="duration" className="form-label">
+                Duration (hours)
+              </label>
+              <input
+                type="number"
+                className="form-control"
+                id="duration"
+                name="duration"
+                value={bookData.duration}
+                onChange={handleChange}
+                min="1"
+                required
+              />
+            </div>
 
-              <button type="submit" style={styles.bookButton}>
+            <div className="mb-4">
+              <label htmlFor="aboutwork" className="form-label">
+                Work Description
+              </label>
+              <textarea
+                className="form-control"
+                id="aboutwork"
+                name="workDetail"
+                rows="3"
+                value={bookData.workDetail}
+                onChange={handleChange}
+                placeholder="Describe the work needed..."
+              />
+            </div>
+
+            <div className="d-grid gap-2">
+              <button type="submit" className="btn btn-primary">
+                <i className="bi bi-check-circle me-2"></i>
                 Confirm Booking
               </button>
               <button
                 type="button"
+                className="btn btn-outline-secondary"
                 onClick={() => setIsModalOpen(false)}
-                style={styles.cancelButton}
               >
                 Cancel
               </button>
-            </form>
-          </div>
-        </div>
-      )}
+            </div>
+          </form>
+        </Modal.Body>
+      </Modal>
+
+      <style jsx>{`
+        .service-card {
+          transition: all 0.3s ease;
+        }
+        .service-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .text-gradient {
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+      `}</style>
     </div>
   );
-};
-
-// Styles
-const styles = {
-  container: {
-    padding: "20px",
-  },
-  categoriesContainer: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-    gap: "20px",
-  },
-  categoryCard: {
-    backgroundColor: "#f4f4f4",
-    padding: "20px",
-    borderRadius: "10px",
-    textAlign: "left",
-  },
-  price: {
-    fontWeight: "bold",
-    marginBottom: "10px",
-  },
-  bookButton: {
-    padding: "10px 20px",
-    backgroundColor: "#007bff",
-    color: "#fff",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    fontSize: "16px",
-  },
-  pagination: {
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "20px",
-  },
-  pageButton: {
-    padding: "10px 15px",
-    margin: "0 5px",
-    border: "1px solid #ccc",
-    borderRadius: "5px",
-    cursor: "pointer",
-  },
-  modalOverlay: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modal: {
-    backgroundColor: "#fff",
-    padding: "20px",
-    borderRadius: "10px",
-    width: "400px",
-    textAlign: "center",
-  },
-  formGroup: {
-    margin: "17px",
-    textAlign: "left",
-  },
-  input: {
-    width: "90%",
-    padding: "10px",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
-    fontSize: "16px",
-  },
-  cancelButton: {
-    padding: "10px 20px",
-    backgroundColor: "#ccc",
-    color: "#333",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    fontSize: "16px",
-    marginLeft: "10px",
-  },
 };
 
 export default ServiceDetails;

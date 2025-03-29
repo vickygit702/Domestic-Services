@@ -31,6 +31,7 @@ const TechnicianLogin = () => {
       );
 
       const { techDetail } = response.data;
+      console.log(techDetail);
       if (techDetail) {
         dispatch(loginTechnicianSuccess(techDetail));
         toast.success(response.data.message);

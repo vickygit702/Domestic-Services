@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
-import UserLogout from "../UserLogout";
+import TechnicianLogout from "../TechnicianLogout";
 
-const UserDashboard = () => {
-  const { user } = useSelector((state) => state.auth);
+const TechnicianHomePage = () => {
+  const { technician } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const { id } = useParams();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -43,7 +43,7 @@ const UserDashboard = () => {
           <i className={`bi bi-${sidebarOpen ? "x" : "list"}`}></i>
         </button>
         <img
-          src={`http://localhost:8000/uploads/profile/${user.profileImg}`}
+          src={`http://localhost:8000/uploads/profile/${technician.profileImg}`}
           alt="profile"
           className="rounded-circle bg-white"
           width="40"
@@ -64,12 +64,14 @@ const UserDashboard = () => {
             {!isMobile && (
               <div className="text-center mb-4">
                 <img
-                  src={`http://localhost:8000/uploads/profile/${user.profileImg}`}
+                  src={`http://localhost:8000/uploads/profile/${technician.profileImg}`}
                   alt="profile"
                   className="rounded-circle bg-white mx-auto"
                   width="80"
                   height="80"
                 />
+                <h5 className="mt-3 text-white">{technician.name}</h5>
+                <small className=" text-white">Electrical</small>
               </div>
             )}
 
@@ -77,7 +79,7 @@ const UserDashboard = () => {
             <ul className="nav flex-column mb-3" style={{ flex: "1 1 auto" }}>
               <li className="nav-item mb-2">
                 <Link
-                  to={`/my-project/user/${id}/dashboard`}
+                  to={`/my-project/technician/${id}/dashboard`}
                   className="nav-link text-white py-2 px-3 rounded d-flex align-items-center"
                   activeClassName="active bg-primary"
                   onClick={closeSidebar}
@@ -88,18 +90,40 @@ const UserDashboard = () => {
               </li>
               <li className="nav-item mb-2">
                 <Link
-                  to={`/my-project/user/${id}/my-bookings`}
+                  to={`/my-project/technician/${id}/my-jobs`}
                   className="nav-link text-white py-2 px-3 rounded d-flex align-items-center"
                   activeClassName="active bg-primary"
                   onClick={closeSidebar}
                 >
-                  <i className="bi bi-calendar-check me-2"></i>
-                  My Bookings
+                  <i className="bi bi-briefcase me-2"></i>
+                  My Jobs
                 </Link>
               </li>
               <li className="nav-item mb-2">
                 <Link
-                  to={`/my-project/user/${id}/profile`}
+                  to={`/my-project/technician/${id}/schedule`}
+                  className="nav-link text-white py-2 px-3 rounded d-flex align-items-center"
+                  activeClassName="active bg-primary"
+                  onClick={closeSidebar}
+                >
+                  <i className="bi bi-calendar3 me-2"></i>
+                  Schedule
+                </Link>
+              </li>
+              <li className="nav-item mb-2">
+                <Link
+                  to={`/my-project/technician/${id}/earnings`}
+                  className="nav-link text-white py-2 px-3 rounded d-flex align-items-center"
+                  activeClassName="active bg-primary"
+                  onClick={closeSidebar}
+                >
+                  <i className="bi bi-cash-stack me-2"></i>
+                  Earnings
+                </Link>
+              </li>
+              <li className="nav-item mb-2">
+                <Link
+                  to={`/my-project/technician/${id}/profile`}
                   className="nav-link text-white py-2 px-3 rounded d-flex align-items-center"
                   activeClassName="active bg-primary"
                   onClick={closeSidebar}
@@ -109,7 +133,7 @@ const UserDashboard = () => {
                 </Link>
               </li>
             </ul>
-            <UserLogout />
+            <TechnicianLogout />
           </div>
         </div>
 
@@ -176,4 +200,5 @@ const UserDashboard = () => {
     </div>
   );
 };
-export default UserDashboard;
+
+export default TechnicianHomePage;

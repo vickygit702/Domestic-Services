@@ -18,6 +18,8 @@ server.use(
 );
 
 server.use(express.json());
+server.use("/uploads/profile", express.static("uploads"));
+
 server.use("/auth/api", authRoutes);
 server.use("/admin", adminRoutes);
 server.use("/user", userRoutes);

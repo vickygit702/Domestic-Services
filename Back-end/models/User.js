@@ -44,6 +44,10 @@ const userSchema = new Schema({
 
   user_location: { type: { lat: Number, lng: Number }, required: true },
   userType: { type: String, enum: ["normal", "premium"], default: "normal" },
+  profileImg: {
+    type: String,
+    default: "profile-user.png",
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);
