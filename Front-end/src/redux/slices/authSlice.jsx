@@ -18,6 +18,27 @@ export const updateUserProfile = createAsyncThunk(
   }
 );
 
+export const updateProfileImage = createAsyncThunk(
+  "upload-profile-image",
+  async ({ userId, file }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/user/${userId}/upload-profile-image`,
+        file,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
 const initialState = {
   user: null,
   technician: null,
@@ -68,17 +89,14 @@ const authSlice = createSlice({
     },
     loginTechnicianStart(state) {
       state.loading = true;
-      state.error = null;
     },
     loginTechnicianSuccess(state, action) {
       state.technician = action.payload;
       state.loading = false;
       state.isVerified = true;
-      state.error = null;
     },
     loginTechnicianFailure(state, action) {
       state.error = action.payload;
-      state.loading = false;
     },
     logoutTechnician(state) {
       state.technician = null;
@@ -108,6 +126,20 @@ const authSlice = createSlice({
       .addCase(updateUserProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to update services";
+      })
+      .addCase(updateProfileImage.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProfileImage.fulfilled, (state, action) => {
+        state.loading = false;
+        if (state.user && action.payload.imageUrl) {
+          state.user.profileImg = action.payload.imageUrl;
+        }
+      })
+      .addCase(updateProfileImage.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

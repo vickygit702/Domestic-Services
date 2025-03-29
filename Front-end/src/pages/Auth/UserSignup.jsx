@@ -80,153 +80,294 @@ const UserSignup = () => {
       // Display error to the user (e.g., using a toast or alert)
     }
   }, [error]);
-  if (loading) return <div>Loading.....</div>;
+  // ... [keep all your existing state and logic] ...
+
+  if (loading)
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "100vh" }}
+      >
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+
   return (
-    <div>
-      <h2>User Signup</h2>
+    <div className="container py-5">
+      <div className="row justify-content-center">
+        <div className="col-lg-8 col-md-10">
+          <div className="card shadow-lg border-0 rounded-3 overflow-hidden">
+            {/* Card Header */}
+            <div className="card-header bg-primary text-white py-4">
+              <h2 className="text-center mb-0">Create Your Account</h2>
+              <p className="text-center mb-0 opacity-75">
+                Join our service platform today
+              </p>
+            </div>
 
-      <form onSubmit={handleSubmit}>
-        {/* Name */}
+            {/* Card Body */}
+            <div className="card-body p-4 p-md-5">
+              <form
+                onSubmit={handleSubmit}
+                className="needs-validation"
+                noValidate
+              >
+                {/* Personal Information Section */}
+                <div className="mb-4">
+                  <h5 className="mb-3 text-primary">Personal Details</h5>
+                  <div className="row g-3">
+                    <div className="col-md-6">
+                      <label htmlFor="user_name" className="form-label">
+                        Full Name
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="user_name"
+                        name="user_name"
+                        value={formData.user_name}
+                        onChange={handleChange}
+                        required
+                      />
+                      <div className="invalid-feedback">
+                        Please provide your name.
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <label htmlFor="user_email" className="form-label">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        className="form-control"
+                        id="user_email"
+                        name="user_email"
+                        value={formData.user_email}
+                        onChange={handleChange}
+                        required
+                      />
+                      <div className="invalid-feedback">
+                        Please provide a valid email.
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <label htmlFor="user_password" className="form-label">
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        id="user_password"
+                        name="user_password"
+                        value={formData.user_password}
+                        onChange={handleChange}
+                        required
+                      />
+                      <div className="invalid-feedback">
+                        Please provide a password.
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <label htmlFor="user_contact" className="form-label">
+                        Contact Number
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="user_contact"
+                        name="user_contact"
+                        value={formData.user_contact}
+                        onChange={handleChange}
+                        required
+                      />
+                      <div className="invalid-feedback">
+                        Please provide your contact number.
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-        <label>Name:</label>
-        <input
-          type="text"
-          name="user_name"
-          value={formData.user_name}
-          onChange={handleChange}
-          required
-        />
+                {/* Address Section */}
+                <div className="mb-4">
+                  <h5 className="mb-3 text-primary">Address Information</h5>
+                  <div className="row g-3">
+                    <div className="col-md-3">
+                      <label htmlFor="flatNo" className="form-label">
+                        Flat/House No.
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="flatNo"
+                        name="flatNo"
+                        value={formData.user_address.flatNo}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            user_address: {
+                              ...prev.user_address,
+                              flatNo: e.target.value,
+                            },
+                          }))
+                        }
+                        required
+                      />
+                    </div>
+                    <div className="col-md-5">
+                      <label htmlFor="street" className="form-label">
+                        Street
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="street"
+                        name="street"
+                        value={formData.user_address.street}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            user_address: {
+                              ...prev.user_address,
+                              street: e.target.value,
+                            },
+                          }))
+                        }
+                        required
+                      />
+                    </div>
+                    <div className="col-md-4">
+                      <label htmlFor="city" className="form-label">
+                        City
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="city"
+                        name="city"
+                        value={formData.user_address.city}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            user_address: {
+                              ...prev.user_address,
+                              city: e.target.value,
+                            },
+                          }))
+                        }
+                        required
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label htmlFor="state" className="form-label">
+                        State
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="state"
+                        name="state"
+                        value={formData.user_address.state}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            user_address: {
+                              ...prev.user_address,
+                              state: e.target.value,
+                            },
+                          }))
+                        }
+                        required
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label htmlFor="pincode" className="form-label">
+                        Pincode
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="pincode"
+                        name="pincode"
+                        value={formData.user_address.pincode}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            user_address: {
+                              ...prev.user_address,
+                              pincode: e.target.value,
+                            },
+                          }))
+                        }
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
 
-        {/* Email */}
+                {/* Location Section */}
+                <div className="mb-4">
+                  <h5 className="mb-3 text-primary">Location Coordinates</h5>
+                  <div className="row g-3">
+                    <div className="col-md-6">
+                      <label htmlFor="lat" className="form-label">
+                        Latitude
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="lat"
+                        name="lat"
+                        value={formData.user_location.lat}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            user_location: {
+                              ...prev.user_location,
+                              lat: e.target.value,
+                            },
+                          }))
+                        }
+                        required
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label htmlFor="lng" className="form-label">
+                        Longitude
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="lng"
+                        name="lng"
+                        value={formData.user_location.lng}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            user_location: {
+                              ...prev.user_location,
+                              lng: e.target.value,
+                            },
+                          }))
+                        }
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
 
-        <label>Email:</label>
-        <input
-          type="email"
-          name="user_email"
-          value={formData.user_email}
-          onChange={handleChange}
-          required
-        />
-
-        {/* Password */}
-
-        <label>Password:</label>
-        <input
-          type="password"
-          name="user_password"
-          value={formData.user_password}
-          onChange={handleChange}
-          required
-        />
-
-        {/* Contact */}
-
-        <label>Contact:</label>
-        <input
-          type="text"
-          name="user_contact"
-          value={formData.user_contact}
-          onChange={handleChange}
-          required
-        />
-        {/* Address */}
-        <label>FlatNo:</label>
-        <input
-          type="text"
-          name="flatNo"
-          value={formData.user_address.flatNo}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              user_address: { ...prev.user_address, flatNo: e.target.value },
-            }))
-          }
-          required
-        />
-        <label>Street:</label>
-        <input
-          type="text"
-          name="street"
-          value={formData.user_address.street}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              user_address: { ...prev.user_address, street: e.target.value },
-            }))
-          }
-          required
-        />
-        <label>City:</label>
-        <input
-          type="text"
-          name="city"
-          value={formData.user_address.city}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              user_address: { ...prev.user_address, city: e.target.value },
-            }))
-          }
-          required
-        />
-        <label>State:</label>
-        <input
-          type="text"
-          name="state"
-          value={formData.user_address.state}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              user_address: { ...prev.user_address, state: e.target.value },
-            }))
-          }
-          required
-        />
-        <label>Pincode:</label>
-        <input
-          type="text"
-          name="pincode"
-          value={formData.user_address.pincode}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              user_address: { ...prev.user_address, pincode: e.target.value },
-            }))
-          }
-          required
-        />
-
-        {/* Location */}
-
-        <label>Latitude:</label>
-        <input
-          type="text"
-          name="lat"
-          value={formData.user_location.lat}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              user_location: { ...prev.user_location, lat: e.target.value },
-            }))
-          }
-          required
-        />
-        <label>Longitude:</label>
-        <input
-          type="text"
-          name="long"
-          value={formData.user_location.lng}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              user_location: { ...prev.user_location, lng: e.target.value },
-            }))
-          }
-          required
-        />
-        {/* Submit Button */}
-        <button type="submit">Signup</button>
-      </form>
+                {/* Submit Button */}
+                <div className="d-grid mt-4">
+                  <button className="btn btn-primary btn-lg" type="submit">
+                    Create Account
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

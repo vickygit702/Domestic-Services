@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import { logoutTechnician } from "../redux/slices/authSlice";
+import { useDispatch } from "react-redux";
 const TechnicianLogout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -13,9 +14,12 @@ const TechnicianLogout = () => {
     }
   };
   return (
-    <div>
-      <button onClick={handleLogout}>Logout</button>
-    </div>
+    <button
+      onClick={handleLogout}
+      className="btn btn-outline-light w-100 mt-auto"
+    >
+      <i className="bi bi-box-arrow-right me-2"></i> Logout
+    </button>
   );
 };
 
