@@ -99,26 +99,16 @@ const TechnicianHomePage = () => {
                   My Jobs
                 </Link>
               </li>
+
               <li className="nav-item mb-2">
                 <Link
-                  to={`/my-project/technician/${id}/schedule`}
-                  className="nav-link text-white py-2 px-3 rounded d-flex align-items-center"
-                  activeClassName="active bg-primary"
-                  onClick={closeSidebar}
-                >
-                  <i className="bi bi-calendar3 me-2"></i>
-                  Schedule
-                </Link>
-              </li>
-              <li className="nav-item mb-2">
-                <Link
-                  to={`/my-project/technician/${id}/earnings`}
+                  to={`/my-project/technician/${id}/payments`}
                   className="nav-link text-white py-2 px-3 rounded d-flex align-items-center"
                   activeClassName="active bg-primary"
                   onClick={closeSidebar}
                 >
                   <i className="bi bi-cash-stack me-2"></i>
-                  Earnings
+                  Payments
                 </Link>
               </li>
               <li className="nav-item mb-2">

@@ -22,7 +22,7 @@ import {
   ServiceDetails,
   TechnicianDashboard,
   TechnicianMyJobs,
-  JobDetails,
+  Payment,
   TechnicianProfile,
 } from "./pages/index";
 
@@ -63,7 +63,7 @@ function App() {
           <Route index element={<TechnicianDashboard />} />
           <Route path="dashboard" element={<TechnicianDashboard />} />
           <Route path="my-jobs" element={<TechnicianMyJobs />} />
-          <Route path="my-jobs/:jobId" element={<JobDetails />} />
+          <Route path="payments" element={<Payment />} />
           <Route path="profile" element={<TechnicianProfile />} />
         </Route>
 

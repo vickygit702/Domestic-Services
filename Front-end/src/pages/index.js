@@ -16,7 +16,8 @@ import MyBookings from "./user/components/MyBookings";
 import Profile from "./user/components/Profile";
 import ServiceDetails from "./user/components/ServiceDetails";
 
-import JobDetails from "./technician/components/JobDetails";
+import Payment from "./technician/components/PaymentsPage";
+
 import TechnicianProfile from "./technician/components/TechnicianProfile";
 import TechnicianDashboard from "./technician/components/TechnicianDashboard";
 import TechnicianMyJobs from "./technician/components/TechnicianMyJobs";
@@ -38,7 +39,7 @@ export {
   MyBookings,
   Profile,
   ServiceDetails,
-  JobDetails,
+  Payment,
   TechnicianProfile,
   TechnicianDashboard,
   TechnicianMyJobs,
