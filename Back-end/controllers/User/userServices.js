@@ -91,7 +91,7 @@ exports.myBookings = async (req, res) => {
       bookeddate: booking.bookedDate,
       jobDetail: booking.workDetail,
       status: booking.status,
-      price: booking.price,
+      est_price: booking.est_price,
     }));
 
     return res

@@ -1,15 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBookings } from "../../../redux/slices/userSlice";
-
+import BookingDetailsModal from "./BookingDetailsModal";
 const MyBookings = () => {
   const { user } = useSelector((state) => state.auth);
   const { userBookings = [] } = useSelector((state) => state.userBooks);
   const dispatch = useDispatch();
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const url = `http://localhost:8000/user/${user.id}/status-page/myBookings`;
     dispatch(fetchBookings(url));
+    console.log(userBookings);
   }, [dispatch]);
 
   const prevBook = userBookings.filter(
@@ -25,6 +28,12 @@ const MyBookings = () => {
     (sum, booking) => sum + (booking.price || 0),
     0
   );
+
+  const handleDetailsClick = (booking) => {
+    setSelectedBooking(booking);
+    setShowModal(true);
+  };
+
   const favoriteService =
     prevBook.length > 0
       ? [...new Set(prevBook.map((b) => b.serviceType))].sort()[0]
@@ -110,13 +119,15 @@ const MyBookings = () => {
                             <i className="bi bi-calendar me-2 text-muted"></i>
                             {new Date(
                               booking.bookeddate.start
-                            ).toLocaleDateString()}
+                            ).toLocaleDateString("en-GB")}
                           </p>
                           <p className="mb-0">
                             <i className="bi bi-clock me-2 text-muted"></i>
                             {new Date(
                               booking.bookeddate.start
-                            ).toLocaleTimeString()}
+                            ).toLocaleTimeString("en-US", {
+                              timeZone: "UTC",
+                            })}
                           </p>
                         </div>
                         <div className="col-md-3">
@@ -125,8 +136,9 @@ const MyBookings = () => {
                             Technician #{booking.technicianid}
                           </p>
                           <p className="mb-0">
-                            <i className="bi bi-cash me-2 text-muted"></i>₹
-                            {booking.price || "Not specified"}
+                            <i className="bi bi-cash me-2 text-muted"></i>
+                            estimated amt :₹
+                            {booking.est_price || "Not specified"}
                           </p>
                         </div>
                         <div className="col-md-3 text-end">
@@ -141,9 +153,7 @@ const MyBookings = () => {
                           </span>
                           <button
                             className="btn btn-sm btn-outline-primary ms-2"
-                            onClick={() =>
-                              navigate(`/booking-details/${booking.id}`)
-                            }
+                            onClick={() => handleDetailsClick(booking)}
                           >
                             Details
                           </button>
@@ -232,10 +242,8 @@ const MyBookings = () => {
                       </td>
                       <td>
                         <button
-                          className="btn btn-sm btn-outline-primary me-2"
-                          onClick={() =>
-                            navigate(`/booking-details/${booking.id}`)
-                          }
+                          className="btn btn-sm btn-outline-primary ms-2"
+                          onClick={() => handleDetailsClick(booking)}
                         >
                           Details
                         </button>
@@ -322,6 +330,11 @@ const MyBookings = () => {
           </div>
         </div>
       </div>
+      <BookingDetailsModal
+        booking={selectedBooking}
+        show={showModal}
+        onHide={() => setShowModal(false)}
+      />
     </div>
   );
 };

@@ -62,6 +62,7 @@ const technicianSchema = new Schema({
     type: String,
     default: "profile-user.png",
   },
+  earnings: { type: Number, default: 0 },
   bookedSlots: [
     {
       start: Date,

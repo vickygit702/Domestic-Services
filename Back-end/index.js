@@ -7,6 +7,7 @@ const authRoutes = require("./routes/Auth");
 const adminRoutes = require("./routes/admin/AdminPage");
 const userRoutes = require("./routes/user/userPage");
 const bookingRoute = require("./routes/booking/booking-service");
+const techRoute = require("./routes/technician/techPage");
 
 const server = express();
 
@@ -24,6 +25,7 @@ server.use("/auth/api", authRoutes);
 server.use("/admin", adminRoutes);
 server.use("/user", userRoutes);
 server.use("/service/booking", bookingRoute);
+server.use("/technician", techRoute);
 
 server.get("/", (req, res) => {
   res.status(200).json({ message: " server is running" });

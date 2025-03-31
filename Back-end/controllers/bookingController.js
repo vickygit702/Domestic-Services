@@ -69,7 +69,7 @@ exports.bookService = async (req, res) => {
 
     const serviceDetail = await Service.findOne({ service_name: serviceName });
 
-    let tot_price = serviceDetail.baseRate;
+    let tot_price = serviceDetail.baseRate * duration;
 
     if (selectedTechnician.isPro) {
       tot_price *= 1.2;
@@ -90,7 +90,7 @@ exports.bookService = async (req, res) => {
         end: overallEndTime,
       },
       workDetail: workDetail,
-      price: tot_price,
+      est_price: tot_price,
     });
 
     await newBooking.save();
