@@ -1,8 +1,15 @@
 const Booking = require("../models/Bookings");
 const Technician = require("../models/Technicians");
+const User = require("../models/User");
 const Service = require("../models/Services");
 const axios = require("axios");
+const twilio = require("twilio"); // If using Twilio
 
+// Initialize Twilio client (example)
+const twilioClient = twilio(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN
+);
 // Book a service
 exports.bookService = async (req, res) => {
   try {
@@ -15,6 +22,12 @@ exports.bookService = async (req, res) => {
       workDetail,
     } = req.body;
 
+    const user = await User.findById(userId);
+    console.log(user);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     //const dates = getBookingDate("2025-02-25T11:00:00Z", 20);
     const dates = getBookingDate(startDate, duration);
     if (dates === "error") {
@@ -23,7 +36,7 @@ exports.bookService = async (req, res) => {
         .json({ message: "Booking must start between 8 AM and 8 PM UTC" });
     }
     const { bookingStartTime, overallEndTime } = dates;
-
+    console.log(bookingStartTime);
     // Step 1: Find available technicians for the requested service
     const availableTechnicians = await Technician.find({
       worksKnown: serviceName,
@@ -102,6 +115,39 @@ exports.bookService = async (req, res) => {
     });
     await selectedTechnician.save();
 
+    // 1. Get and validate the technician's phone number
+    if (!selectedTechnician.tech_contact) {
+      console.error("Technician contact number is missing");
+      return; // Skip SMS if no number exists
+    }
+
+    let technicianPhone = String(selectedTechnician.tech_contact); // Force convert to string
+
+    // 2. Format the number (add +91 for India)
+    technicianPhone = technicianPhone.replace(/\D/g, ""); // Remove non-digits
+
+    if (technicianPhone.length === 10) {
+      technicianPhone = `+91${technicianPhone}`; // Indian number
+    }
+
+    // 3. Send SMS (Twilio example)
+    try {
+      const message = `New booking details:
+Service: ${serviceName}
+Customer: ${user.user_name}
+Contact: ${user.user_contact}
+Address: ${user.user_address}
+Date: ${bookingStartTime.toUTCString()}; 
+Work Details: ${workDetail}`;
+      await twilioClient.messages.create({
+        body: message,
+        from: process.env.TWILIO_PHONE_NUMBER,
+        to: technicianPhone,
+      });
+      console.log(" SMS sent to technician successfully", message);
+    } catch (err) {
+      console.error("SMS failed:", err.message);
+    }
     res
       .status(201)
       .json({ message: "Booking successful", booking: newBooking });

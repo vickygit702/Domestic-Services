@@ -43,7 +43,7 @@ const UserDashboard = () => {
           <i className={`bi bi-${sidebarOpen ? "x" : "list"}`}></i>
         </button>
         <img
-          src={`http://localhost:8000/uploads/profile/${user.profileImg}`}
+          src={`http://localhost:8000/uploads/profile/user/${user.profileImg}`}
           alt="profile"
           className="rounded-circle bg-white"
           width="40"
@@ -64,7 +64,7 @@ const UserDashboard = () => {
             {!isMobile && (
               <div className="text-center mb-4">
                 <img
-                  src={`http://localhost:8000/uploads/profile/${user.profileImg}`}
+                  src={`http://localhost:8000/uploads/profile/user/${user.profileImg}`}
                   alt="profile"
                   className="rounded-circle bg-white mx-auto"
                   width="80"

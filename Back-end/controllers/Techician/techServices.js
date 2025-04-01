@@ -64,3 +64,49 @@ exports.singleJobDetail = async (req, res) => {
       .json({ message: "Error occured in server please try again later" });
   }
 };
+
+exports.updateTech = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = req.body;
+
+    const updateObject = {};
+    for (const key in data) {
+      if (typeof data[key] === "object" && !Array.isArray(data[key])) {
+        // Handle nested objects (e.g., user_address)
+        for (const nestedKey in data[key]) {
+          updateObject[`${key}.${nestedKey}`] = data[key][nestedKey];
+        }
+      } else {
+        // Handle top-level fields (e.g., user_name, user_email)
+        updateObject[key] = data[key];
+      }
+    }
+
+    upd_tech = await Technician.findByIdAndUpdate(
+      id,
+      { $set: updateObject },
+      { new: true }
+    );
+    const techUptodate = {
+      name: upd_tech.tech_name,
+
+      password: upd_tech.tech_password,
+      contact: upd_tech.tech_contact,
+      address: upd_tech.tech_address,
+
+      workKnown: upd_tech.worksKnown,
+      experience: upd_tech.tech_experience,
+
+      profileImg: upd_tech.profileImg,
+    };
+    res
+      .status(200)
+      .json({ techUptodate, message: "Tech updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ message: "Error occured in server please try again later" });
+  }
+};

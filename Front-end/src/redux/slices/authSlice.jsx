@@ -3,11 +3,11 @@ import axios from "axios";
 
 // Async thunk to update user profile
 export const updateUserProfile = createAsyncThunk(
-  "update-profile",
+  "update-user-profile",
   async ({ userId, updatedData }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `http://localhost:8000/user/${userId}/update-profile`,
+        `http://localhost:8000/user/${userId}/update-user-profile`,
         updatedData
       );
 
@@ -19,11 +19,49 @@ export const updateUserProfile = createAsyncThunk(
 );
 
 export const updateProfileImage = createAsyncThunk(
-  "upload-profile-image",
+  "upload-user-profile-image",
   async ({ userId, file }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/user/${userId}/upload-profile-image`,
+        `http://localhost:8000/user/${userId}/upload-user-profile-image`,
+        file,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+// Async thunk to update tech profile
+export const updateTechProfile = createAsyncThunk(
+  "update-tech-profile",
+  async ({ techId, updatedData }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/technician/${techId}/update-tech-profile`,
+        updatedData
+      );
+
+      return response.data; // Return updated user data
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateTechImage = createAsyncThunk(
+  "upload-tech-profile-image",
+  async ({ techId, file }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/technician/${techId}/upload-tech-profile-image`,
         file,
         {
           headers: {
@@ -138,6 +176,45 @@ const authSlice = createSlice({
         }
       })
       .addCase(updateProfileImage.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateTechProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateTechProfile.fulfilled, (state, action) => {
+        state.loading = false;
+
+        // Ensure that action.payload.upd_user contains the updated user data
+        if (action.payload.techUptodate) {
+          state.technician = {
+            ...state.technician,
+            ...action.payload.techUptodate,
+          };
+          console.log("updated tech data :", state.technician);
+        } else {
+          console.error(
+            "Updated tech data not found in response:",
+            action.payload
+          );
+        }
+      })
+      .addCase(updateTechProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to update services";
+      })
+      .addCase(updateTechImage.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateTechImage.fulfilled, (state, action) => {
+        state.loading = false;
+        if (state.technician && action.payload.imageUrl) {
+          state.technician.profileImg = action.payload.imageUrl;
+        }
+      })
+      .addCase(updateTechImage.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

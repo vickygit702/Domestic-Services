@@ -124,6 +124,7 @@ exports.loginTechnician = async (req, res) => {
         workKnown: technician.worksKnown,
         experience: technician.tech_experience,
         ratingAvg: technician.tech_ratingAvg,
+        earned: technician.earnings,
         completions: technician.jobsCompleted,
         profileImg: technician.profileImg,
       };
