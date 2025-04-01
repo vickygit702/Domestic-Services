@@ -129,16 +129,20 @@ exports.bookService = async (req, res) => {
     if (technicianPhone.length === 10) {
       technicianPhone = `+91${technicianPhone}`; // Indian number
     }
-
+    //map location
+    const lat = user.user_location.lat;
+    const lng = user.user_location.lng;
+    const googleMapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
     // 3. Send SMS (Twilio example)
     try {
       const message = `New booking details:
-Service: ${serviceName}
-Customer: ${user.user_name}
-Contact: ${user.user_contact}
-Address: ${user.user_address}
-Date: ${bookingStartTime.toUTCString()}; 
-Work Details: ${workDetail}`;
+        Service: ${serviceName}
+        Customer: ${user.user_name}
+        Contact: ${user.user_contact}
+        Address: ${user.user_address}
+        Date: ${bookingStartTime.toUTCString()}; 
+        Work Details: ${workDetail}
+        Location:${googleMapsLink}`;
       await twilioClient.messages.create({
         body: message,
         from: process.env.TWILIO_PHONE_NUMBER,

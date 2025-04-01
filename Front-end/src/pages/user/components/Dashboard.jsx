@@ -48,8 +48,16 @@ const Dashboard = () => {
   const filteredCategory = categories.filter((service) =>
     service.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  const imgurl = "../../../assets/premium-benefits.png";
-
+  const categoryIcons = {
+    "Home Repair & Maintenance": "bi-tools",
+    "Outdoor & Home Improvement": "bi-house-door",
+    "Appliance & Gadget Services": "bi-plug",
+    "Health & Wellness": "bi-heart-pulse",
+    "Education & Tutoring": "bi-book",
+    "Event Planning": "bi-calendar-event",
+    "Pet Care": "bi-hospital",
+    "Professional Services": "bi-briefcase",
+  };
   return (
     <div className="container-fluid px-4">
       {/* Search Bar */}
@@ -171,13 +179,11 @@ const Dashboard = () => {
                         backgroundColor: "rgba(13, 110, 253, 0.1)",
                       }}
                     >
-                      <i className="bi bi-tools fs-3 text-primary"></i>
+                      <i
+                        className={`bi ${categoryIcons[service]} fs-3 text-primary`}
+                      ></i>
                     </div>
                     <h5 className="card-title fw-bold mb-0">{service}</h5>
-                    <p className="text-muted small mt-2">
-                      {serviceList.filter((s) => s.category === service).length}{" "}
-                      technicians available
-                    </p>
                   </div>
                 </div>
               </div>

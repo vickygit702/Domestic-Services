@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBookings } from "../../../redux/slices/userSlice";
 import BookingDetailsModal from "./BookingDetailsModal";
+import { useNavigate } from "react-router";
 const MyBookings = () => {
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const { userBookings = [] } = useSelector((state) => state.userBooks);
   const dispatch = useDispatch();
@@ -110,7 +112,7 @@ const MyBookings = () => {
                       <div className="row align-items-center">
                         <div className="col-md-3">
                           <h5 className="fw-bold mb-1">
-                            {booking.serviceType || "Service"}
+                            {booking.servicename || "Service"}
                           </h5>
                           <small className="text-muted">#{booking.id}</small>
                         </div>
@@ -147,7 +149,7 @@ const MyBookings = () => {
                               booking.status === "Confirmed"
                                 ? "warning"
                                 : "success"
-                            } text-dark`}
+                            } text-dark p-2`}
                           >
                             {booking.status}
                           </span>
@@ -173,7 +175,7 @@ const MyBookings = () => {
               </p>
               <button
                 className="btn btn-primary mt-2"
-                onClick={() => navigate("/services")}
+                onClick={() => navigate(`/my-project/user/${user.id}`)}
               >
                 Book a Service
               </button>
