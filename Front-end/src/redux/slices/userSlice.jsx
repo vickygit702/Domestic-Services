@@ -16,6 +16,18 @@ export const fetchBookings = createAsyncThunk(
   }
 );
 
+export const cancelBookings = createAsyncThunk(
+  "status-page/myBookings/cancel",
+  async ({ url, bookingId }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(url, { bookingId }); // Send as object in request body
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
 export const bookService = createAsyncThunk(
   "booking/book-service", // Action type prefix
   async (bookingData, { rejectWithValue }) => {
@@ -70,6 +82,17 @@ const userSlice = createSlice({
       .addCase(bookService.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to book service";
+      })
+      .addCase(cancelBookings.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(cancelBookings.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        // Optional: Update specific booking in state if needed
+      })
+      .addCase(cancelBookings.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
       });
   },
 });

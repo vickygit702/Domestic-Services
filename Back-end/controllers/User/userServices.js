@@ -104,3 +104,36 @@ exports.myBookings = async (req, res) => {
       .json({ message: "Error occured in server please try again later" });
   }
 };
+exports.cancelBooking = async (req, res) => {
+  try {
+    const { bookingId } = req.body; // Destructure from request body
+
+    // Verify the booking belongs to the user
+    const booking = await Bookings.findOneAndUpdate(
+      {
+        _id: bookingId,
+      },
+      { status: "Cancelled" },
+      { new: true }
+    );
+
+    if (!booking) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking not found or doesn't belong to this user.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Booking cancelled successfully",
+    });
+  } catch (error) {
+    console.error("Cancellation error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error occurred while cancelling booking",
+      error: error.message,
+    });
+  }
+};
