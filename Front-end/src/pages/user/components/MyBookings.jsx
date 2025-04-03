@@ -343,11 +343,11 @@
 
 // export default MyBookings;
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBookings, cancelBookings } from "../../../redux/slices/userSlice";
 import BookingDetailsModal from "./BookingDetailsModal";
-
+import PaymentModal from "./PaymentModal";
 import { useNavigate } from "react-router";
 
 const MyBookings = () => {
@@ -357,29 +357,17 @@ const MyBookings = () => {
   const dispatch = useDispatch();
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [currentBooking, setCurrentBooking] = useState(null);
+
+  const refreshBookings = useCallback(() => {
+    const url = `http://localhost:8000/user/${user.id}/status-page/myBookings`;
+    dispatch(fetchBookings(url));
+  }, [dispatch, user.id]);
 
   useEffect(() => {
-    let isMounted = true;
-
-    const fetchData = async () => {
-      try {
-        const url = `http://localhost:8000/user/${user.id}/status-page/myBookings`;
-        if (isMounted) {
-          await dispatch(fetchBookings(url));
-        }
-      } catch (error) {
-        if (isMounted) {
-          console.error("Failed to fetch bookings:", error);
-        }
-      }
-    };
-
-    fetchData();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [dispatch, user.id]);
+    refreshBookings();
+  }, [refreshBookings]);
 
   // Categorize bookings by status
   const bookings = {
@@ -408,19 +396,21 @@ const MyBookings = () => {
       try {
         const url = `http://localhost:8000/user/${user.id}/status-page/cancel`;
         await dispatch(cancelBookings({ url, bookingId })).unwrap();
-        // Refresh bookings after successful cancellation
-        // dispatch(fetchBookings(`http://localhost:8000/user/${user.id}/status-page/myBookings`));
-        // Optional: Show success notification
+        refreshBookings(); // Refresh after cancellation
       } catch (error) {
         console.error("Cancellation failed:", error);
-        // Optional: Show error notification
       }
     }
   };
+  const handleMakePayment = (booking) => {
+    setCurrentBooking(booking);
+    setShowPaymentModal(true);
+  };
 
-  const handleMakePayment = (bookingId) => {
-    // Implement payment logic
-    console.log("Make payment for:", bookingId);
+  const handlePaymentSuccess = () => {
+    setShowPaymentModal(false);
+    // Optionally refresh bookings
+    refreshBookings();
   };
 
   return (
@@ -574,7 +564,7 @@ const MyBookings = () => {
                             {section.showPaymentButton && (
                               <button
                                 className="btn btn-sm btn-success ms-2"
-                                onClick={() => handleMakePayment(booking.id)}
+                                onClick={() => handleMakePayment(booking)}
                               >
                                 Make Payment
                               </button>
@@ -614,7 +604,14 @@ const MyBookings = () => {
           </div>
         </div>
       ))}
-
+      {currentBooking && (
+        <PaymentModal
+          booking={currentBooking}
+          show={showPaymentModal}
+          onClose={() => setShowPaymentModal(false)}
+          onSuccess={handlePaymentSuccess}
+        />
+      )}
       {/* Booking Details Modal */}
       <BookingDetailsModal
         booking={selectedBooking}
