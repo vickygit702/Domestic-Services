@@ -7,6 +7,7 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import { toast } from "react-toastify";
+import ReviewModal from "./ReviewModel";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
@@ -84,6 +85,9 @@ const CheckoutForm = ({ booking, onSuccess }) => {
 
 const PaymentModal = ({ booking, show, onClose, onSuccess }) => {
   const [stripeReady, setStripeReady] = useState(false);
+  //test review modal
+  const [showReview, setShowReview] = useState(true);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
   useEffect(() => {
     // Verify Stripe is properly loaded
@@ -92,37 +96,112 @@ const PaymentModal = ({ booking, show, onClose, onSuccess }) => {
       .catch((err) => console.error("Stripe loading error:", err));
   }, []);
 
-  if (!show) return null;
+  //test review modal
+  const handlePaymentSuccess = () => {
+    setPaymentSuccess(true);
+    setShowReview(true);
+    toast.success("Payment successful!");
+  };
 
+  // Review Modal test
+  const handleReviewSubmit = async (reviewData) => {
+    try {
+      const response = await fetch(
+        "http://localhost:8000/bookings/submit-review",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(reviewData),
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to submit review");
+
+      const result = await response.json();
+      toast.success("Thank you for your review!");
+      onSuccess(result.updatedBooking);
+    } catch (error) {
+      toast.error(error.message);
+      throw error;
+    }
+  };
+
+  if (!show) return null;
   return (
-    <div className="modal fade show d-block">
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Pay for Booking #{booking.id}</h5>
-            <button
-              type="button"
-              className="btn-close"
-              onClick={onClose}
-            ></button>
-          </div>
-          <div className="modal-body">
-            {stripeReady ? (
-              <Elements stripe={stripePromise}>
-                <CheckoutForm booking={booking} onSuccess={onSuccess} />
-              </Elements>
-            ) : (
-              <div className="text-center py-4">
-                <div className="spinner-border text-primary" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-                <p className="mt-2">Loading payment gateway...</p>
+    // <div className="modal fade show d-block">
+    //   <div className="modal-dialog">
+    //     <div className="modal-content">
+    //       <div className="modal-header">
+    //         <h5 className="modal-title">Pay for Booking #{booking.id}</h5>
+    //         <button
+    //           type="button"
+    //           className="btn-close"
+    //           onClick={onClose}
+    //         ></button>
+    //       </div>
+    //       <div className="modal-body">
+    //         {stripeReady ? (
+    //           <Elements stripe={stripePromise}>
+    //             <CheckoutForm booking={booking} onSuccess={onSuccess} />
+    //           </Elements>
+    //         ) : (
+    //           <div className="text-center py-4">
+    //             <div className="spinner-border text-primary" role="status">
+    //               <span className="visually-hidden">Loading...</span>
+    //             </div>
+    //             <p className="mt-2">Loading payment gateway...</p>
+    //           </div>
+    //         )}
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
+
+    <>
+      {!showReview ? (
+        <div className="modal fade show d-block">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Pay for Booking #{booking.id}</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={onClose}
+                ></button>
               </div>
-            )}
+              <div className="modal-body">
+                {stripeReady ? (
+                  <Elements stripe={stripePromise}>
+                    <CheckoutForm
+                      booking={booking}
+                      onSuccess={handlePaymentSuccess}
+                    />
+                  </Elements>
+                ) : (
+                  <div className="text-center py-4">
+                    <div className="spinner-border text-primary" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <p className="mt-2">Loading payment gateway...</p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <ReviewModal
+          booking={booking}
+          show={showReview}
+          onClose={() => {
+            setShowReview(false);
+            onClose();
+          }}
+          onReviewSubmit={handleReviewSubmit}
+        />
+      )}
+    </>
   );
 };
 export default PaymentModal;

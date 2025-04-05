@@ -3,12 +3,32 @@ import { motion } from "framer-motion";
 
 const BookingDetailsModal = ({ booking, show, onHide }) => {
   if (!booking) return null;
+  let durationMs;
+  if (booking.status === "Completed") {
+    durationMs = Math.abs(
+      new Date(booking.actualWorked.end).getTime() -
+        new Date(booking.actualWorked.start).getTime()
+    );
+  } else {
+    durationMs = Math.abs(
+      new Date(booking.bookeddate.end).getTime() -
+        new Date(booking.bookeddate.start).getTime()
+    );
+  }
 
-  // Calculate prices
-  const basePrice = booking.price || 0;
+  console.log(durationMs); // Duration in milliseconds
+
+  // More useful formatted versions:
+  const durationMinutes = Math.floor(durationMs / (1000 * 60));
+  const durationHrs = (durationMs / (1000 * 60 * 60)).toFixed(2);
+
+  console.log(`Duration: ${durationMinutes} minutes`);
+  console.log(`Duration: ${durationHrs} hours`);
+  const basePrice =
+    booking.status === "Completed" ? booking.price : booking.est_price;
   const platformFee = basePrice * 0.2;
   const totalAmount = basePrice + platformFee;
-  const durationHours = booking.duration || 1;
+  const durationHours = durationHrs; // booking.duration -  update actual duration
 
   // Animation variants
   const fadeIn = {
@@ -63,20 +83,95 @@ const BookingDetailsModal = ({ booking, show, onHide }) => {
                 </div>
               </div>
               <div className="col-md-7">
-                <h5 className="fw-bold mb-1">{booking.serviceType}</h5>
+                <h5 className="fw-bold mb-1">{booking.servicename}</h5>
                 <div className="d-flex flex-wrap gap-2 mt-2">
                   <span className="badge bg-light text-dark">
                     <i className="bi bi-calendar me-1"></i>
-                    {new Date(booking.bookeddate.start).toLocaleDateString(
-                      "en-GB"
-                    )}
+                    {booking.status === "Completed" ? (
+                      <>
+                        {new Date(
+                          booking.actualWorked.start
+                        ).toLocaleDateString("en-GB")}
+                        {" to "}
+                        {new Date(booking.actualWorked.end).toLocaleDateString(
+                          "en-GB"
+                        )}
+
+                        {/* {new Date(
+                                    booking.actualWorked.start
+                                  ).toLocaleTimeString("en-US", {
+                                    // timeZone: "UTC",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}
+                                  -
+                                  {new Date(
+                                    booking.actualWorked.end
+                                  ).toLocaleTimeString("en-US", {
+                                    // timeZone: "UTC",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}{" "} */}
+                      </>
+                    ) : booking.status === "InProgress" ||
+                      booking.status === "Cancelled" ||
+                      booking.status === "Confirmed" ? (
+                      <>
+                        {new Date(booking.bookeddate.start).toLocaleDateString(
+                          "en-GB"
+                        )}
+                        {" to "}
+                        {new Date(booking.bookeddate.end).toLocaleDateString(
+                          "en-GB"
+                        )}
+                      </>
+                    ) : null}
                   </span>
                   <span className="badge bg-light text-dark">
                     <i className="bi bi-clock me-1"></i>
-                    {new Date(booking.bookeddate.start).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
+                    {booking.status === "Completed" ? (
+                      <>
+                        {new Date(
+                          booking.actualWorked.start
+                        ).toLocaleTimeString("en-US", {
+                          // timeZone: "UTC",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                        -
+                        {new Date(booking.actualWorked.end).toLocaleTimeString(
+                          "en-US",
+                          {
+                            // timeZone: "UTC",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }
+                        )}{" "}
+                      </>
+                    ) : booking.status === "InProgress" ||
+                      booking.status === "Cancelled" ||
+                      booking.status === "Confirmed" ? (
+                      <>
+                        {new Date(booking.bookeddate.start).toLocaleTimeString(
+                          "en-US",
+                          {
+                            timeZone: "UTC",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }
+                        )}
+                        {" to "}
+
+                        {new Date(booking.bookeddate.end).toLocaleTimeString(
+                          "en-US",
+                          {
+                            timeZone: "UTC",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }
+                        )}
+                      </>
+                    ) : null}
                   </span>
                   <span className="badge bg-light text-dark">
                     <i className="bi bi-person me-1"></i>
@@ -213,10 +308,10 @@ const BookingDetailsModal = ({ booking, show, onHide }) => {
             Close
           </button>
           <div>
-            <button className="btn btn-primary me-2">
+            {/* <button className="btn btn-primary me-2">
               <i className="bi bi-printer me-2"></i>
               Print Receipt
-            </button>
+            </button> */}
             <button className="btn btn-success">
               <i className="bi bi-chat-text me-2"></i>
               Contact Support

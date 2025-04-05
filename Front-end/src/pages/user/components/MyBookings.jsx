@@ -474,7 +474,6 @@ const MyBookings = () => {
           icon: "bi-hourglass-split",
           color: "info",
           bookings: bookings.inProgress,
-          showPaymentButton: true,
         },
         {
           title: "Upcoming Services",
@@ -488,6 +487,7 @@ const MyBookings = () => {
           icon: "bi-check-circle",
           color: "success",
           bookings: bookings.completed,
+          showPaymentButton: true,
         },
         {
           title: "Cancelled Services",
@@ -522,17 +522,96 @@ const MyBookings = () => {
                           <div className="col-md-3">
                             <p className="mb-1">
                               <i className="bi bi-calendar me-2 text-muted"></i>
-                              {new Date(
-                                booking.bookeddate.start
-                              ).toLocaleDateString("en-GB")}
+                              {booking.status === "Completed" ? (
+                                <>
+                                  {new Date(
+                                    booking.actualWorked.start
+                                  ).toLocaleDateString("en-GB")}
+                                  -
+                                  {new Date(
+                                    booking.actualWorked.end
+                                  ).toLocaleDateString("en-GB")}
+                                  {" to "}
+                                  {new Date(
+                                    booking.actualWorked.start
+                                  ).toLocaleTimeString("en-US", {
+                                    // timeZone: "UTC",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}
+                                  -
+                                  {new Date(
+                                    booking.actualWorked.end
+                                  ).toLocaleTimeString("en-US", {
+                                    // timeZone: "UTC",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}{" "}
+                                </>
+                              ) : booking.status === "InProgress" ||
+                                booking.status === "Cancelled" ||
+                                booking.status === "Confirmed" ? (
+                                <>
+                                  {new Date(
+                                    booking.bookeddate.start
+                                  ).toLocaleDateString("en-GB")}
+                                  {" to "}
+                                  {new Date(
+                                    booking.bookeddate.end
+                                  ).toLocaleDateString("en-GB")}
+                                </>
+                              ) : null}
                             </p>
                             <p className="mb-0">
                               <i className="bi bi-clock me-2 text-muted"></i>
-                              {new Date(
+                              {booking.status === "Completed" ? (
+                                <>
+                                  {new Date(
+                                    booking.actualWorked.start
+                                  ).toLocaleTimeString("en-US", {
+                                    // timeZone: "UTC",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}
+                                  {" to "}
+
+                                  {new Date(
+                                    booking.actualWorked.end
+                                  ).toLocaleTimeString("en-US", {
+                                    // timeZone: "UTC",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}
+                                </>
+                              ) : booking.status === "InProgress" ||
+                                booking.status === "Cancelled" ||
+                                booking.status === "Confirmed" ? (
+                                <>
+                                  {new Date(
+                                    booking.bookeddate.start
+                                  ).toLocaleTimeString("en-US", {
+                                    timeZone: "UTC",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}
+                                  {" to "}
+
+                                  {new Date(
+                                    booking.bookeddate.end
+                                  ).toLocaleTimeString("en-US", {
+                                    timeZone: "UTC",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  })}
+                                </>
+                              ) : null}
+                              {/* {new Date(
                                 booking.bookeddate.start
                               ).toLocaleTimeString("en-US", {
                                 timeZone: "UTC",
-                              })}
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })} */}
                             </p>
                           </div>
                           <div className="col-md-3">
@@ -542,11 +621,6 @@ const MyBookings = () => {
                             </p>
                           </div>
                           <div className="d-flex flex-column gap-2 col-md-3 text-end">
-                            {/* <span
-                              className={`badge bg-${section.color} text-dark p-2`}
-                            >
-                              {booking.status}
-                            </span> */}
                             <button
                               className="btn btn-sm btn-outline-primary ms-2"
                               onClick={() => handleDetailsClick(booking)}
@@ -561,14 +635,15 @@ const MyBookings = () => {
                                 Cancel
                               </button>
                             )}
-                            {section.showPaymentButton && (
-                              <button
-                                className="btn btn-sm btn-success ms-2"
-                                onClick={() => handleMakePayment(booking)}
-                              >
-                                Make Payment
-                              </button>
-                            )}
+                            {section.showPaymentButton &&
+                              booking.paymentStatus === false && (
+                                <button
+                                  className="btn btn-sm btn-success ms-2"
+                                  onClick={() => handleMakePayment(booking)}
+                                >
+                                  Make Payment
+                                </button>
+                              )}
                           </div>
                         </div>
                       </div>

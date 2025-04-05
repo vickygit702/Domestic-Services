@@ -1,5 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import moment from "moment-timezone";
 import { useParams, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchJobs, updateJobStatus } from "../../../redux/slices/techSlice";
+import { toast } from "react-toastify";
 import {
   Table,
   TableBody,
@@ -56,8 +60,13 @@ function TabPanel(props) {
 
 const TechnicianMyJobs = () => {
   const { id } = useParams();
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const {
+    jobDetails = [],
+    loading,
+    error,
+  } = useSelector((state) => state.techJobs);
+
   const [tabValue, setTabValue] = useState(0);
 
   const statusTabs = [
@@ -67,26 +76,42 @@ const TechnicianMyJobs = () => {
     { label: "Cancelled", value: "Cancelled" },
   ];
 
+  const refreshJobs = useCallback(() => {
+    const url = `http://localhost:8000/technician/${id}/jobs/fetch-jobs`;
+    dispatch(fetchJobs(url));
+    console.log("job details", jobDetails);
+  }, []);
+
   useEffect(() => {
-    const fetchJobs = async () => {
+    refreshJobs();
+  }, [refreshJobs]);
+
+  const handleStatusUpdate = useCallback(
+    async (selectedJob) => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/technician/${id}/jobs`
-        );
-        if (!response.ok) throw new Error("Failed to fetch jobs");
-        const data = await response.json();
-        setJobs(data);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching jobs:", err);
-        setLoading(false);
+        const url = `http://localhost:8000/technician/${id}/jobs/update-job-status`;
+        await dispatch(
+          updateJobStatus({
+            url,
+            selectedJob,
+          })
+        ).unwrap();
+        refreshJobs();
+      } catch (error) {
+        console.error("Error updating job status:", error);
+        toast.error("Failed to update job status");
       }
-    };
+    },
+    [dispatch, id]
+  );
 
-    fetchJobs();
-  }, [id]);
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
-  const filteredJobs = jobs.filter(
+  const filteredJobs = (jobDetails || []).filter(
     (job) => job.status === statusTabs[tabValue].value
   );
 
@@ -122,8 +147,6 @@ const TechnicianMyJobs = () => {
         <Tabs
           value={tabValue}
           onChange={(e, newValue) => setTabValue(newValue)}
-          variant="scrollable"
-          scrollButtons="auto"
         >
           {statusTabs.map((tab, index) => (
             <Tab
@@ -131,18 +154,14 @@ const TechnicianMyJobs = () => {
               label={
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   {tab.label}
-                  <Box
-                    sx={{
-                      ml: 1,
-                      px: 1,
-                      py: 0.5,
-                      bgcolor: "action.selected",
-                      borderRadius: 10,
-                      fontSize: 12,
-                    }}
-                  >
-                    {jobs.filter((j) => j.status === tab.value).length}
-                  </Box>
+                  <Chip
+                    label={
+                      (jobDetails || []).filter((j) => j.status === tab.value)
+                        .length
+                    }
+                    size="small"
+                    sx={{ ml: 1 }}
+                  />
                 </Box>
               }
             />
@@ -157,6 +176,8 @@ const TechnicianMyJobs = () => {
             status={tab.value}
             technicianId={id}
             getStatusColor={getStatusColor}
+            handleStatusUpdate={handleStatusUpdate} // Add this
+            refreshJobs={refreshJobs}
           />
         </TabPanel>
       ))}
@@ -164,7 +185,15 @@ const TechnicianMyJobs = () => {
   );
 };
 
-const JobTable = ({ jobs, status, technicianId, getStatusColor }) => {
+const JobTable = ({
+  jobs,
+  status,
+  technicianId,
+  getStatusColor,
+  handleStatusUpdate, // Add this prop
+  refreshJobs,
+  // Add this prop
+}) => {
   const [open, setOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
 
@@ -177,23 +206,16 @@ const JobTable = ({ jobs, status, technicianId, getStatusColor }) => {
     setOpen(false);
     setSelectedJob(null);
   };
-  // if (jobs.length === 0) {
-  //   return (
-  //     <Box
-  //       sx={{
-  //         p: 4,
-  //         textAlign: "center",
-  //         border: "1px dashed",
-  //         borderColor: "divider",
-  //         borderRadius: 2,
-  //       }}
-  //     >
-  //       <Typography variant="body1" color="text.secondary">
-  //         No {status.toLowerCase()} jobs found
-  //       </Typography>
-  //     </Box>
-  //   );
-  // }
+
+  const handleStatusUpdateLocal = async (selectedJob) => {
+    try {
+      await handleStatusUpdate(selectedJob);
+      refreshJobs();
+      handleClose();
+    } catch (error) {
+      console.error("Error updating job status:", error);
+    }
+  };
 
   return (
     <>
@@ -205,43 +227,49 @@ const JobTable = ({ jobs, status, technicianId, getStatusColor }) => {
               <TableCell sx={{ fontWeight: 600 }}>Customer</TableCell>
               <TableCell sx={{ fontWeight: 600 }}>Service</TableCell>
               <TableCell sx={{ fontWeight: 600 }}>Date & Time</TableCell>
+
               <TableCell sx={{ fontWeight: 600 }}>Price</TableCell>
+
               <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
               <TableCell sx={{ fontWeight: 600 }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {jobs.map((job) => (
-              <TableRow key={job._id} hover>
-                <TableCell>#{job._id.slice(-6)}</TableCell>
+              <TableRow key={job.id} hover>
+                <TableCell>#{job.id.slice(-6)}</TableCell>
                 <TableCell>
                   <Stack direction="row" alignItems="center" spacing={2}>
                     <Avatar sx={{ bgcolor: "primary.main" }}>
-                      {job.user_Id?.user_name?.charAt(0) || "U"}
+                      {job.user?.user_name?.charAt(0) || "U"}
                     </Avatar>
                     <Box>
-                      <Typography>{job.user_Id?.user_name || "N/A"}</Typography>
+                      <Typography>{job.user?.user_name || "N/A"}</Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {job.user_Id?.user_contact || "No contact"}
+                        {job.user?.user_contact || "No contact"}
                       </Typography>
                     </Box>
                   </Stack>
                 </TableCell>
                 <TableCell>
-                  <Typography fontWeight={500}>{job.serviceName}</Typography>
+                  <Typography fontWeight={500}>{job.servicename}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {job.workDetail}
+                    {job.jobDetail}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>
-                    {new Date(job.bookedDate.start).toLocaleDateString()}
+                    {new Date(job.bookeddate.start).toLocaleDateString("en-GB")}{" "}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {new Date(job.bookedDate.start).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
+                    {new Date(job.bookeddate.start).toLocaleTimeString(
+                      "en-US",
+                      {
+                        timeZone: "UTC",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }
+                    )}
                   </Typography>
                 </TableCell>
                 <TableCell>
@@ -284,10 +312,10 @@ const JobTable = ({ jobs, status, technicianId, getStatusColor }) => {
             <DialogTitle>
               <Stack direction="row" alignItems="center" spacing={2}>
                 <Avatar sx={{ bgcolor: "primary.main" }}>
-                  {selectedJob.user_Id?.user_name?.charAt(0) || "U"}
+                  {selectedJob.user?.user_name?.charAt(0) || "U"}
                 </Avatar>
                 <Typography variant="h6">
-                  {selectedJob.serviceName} - #{selectedJob._id.slice(-6)}
+                  {selectedJob.servicename} - #{selectedJob.id.slice(-6)}
                 </Typography>
                 <StatusChip
                   label={selectedJob.status}
@@ -304,13 +332,13 @@ const JobTable = ({ jobs, status, technicianId, getStatusColor }) => {
                     CUSTOMER DETAILS
                   </Typography>
                   <Typography>
-                    {selectedJob.user_Id?.user_name || "N/A"}
+                    {selectedJob.user?.user_name || "N/A"}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {selectedJob.user_Id?.user_email}
+                    {selectedJob.user?.user_email}
                   </Typography>
                   <Typography variant="body2">
-                    {selectedJob.user_Id?.user_contact}
+                    {selectedJob.user?.user_contact}
                   </Typography>
                 </div>
 
@@ -320,9 +348,13 @@ const JobTable = ({ jobs, status, technicianId, getStatusColor }) => {
                   <Typography variant="subtitle2" color="text.secondary">
                     SERVICE DETAILS
                   </Typography>
-                  <Typography>{selectedJob.workDetail}</Typography>
+                  <Typography>{selectedJob.jobDetail}</Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Estimated Price: ${selectedJob.est_price.toFixed(2)}
+                    {selectedJob.status === "Confirmed" ||
+                    selectedJob.status === "InProgress" ||
+                    selectedJob.status === "Cancelled"
+                      ? `Estimated Price: ${selectedJob.est_price.toFixed(2)}`
+                      : `Total Price: ${selectedJob.price.toFixed(2)}`}
                   </Typography>
                   <Chip
                     label={
@@ -337,32 +369,102 @@ const JobTable = ({ jobs, status, technicianId, getStatusColor }) => {
 
                 <div>
                   <Typography variant="subtitle2" color="text.secondary">
-                    SCHEDULE
+                    {selectedJob.status === "Completed"
+                      ? "WORK DETAILS"
+                      : "SCHEDULE"}
                   </Typography>
                   <Typography>
-                    {new Date(selectedJob.bookedDate.start).toLocaleString()}
+                    {selectedJob.status === "Completed" ? (
+                      <>
+                        {new Date(
+                          selectedJob.actualWorked.start
+                        ).toLocaleDateString("en-GB")}
+                        -
+                        {new Date(
+                          selectedJob.actualWorked.start
+                        ).toLocaleTimeString("en-US", {
+                          // timeZone: "UTC",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                        {" to "}
+                        {new Date(
+                          selectedJob.actualWorked.end
+                        ).toLocaleDateString("en-GB")}
+                        -
+                        {new Date(
+                          selectedJob.actualWorked.end
+                        ).toLocaleTimeString("en-US", {
+                          // timeZone: "UTC",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}{" "}
+                      </>
+                    ) : selectedJob.status === "InProgress" ||
+                      selectedJob.status === "Cancelled" ||
+                      selectedJob.status === "Confirmed" ? (
+                      <>
+                        {new Date(
+                          selectedJob.bookeddate.start
+                        ).toLocaleDateString("en-GB")}
+                        -
+                        {new Date(
+                          selectedJob.bookeddate.start
+                        ).toLocaleTimeString("en-US", {
+                          timeZone: "UTC",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </>
+                    ) : null}
+                    {/* {moment(selectedJob.bookeddate.start)
+                      .tz("Asia/Kolkata")
+                      .format("DD MMM YYYY, hh:mm A")} */}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    to {new Date(selectedJob.bookedDate.end).toLocaleString()}
-                  </Typography>
+                  {/* <Typography variant="body2" color="text.secondary">
+                    to{" "}
+                    {new Date(selectedJob.bookeddate.end).toLocaleDateString(
+                      "en-GB"
+                    )}{" "}
+                    -
+                    {new Date(selectedJob.bookeddate.end).toLocaleTimeString(
+                      "en-US",
+                      {
+                        timeZone: "UTC",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }
+                    )}
+                  </Typography> */}
                 </div>
               </Stack>
             </DialogContent>
 
             <DialogActions>
               <Button onClick={handleClose}>Close</Button>
-              <Button
-                variant="contained"
-                onClick={() => {
+              {selectedJob.status === "InProgress" && (
+                <Button
+                  variant="contained"
+                  onClick={() => handleStatusUpdateLocal(selectedJob)}
                   // Add any action here
-                  handleClose();
-                }}
-              >
-                Mark as{" "}
-                {selectedJob.status === "Completed"
+                >
+                  Mark as Completed
+                  {/* {selectedJob.status === "Completed"
                   ? "InProgress"
-                  : "Completed"}
-              </Button>
+                  : "Completed"} */}
+                </Button>
+              )}
+              {selectedJob.status === "Confirmed" && (
+                <Button
+                  variant="contained"
+                  onClick={() => handleStatusUpdateLocal(selectedJob)}
+                >
+                  Mark as Start
+                  {/* {selectedJob.status === "Completed"
+                  ? "InProgress"
+                  : "Completed"} */}
+                </Button>
+              )}
             </DialogActions>
           </>
         )}

@@ -84,11 +84,6 @@ exports.bookService = async (req, res) => {
 
     let tot_price = serviceDetail.baseRate * duration;
 
-    if (selectedTechnician.isPro) {
-      tot_price *= 1.2;
-    } else {
-      tot_price *= 1;
-    }
     console.log("Final Price Before Saving:", tot_price);
     if (isNaN(tot_price) || tot_price <= 0) {
       return res.status(400).json({ message: "Invalid price calculation" });

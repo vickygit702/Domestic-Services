@@ -1,3 +1,4 @@
+const moment = require("moment-timezone");
 const Services = require("../../models/Services");
 const User = require("../../models/User");
 const Bookings = require("../../models/Bookings");
@@ -75,7 +76,9 @@ exports.myBookings = async (req, res) => {
     console.log("Fetching bookings for user ID:", userId);
     const userBookings = await Bookings.find({
       user_Id: userId,
-    });
+    })
+      .populate("tech_Id", "_id tech_name tech_email tech_contact")
+      .lean();
     console.log(userBookings);
     if (!userBookings || userBookings.length === 0) {
       return res
@@ -84,19 +87,26 @@ exports.myBookings = async (req, res) => {
     }
 
     // Format the response
-    const formattedBookings = userBookings.map((booking) => ({
-      id: booking._id,
-      technicianid: booking.tech_Id,
-      servicename: booking.serviceName,
-      bookeddate: booking.bookedDate,
-      jobDetail: booking.workDetail,
-      status: booking.status,
-      est_price: booking.est_price,
-    }));
+    // const formattedBookings = userBookings.map((booking) => ({
+    //   id: booking._id,
+    //   technicianid: booking.tech_Id,
+    //   servicename: booking.serviceName,
+    //   bookeddate: booking.bookedDate,
+    //   jobDetail: booking.workDetail,
+    //   status: booking.status,
+    //   paymentStatus: booking.paymentStatus,
+    //   price: booking.price,
+    //   est_price: booking.est_price,
 
+    // }));
+
+    const formattedBookings = userBookings.map(formatBooking);
     return res
       .status(200)
       .json({ formattedBookings, message: "Bookings fetched successfully" });
+    // return res
+    //   .status(200)
+    //   .json({ formattedBookings, message: "Bookings fetched successfully" });
   } catch (error) {
     console.log(error);
     res
@@ -136,4 +146,38 @@ exports.cancelBooking = async (req, res) => {
       error: error.message,
     });
   }
+};
+
+const formatBooking = (booking) => {
+  const formatted = {
+    id: booking._id,
+    technicianid: booking.tech_Id._id,
+    technician: booking.tech_Id,
+    servicename: booking.serviceName,
+    bookeddate: booking.bookedDate,
+    jobDetail: booking.workDetail,
+    status: booking.status,
+    paymentStatus: booking.paymentStatus,
+    price: booking.price,
+    est_price: booking.est_price,
+  };
+
+  // Format actualWorked dates if they exist
+  if (booking.actualWorked) {
+    formatted.actualWorked = {
+      ...booking.actualWorked,
+      start: booking.actualWorked.start
+        ? moment(booking.actualWorked.start)
+            .tz("Asia/Kolkata")
+            .format("YYYY-MM-DD HH:mm:ss")
+        : null,
+      end: booking.actualWorked.end
+        ? moment(booking.actualWorked.end)
+            .tz("Asia/Kolkata")
+            .format("YYYY-MM-DD HH:mm:ss")
+        : null,
+    };
+  }
+
+  return formatted;
 };

@@ -486,6 +486,23 @@ const TechnicianDashboard = () => {
   const [loading, setLoading] = useState(true);
   const theme = useTheme();
 
+  //   useEffect(() => {
+  //     const fetchDashboardData = async () => {
+  //       try {
+  //         const response = await fetch(
+  //           `http://localhost:8000/technician/${id}/dashboard`
+  //         );
+  //         const data = await response.json();
+  //         setStats(data);
+  //         setLoading(false);
+  //       } catch (err) {
+  //         console.error("Error fetching dashboard data:", err);
+  //         setLoading(false);
+  //       }
+  //     };
+
+  //     fetchDashboardData();
+  //   }, [id]);
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
