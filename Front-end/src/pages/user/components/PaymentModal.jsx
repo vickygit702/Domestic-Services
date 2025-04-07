@@ -12,7 +12,7 @@ import ReviewModal from "./ReviewModel";
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 console.log("stripe promise", stripePromise);
-const CheckoutForm = ({ booking, onSuccess }) => {
+const CheckoutForm = ({ booking, onSuccess, amt }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
@@ -33,7 +33,7 @@ const CheckoutForm = ({ booking, onSuccess }) => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            amount: booking.est_price,
+            amount: amt,
             bookingId: booking.id,
           }),
         }
@@ -53,7 +53,6 @@ const CheckoutForm = ({ booking, onSuccess }) => {
         setError(stripeError.message);
         setLoading(false);
       } else if (paymentIntent.status === "succeeded") {
-        toast.success("payment success");
         onSuccess(); // Update UI or redirect
       }
     } catch (err) {
@@ -77,7 +76,7 @@ const CheckoutForm = ({ booking, onSuccess }) => {
         disabled={!stripe || loading}
         className="btn btn-success w-100"
       >
-        {loading ? "Processing..." : `Pay ₹${booking.est_price}`}
+        {loading ? "Processing..." : `Pay ₹${amt}`}
       </button>
     </form>
   );
@@ -86,9 +85,9 @@ const CheckoutForm = ({ booking, onSuccess }) => {
 const PaymentModal = ({ booking, show, onClose, onSuccess }) => {
   const [stripeReady, setStripeReady] = useState(false);
   //test review modal
-  const [showReview, setShowReview] = useState(true);
+  const [showReview, setShowReview] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
-
+  const amt = booking.price + booking.price * 0.2;
   useEffect(() => {
     // Verify Stripe is properly loaded
     stripePromise
@@ -107,7 +106,7 @@ const PaymentModal = ({ booking, show, onClose, onSuccess }) => {
   const handleReviewSubmit = async (reviewData) => {
     try {
       const response = await fetch(
-        "http://localhost:8000/bookings/submit-review",
+        "http://localhost:8000/user/status-page/submit-review",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -176,6 +175,7 @@ const PaymentModal = ({ booking, show, onClose, onSuccess }) => {
                     <CheckoutForm
                       booking={booking}
                       onSuccess={handlePaymentSuccess}
+                      amt={amt}
                     />
                   </Elements>
                 ) : (

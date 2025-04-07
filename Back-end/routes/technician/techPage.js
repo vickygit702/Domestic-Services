@@ -6,6 +6,7 @@ const { uploadMiddleware, handleImageUpload } = require("./imageUpload");
 router
   .get("/:id/dashboard", techController.techDashboard)
   .get("/:id/jobs/fetch-jobs", techController.fetchJobs)
+  .get("/:id/payments/payslips", techController.getPayslips)
   .put("/:id/update-tech-profile", techController.updateTech)
   .put("/:id/jobs/update-job-status", techController.updateJobStatus)
   .post("/:id/upload-tech-profile-image", uploadMiddleware, handleImageUpload)

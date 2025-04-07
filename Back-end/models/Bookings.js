@@ -11,6 +11,11 @@ const bookingSchema = new mongoose.Schema({
     ref: "Technicians",
     required: true,
   },
+  ser_Id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Services",
+    required: true,
+  },
   serviceName: {
     type: String,
     required: true,
@@ -29,6 +34,12 @@ const bookingSchema = new mongoose.Schema({
     default: "Confirmed",
   },
   est_price: {
+    type: Number,
+  },
+  perHour: {
+    type: Number,
+  },
+  totDuration: {
     type: Number,
   },
   price: {

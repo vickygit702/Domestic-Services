@@ -9,8 +9,8 @@ const ReviewModal = ({ booking, show, onClose, onReviewSubmit }) => {
     setSubmitting(true);
     try {
       await onReviewSubmit({
-        bookingId: booking._id,
-        technicianId: booking.technician_Id,
+        bookingId: booking.id,
+        technicianId: booking.technicianid,
         rating,
         review,
       });

@@ -1,24 +1,31 @@
 const moment = require("moment-timezone");
 const Technician = require("../../models/Technicians");
 const Booking = require("../../models/Bookings");
+const Payslip = require("../../models/PaySlip");
+
 exports.techDashboard = async (req, res) => {
   try {
     const technician = await Technician.findById(req.params.id);
     if (!technician) return res.status(404).send("Technician not found");
     const jobs = await Booking.find({ tech_Id: technician._id });
     const completedJobs = jobs.filter((job) => job.status === "Completed");
+    const pendingJobs = jobs.filter((job) => job.status === "Confirmed");
 
     const monthlyEarnings = Array(12).fill(0);
     completedJobs.forEach((job) => {
-      const month = new Date(job.actualWorked.end).getMonth();
-      monthlyEarnings[month] += job.price;
+      if (job.paymentStatus) {
+        const month = new Date(job.actualWorked.end).getMonth();
+        monthlyEarnings[month] += job.price;
+      }
     });
 
     res.json({
+      jobs: completedJobs,
       totalEarnings: technician.earnings,
       completedJobs: technician.jobsCompleted,
       rating: technician.tech_ratingAvg,
       monthlyEarnings,
+      pendingJobs,
       recentJobs: jobs.slice(0, 3),
     });
   } catch (error) {
@@ -46,6 +53,28 @@ exports.fetchJobs = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Error occured in server please try again later" });
+  }
+};
+exports.getPayslips = async (req, res) => {
+  try {
+    const technicianId = req.params.id;
+    const { month, year } = req.query;
+
+    if (!month || !year) {
+      return res.status(400).json({ error: "Month and year are required" });
+    }
+
+    const payslips = await Payslip.find({
+      technicianId: technicianId,
+      date: {
+        $gte: new Date(year, month - 1, 1),
+        $lt: new Date(year, month, 1),
+      },
+    }).populate("technicianId", "tech_name bankAccountNo");
+
+    res.json(payslips);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -152,6 +181,26 @@ exports.updateJobStatus = async (req, res) => {
     }
     //db stores UTC time we convert into IST time
     const doc = await Booking.findById(id);
+    //update price
+    if (status === "InProgress") {
+      const hourCost = doc.perHour;
+      console.log(hourCost);
+      const inMin = hourCost / 3600;
+      //get atleast 5 decimals
+      console.log(inMin);
+      if (doc.actualWorked?.start && doc.actualWorked?.end) {
+        const start = new Date(doc.actualWorked.start);
+        console.log(start);
+        const end = new Date(doc.actualWorked.end);
+        console.log(end);
+        const totduration = Math.round((end - start) / (1000 * 60)); // Duration in minutes
+        console.log("mins", totduration);
+        const totPrice = Math.round(totduration * inMin * 60);
+        console.log("efore updating db tot price", totPrice);
+        // Update with calculated duration
+        await Booking.findByIdAndUpdate(id, { $set: { price: totPrice } });
+      }
+    }
 
     res.json(doc);
   } catch (error) {
@@ -173,7 +222,7 @@ const formatBooking = (job) => {
     status: job.status,
     paymentStatus: job.paymentStatus,
     price: job?.price || 0,
-    est_price: job.est_price * 0.2,
+    est_price: job.est_price,
   };
 
   // Format actualWorked dates if they exist

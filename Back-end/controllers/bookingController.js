@@ -92,6 +92,8 @@ exports.bookService = async (req, res) => {
     const newBooking = new Booking({
       user_Id: userId,
       tech_Id: selectedTechnician._id,
+      ser_Id: serviceDetail._id,
+      perHour: serviceDetail.baseRate,
       serviceName,
       bookedDate: {
         start: bookingStartTime,
@@ -138,11 +140,11 @@ exports.bookService = async (req, res) => {
         Date: ${bookingStartTime.toUTCString()}; 
         Work Details: ${workDetail}
         Location:${googleMapsLink}`;
-      await twilioClient.messages.create({
-        body: message,
-        from: process.env.TWILIO_PHONE_NUMBER,
-        to: technicianPhone,
-      });
+      // await twilioClient.messages.create({
+      //   body: message,
+      //   from: process.env.TWILIO_PHONE_NUMBER,
+      //   to: technicianPhone,
+      // });
       console.log(" SMS sent to technician successfully", message);
     } catch (err) {
       console.error("SMS failed:", err.message);

@@ -274,7 +274,9 @@ const JobTable = ({
                 </TableCell>
                 <TableCell>
                   <Typography fontWeight={500}>
-                    ${job.est_price.toFixed(2)}
+                    {job.status === "Completed"
+                      ? `$ ${job.price}`
+                      : `$ ${job.est_price}`}
                   </Typography>
                   <Typography
                     variant="body2"
@@ -383,7 +385,6 @@ const JobTable = ({
                         {new Date(
                           selectedJob.actualWorked.start
                         ).toLocaleTimeString("en-US", {
-                          // timeZone: "UTC",
                           hour: "2-digit",
                           minute: "2-digit",
                         })}
@@ -395,7 +396,6 @@ const JobTable = ({
                         {new Date(
                           selectedJob.actualWorked.end
                         ).toLocaleTimeString("en-US", {
-                          // timeZone: "UTC",
                           hour: "2-digit",
                           minute: "2-digit",
                         })}{" "}
@@ -417,25 +417,7 @@ const JobTable = ({
                         })}
                       </>
                     ) : null}
-                    {/* {moment(selectedJob.bookeddate.start)
-                      .tz("Asia/Kolkata")
-                      .format("DD MMM YYYY, hh:mm A")} */}
                   </Typography>
-                  {/* <Typography variant="body2" color="text.secondary">
-                    to{" "}
-                    {new Date(selectedJob.bookeddate.end).toLocaleDateString(
-                      "en-GB"
-                    )}{" "}
-                    -
-                    {new Date(selectedJob.bookeddate.end).toLocaleTimeString(
-                      "en-US",
-                      {
-                        timeZone: "UTC",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      }
-                    )}
-                  </Typography> */}
                 </div>
               </Stack>
             </DialogContent>
@@ -449,9 +431,6 @@ const JobTable = ({
                   // Add any action here
                 >
                   Mark as Completed
-                  {/* {selectedJob.status === "Completed"
-                  ? "InProgress"
-                  : "Completed"} */}
                 </Button>
               )}
               {selectedJob.status === "Confirmed" && (
@@ -460,9 +439,6 @@ const JobTable = ({
                   onClick={() => handleStatusUpdateLocal(selectedJob)}
                 >
                   Mark as Start
-                  {/* {selectedJob.status === "Completed"
-                  ? "InProgress"
-                  : "Completed"} */}
                 </Button>
               )}
             </DialogActions>

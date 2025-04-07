@@ -2,6 +2,7 @@ const moment = require("moment-timezone");
 const Services = require("../../models/Services");
 const User = require("../../models/User");
 const Bookings = require("../../models/Bookings");
+const Technician = require("../../models/Technicians");
 
 exports.updateUser = async (req, res) => {
   try {
@@ -145,6 +146,53 @@ exports.cancelBooking = async (req, res) => {
       message: "Error occurred while cancelling booking",
       error: error.message,
     });
+  }
+};
+
+exports.submitReview = async (req, res) => {
+  try {
+    const { bookingId, technicianId, rating, review } = req.body;
+    console.log("user ratings", rating);
+    // Update booking with review
+    const updatedBooking = await Bookings.findByIdAndUpdate(
+      bookingId,
+      {
+        $set: {
+          userRating: rating,
+          userReview: review,
+        },
+      },
+      { new: true }
+    );
+
+    // Update technician stats
+    await Technician.findByIdAndUpdate(technicianId, {
+      $inc: {
+        jobsCompleted: 1,
+        // earnings: updatedBooking.price,
+      },
+      // $push: {
+      //   ratings: rating
+      // }
+    });
+
+    // Calculate new average rating
+    const technician = await Technician.findById(technicianId);
+
+    const avgRating =
+      (technician.tech_ratingAvg + rating) / technician.jobsCompleted;
+
+    await Technician.findByIdAndUpdate(technicianId, {
+      $set: { tech_ratingAvg: avgRating },
+    });
+
+    res.json({
+      success: true,
+      updatedBooking,
+    });
+  } catch (error) {
+    console.error("Error submitting review:", error);
+    res.status(500).json({ message: "Error submitting review" });
   }
 };
 

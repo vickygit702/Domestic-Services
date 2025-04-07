@@ -63,6 +63,7 @@ const technicianSchema = new Schema({
     default: "profile-tech.png",
   },
   earnings: { type: Number, default: 0 },
+  bankAccountNo: { type: String, default: "1234567890" },
   bookedSlots: [
     {
       start: Date,

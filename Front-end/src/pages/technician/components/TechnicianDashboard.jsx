@@ -486,38 +486,14 @@ const TechnicianDashboard = () => {
   const [loading, setLoading] = useState(true);
   const theme = useTheme();
 
-  //   useEffect(() => {
-  //     const fetchDashboardData = async () => {
-  //       try {
-  //         const response = await fetch(
-  //           `http://localhost:8000/technician/${id}/dashboard`
-  //         );
-  //         const data = await response.json();
-  //         setStats(data);
-  //         setLoading(false);
-  //       } catch (err) {
-  //         console.error("Error fetching dashboard data:", err);
-  //         setLoading(false);
-  //       }
-  //     };
-
-  //     fetchDashboardData();
-  //   }, [id]);
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 800));
-        setStats({
-          totalEarnings: 18500,
-          completedJobs: 64,
-          avgRating: 4.8,
-          pendingJobs: 5,
-          monthlyEarnings: [
-            1500, 2200, 1800, 2500, 2100, 2800, 3200, 2400, 2900, 2600, 3100,
-            3500,
-          ],
-        });
+        const response = await fetch(
+          `http://localhost:8000/technician/${id}/dashboard`
+        );
+        const data = await response.json();
+        setStats(data);
         setLoading(false);
       } catch (err) {
         console.error("Error fetching dashboard data:", err);
@@ -527,6 +503,30 @@ const TechnicianDashboard = () => {
 
     fetchDashboardData();
   }, [id]);
+  // useEffect(() => {
+  //   const fetchDashboardData = async () => {
+  //     try {
+  //       // Simulate API call
+  //       await new Promise((resolve) => setTimeout(resolve, 800));
+  //       setStats({
+  //         totalEarnings: 18500,
+  //         completedJobs: 64,
+  //         avgRating: 4.8,
+  //         pendingJobs: 5,
+  //         monthlyEarnings: [
+  //           1500, 2200, 1800, 2500, 2100, 2800, 3200, 2400, 2900, 2600, 3100,
+  //           3500,
+  //         ],
+  //       });
+  //       setLoading(false);
+  //     } catch (err) {
+  //       console.error("Error fetching dashboard data:", err);
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchDashboardData();
+  // }, [id]);
 
   const chartData = {
     labels: [
@@ -588,7 +588,7 @@ const TechnicianDashboard = () => {
                 variant="h4"
                 sx={{ fontWeight: 700, color: "success.main" }}
               >
-                ${stats.totalEarnings.toLocaleString()}
+                ${stats.totalEarnings}
               </Typography>
             </CardContent>
           </StatCard>
@@ -618,7 +618,7 @@ const TechnicianDashboard = () => {
                   variant="h4"
                   sx={{ fontWeight: 700, mr: 1, color: "warning.main" }}
                 >
-                  {stats.avgRating}
+                  {stats.rating}
                 </Typography>
                 <Typography color="text.secondary">/ 5.0</Typography>
               </Box>
@@ -633,7 +633,7 @@ const TechnicianDashboard = () => {
                 PENDING JOBS
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 700 }}>
-                {stats.pendingJobs}
+                {stats.pendingJobs.length || 0}
               </Typography>
             </CardContent>
           </StatCard>
@@ -679,6 +679,7 @@ const TechnicianDashboard = () => {
           </Box>
         </CardContent>
       </Card>
+      {/* recent jobs */}
     </DashboardContainer>
   );
 };

@@ -8,7 +8,7 @@ router
   .post("/:id/upload-user-profile-image", uploadMiddleware, handleImageUpload)
   .get("/:id/status-page/myBookings", userController.myBookings)
   .put("/:id/status-page/cancel", userController.cancelBooking)
-
+  .post("/status-page/submit-review", userController.submitReview)
   .get("/:id/services/fetchAllServices", userController.allServices);
 
 module.exports = router;

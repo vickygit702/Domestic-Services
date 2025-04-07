@@ -527,26 +527,10 @@ const MyBookings = () => {
                                   {new Date(
                                     booking.actualWorked.start
                                   ).toLocaleDateString("en-GB")}
-                                  -
+                                  {" to "}
                                   {new Date(
                                     booking.actualWorked.end
                                   ).toLocaleDateString("en-GB")}
-                                  {" to "}
-                                  {new Date(
-                                    booking.actualWorked.start
-                                  ).toLocaleTimeString("en-US", {
-                                    // timeZone: "UTC",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  })}
-                                  -
-                                  {new Date(
-                                    booking.actualWorked.end
-                                  ).toLocaleTimeString("en-US", {
-                                    // timeZone: "UTC",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  })}{" "}
                                 </>
                               ) : booking.status === "InProgress" ||
                                 booking.status === "Cancelled" ||
@@ -605,19 +589,12 @@ const MyBookings = () => {
                                   })}
                                 </>
                               ) : null}
-                              {/* {new Date(
-                                booking.bookeddate.start
-                              ).toLocaleTimeString("en-US", {
-                                timeZone: "UTC",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })} */}
                             </p>
                           </div>
                           <div className="col-md-3">
                             <p className="mb-0">
                               <i className="bi bi-person me-2 text-muted"></i>
-                              Technician #{booking.technicianid}
+                              Technician #{booking.technician.tech_name}
                             </p>
                           </div>
                           <div className="d-flex flex-column gap-2 col-md-3 text-end">
