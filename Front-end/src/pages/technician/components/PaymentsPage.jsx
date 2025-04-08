@@ -20,6 +20,8 @@ import {
   Chip,
   Divider,
   Collapse,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import {
   Print as PrintIcon,
@@ -32,6 +34,8 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 
 const PaymentsPage = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [payslips, setPayslips] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
@@ -172,19 +176,31 @@ const PaymentsPage = () => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: isMobile ? 1 : 3 }}>
       <Stack
-        direction="row"
-        justifyContent="space-between"
+        direction={isMobile ? "column" : "row"}
+        justifyContent="space-evenly"
+        //alignItems={isMobile ? "flex-start" : "center"}
         alignItems="center"
+        spacing={isMobile ? 2 : 0}
         mb={3}
       >
-        <Typography variant="h4" fontWeight="bold">
-          Payslip History
-        </Typography>
-
-        <Stack direction="row" spacing={2} className="no-print">
-          <FormControl size="small" sx={{ minWidth: 120 }}>
+        {!isMobile && (
+          <Typography variant="h4" fontWeight="bold">
+            Payslip History
+          </Typography>
+        )}
+        <Stack
+          direction="row"
+          spacing={1}
+          className="no-print"
+          sx={{
+            width: isMobile ? "100%" : "auto",
+            flexWrap: isMobile ? "wrap" : "nowrap",
+            gap: isMobile ? 2 : 3,
+          }}
+        >
+          <FormControl size="small" sx={{ minWidth: isMobile ? "100%" : 120 }}>
             <InputLabel>Month</InputLabel>
             <Select
               value={selectedMonth}
@@ -199,7 +215,7 @@ const PaymentsPage = () => {
             </Select>
           </FormControl>
 
-          <FormControl size="small" sx={{ minWidth: 120 }}>
+          <FormControl size="small" sx={{ minWidth: isMobile ? "80%" : 120 }}>
             <InputLabel>Year</InputLabel>
             <Select
               value={selectedYear}
@@ -215,11 +231,16 @@ const PaymentsPage = () => {
           </FormControl>
 
           {payslips.length > 0 && (
-            <>
-              <IconButton onClick={handleExportPDF} color="error">
-                <PdfIcon />
-              </IconButton>
-            </>
+            <IconButton
+              onClick={handleExportPDF}
+              color="error"
+              sx={{
+                ml: isMobile ? "auto" : 0,
+                order: isMobile ? 2 : 0,
+              }}
+            >
+              <PdfIcon />
+            </IconButton>
           )}
         </Stack>
       </Stack>
@@ -232,7 +253,7 @@ const PaymentsPage = () => {
         <Paper
           ref={payslipRef}
           sx={{
-            p: 4,
+            p: isMobile ? 2 : 4,
             maxWidth: "800px",
             mx: "auto",
             boxShadow: 3,
@@ -243,37 +264,42 @@ const PaymentsPage = () => {
           className="payslip-container"
         >
           {/* Payslip Header */}
-          <Box textAlign="center" mb={3}>
-            <Typography variant="h5" fontWeight="bold">
+          <Box textAlign="center" mb={isMobile ? 1 : 3}>
+            <Typography variant={isMobile ? "h6" : "h5"} fontWeight="bold">
               TECHNICIAN PAYSLIP
             </Typography>
-            <Stack direction="row" justifyContent="space-between" mt={2}>
-              <Typography variant="body2">
-                <strong>Period:</strong> {currentPayslip.period}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Payslip ID:</strong> {currentPayslip.id}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Payment Date:</strong> {currentPayslip.date}
-              </Typography>
+            <Stack
+              direction={isMobile ? "row" : "row"}
+              justifyContent="space-evenly"
+              spacing={isMobile ? 1 : 0}
+              mt={isMobile ? 1 : 2}
+              // textAlign={isMobile ? "left" : "inherit"}
+            >
+              <Typography variant="body2">{currentPayslip.period}</Typography>
+              <Typography variant="body2">{currentPayslip.id}</Typography>
+              <Typography variant="body2">{currentPayslip.date}</Typography>
             </Stack>
           </Box>
 
-          <Divider sx={{ my: 2 }} />
+          <Divider sx={{ my: isMobile ? 1 : 2 }} />
 
           {/* Earnings Section */}
-          <Typography variant="h6" gutterBottom>
+          {/* <Typography variant={isMobile ? "subtitle1" : "h6"} gutterBottom>
             EARNINGS SUMMARY
-          </Typography>
+          </Typography> */}
           <TableContainer>
             <Table size="small">
               <TableBody>
                 <TableRow sx={{ "& td": { borderBottom: "none" } }}>
-                  <TableCell>
+                  <TableCell
+                    sx={{ padding: isMobile ? "8px 8px 8px 0" : "16px" }}
+                  >
                     <strong>Total Earnings</strong>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell
+                    align="right"
+                    sx={{ padding: isMobile ? "8px 0 8px 8px" : "16px" }}
+                  >
                     <strong>${currentPayslip.netPay?.toFixed(2)}</strong>
                   </TableCell>
                 </TableRow>
@@ -283,7 +309,7 @@ const PaymentsPage = () => {
 
           {/* Job Details Section */}
           {currentPayslip.earningData?.length > 0 && (
-            <Box mt={4}>
+            <Box mt={isMobile ? 2 : 4}>
               <Button
                 startIcon={
                   expandedJobs[currentPayslip.id] ? (
@@ -293,7 +319,12 @@ const PaymentsPage = () => {
                   )
                 }
                 onClick={() => toggleJobDetails(currentPayslip.id)}
-                sx={{ mb: 1 }}
+                sx={{
+                  mb: 1,
+                  p: isMobile ? "6px 8px" : "8px 16px",
+                  fontSize: isMobile ? "0.875rem" : "1rem",
+                }}
+                size={isMobile ? "small" : "medium"}
               >
                 {expandedJobs[currentPayslip.id]
                   ? "Hide Job Details"
@@ -301,26 +332,49 @@ const PaymentsPage = () => {
               </Button>
 
               <Collapse in={expandedJobs[currentPayslip.id]}>
-                <Typography variant="h6" gutterBottom>
+                <Typography
+                  variant={isMobile ? "subtitle1" : "h6"}
+                  gutterBottom
+                >
                   JOB DETAILS
                 </Typography>
-                <TableContainer component={Paper} sx={{ mb: 3 }}>
+                <TableContainer
+                  component={Paper}
+                  sx={{
+                    mb: isMobile ? 1 : 3,
+                    maxWidth: isMobile ? "calc(100vw - 32px)" : "100%",
+                  }}
+                >
                   <Table size="small">
                     <TableHead>
                       <TableRow>
-                        <TableCell>Job Name</TableCell>
-                        <TableCell>Work Date</TableCell>
-                        <TableCell align="right">Amount</TableCell>
+                        <TableCell sx={{ p: isMobile ? "8px" : "16px" }}>
+                          <b>Job Name</b>
+                        </TableCell>
+                        <TableCell sx={{ p: isMobile ? "8px" : "16px" }}>
+                          <b>Work Date</b>
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          sx={{ p: isMobile ? "8px" : "16px" }}
+                        >
+                          <b>Amount</b>
+                        </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {currentPayslip.earningData.map((job, index) => (
                         <TableRow key={index}>
-                          <TableCell>{job.jobName || "Unknown Job"}</TableCell>
-                          <TableCell>
+                          <TableCell sx={{ p: isMobile ? "8px" : "16px" }}>
+                            {job.jobName || "Unknown Job"}
+                          </TableCell>
+                          <TableCell sx={{ p: isMobile ? "8px" : "16px" }}>
                             {new Date(job.workDate).toLocaleDateString()}
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell
+                            align="right"
+                            sx={{ p: isMobile ? "8px" : "16px" }}
+                          >
                             ${(job.amount || 0).toFixed(2)}
                           </TableCell>
                         </TableRow>
@@ -333,27 +387,37 @@ const PaymentsPage = () => {
           )}
 
           {/* Net Pay */}
-          <Box mt={4} p={2} bgcolor="primary.light" textAlign="center">
-            <Typography variant="h5">
+          <Box
+            mt={isMobile ? 2 : 4}
+            p={isMobile ? 1 : 2}
+            bgcolor="primary.light"
+            textAlign="center"
+          >
+            <Typography variant={isMobile ? "h7" : "h5"}>
               NET PAY: ${currentPayslip.netPay?.toFixed(2)}
             </Typography>
           </Box>
 
           {/* Payment Info */}
-          <Stack direction="row" justifyContent="space-between" mt={4}>
+          <Stack
+            direction={isMobile ? "row" : "row"}
+            justifyContent="space-evenly"
+            // spacing={isMobile ? 1 : 0}
+            mt={isMobile ? 2 : 4}
+            sx={{ alignItems: "center" }}
+          >
             <Typography variant="body2">
-              <strong>Payment Method:</strong> {currentPayslip.paymentMethod}
+              {currentPayslip.paymentMethod}
             </Typography>
             <Typography variant="body2">
-              <strong>Bank Account:</strong> {currentPayslip.bankAccount}
+              {currentPayslip.bankAccount}
             </Typography>
-            <Typography variant="body2">
-              <strong>Status:</strong>
+            <Typography variant="body2" component="span">
               <Chip
                 label={currentPayslip.status}
                 color={currentPayslip.status === "Paid" ? "success" : "warning"}
                 size="small"
-                sx={{ ml: 1 }}
+                sx={{ p: "15px" }}
               />
             </Typography>
           </Stack>

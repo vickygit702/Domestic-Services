@@ -174,7 +174,7 @@ const Profile = () => {
           sx={{
             display: "flex",
             alignItems: "center",
-            gap: 4,
+            gap: 2,
             flexWrap: "wrap",
           }}
         >
@@ -182,8 +182,8 @@ const Profile = () => {
             <Avatar
               src={`http://localhost:8000/uploads/profile/user/${profileImage}`}
               sx={{
-                width: 130,
-                height: 130,
+                width: 100,
+                height: 100,
                 border: "4px solid white",
                 boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
               }}
@@ -213,16 +213,17 @@ const Profile = () => {
             )}
           </Box>
 
-          <Box sx={{ flex: 1, minWidth: "300px" }}>
+          <Box sx={{ flex: 1, minWidth: "280px" }}>
             <Stack
               direction="row"
-              justifyContent="space-between"
-              alignItems="flex-start"
+              justifyContent="flex-start"
+              gap="20px"
+              alignItems="center"
             >
               <Box>
                 <Typography
                   variant="h7"
-                  component="h1"
+                  component="h5"
                   fontWeight="600"
                   gutterBottom
                 >
@@ -234,7 +235,7 @@ const Profile = () => {
                 variant="outlined"
                 startIcon={<Edit />}
                 onClick={() => setIsEditing(!isEditing)}
-                sx={{ alignSelf: "center", mr: 3 }}
+                sx={{ alignSelf: "center" }}
               >
                 {isEditing ? "Cancel" : "Edit"}
               </Button>
@@ -246,7 +247,7 @@ const Profile = () => {
       {/* Profile Sections */}
       <Grid container spacing={3}>
         {/* Personal Information */}
-        <Grid item xs={12} md={6} sx={{ width: "100%" }}>
+        <Grid xs={12} md={6} sx={{ width: "100%" }}>
           <StyledCard>
             <CardContent>
               <Box
@@ -265,7 +266,7 @@ const Profile = () => {
 
               <Box component="form" onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
-                  <Grid item xs={12}>
+                  <Grid xs={12}>
                     <TextField
                       fullWidth
                       label="Full Name"
@@ -282,7 +283,7 @@ const Profile = () => {
                       }}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid xs={12}>
                     <TextField
                       fullWidth
                       label="Email"
@@ -298,7 +299,7 @@ const Profile = () => {
                       }}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid xs={12}>
                     <TextField
                       fullWidth
                       label="Contact Number"
@@ -322,7 +323,7 @@ const Profile = () => {
         </Grid>
 
         {/* Address Information */}
-        <Grid item xs={12} md={6} sx={{ width: "100%" }}>
+        <Grid xs={12} md={6} sx={{ width: "100%" }}>
           <StyledCard>
             <CardContent>
               <Box
@@ -344,7 +345,7 @@ const Profile = () => {
                 </Typography>
               </Box>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={3}>
+                <Grid xs={12} sm={3}>
                   <TextField
                     fullWidth
                     label="Flat/House No"
@@ -354,7 +355,7 @@ const Profile = () => {
                     onChange={(e) => handleNestedChange(e, "user_address")}
                   />
                 </Grid>
-                <Grid item xs={12} sm={9}>
+                <Grid xs={12} sm={9}>
                   <TextField
                     fullWidth
                     label="Street"
@@ -364,7 +365,7 @@ const Profile = () => {
                     onChange={(e) => handleNestedChange(e, "user_address")}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid xs={12} sm={6}>
                   <TextField
                     fullWidth
                     label="City"
@@ -374,7 +375,7 @@ const Profile = () => {
                     onChange={(e) => handleNestedChange(e, "user_address")}
                   />
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid xs={12} sm={4}>
                   <TextField
                     fullWidth
                     label="State"
@@ -384,7 +385,7 @@ const Profile = () => {
                     onChange={(e) => handleNestedChange(e, "user_address")}
                   />
                 </Grid>
-                <Grid item xs={12} sm={2}>
+                <Grid xs={12} sm={2}>
                   <TextField
                     fullWidth
                     label="Pincode"
@@ -394,7 +395,7 @@ const Profile = () => {
                     onChange={(e) => handleNestedChange(e, "user_address")}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid xs={12}>
                   <TextField
                     fullWidth
                     label="Location Coordinates"
@@ -414,7 +415,7 @@ const Profile = () => {
           </StyledCard>
         </Grid>
         {/* security*/}
-        <Grid item xs={12} md={6} sx={{ width: "100%" }}>
+        <Grid xs={12} md={6} sx={{ width: "100%" }}>
           <StyledCard>
             <CardContent>
               <Box
@@ -436,7 +437,7 @@ const Profile = () => {
                 </Typography>
               </Box>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={3}>
+                <Grid xs={12} sm={3}>
                   <TextField
                     fullWidth
                     label="Password"
@@ -464,9 +465,9 @@ const Profile = () => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "flex-end",
+            justifyContent: "center",
             gap: 2,
-            mt: 4,
+            mt: 2,
             position: "sticky",
             bottom: 20,
             zIndex: 1000,
@@ -477,8 +478,8 @@ const Profile = () => {
             startIcon={<Cancel />}
             onClick={handleCancel}
             sx={{
-              px: 4,
-              py: 1.5,
+              px: 1,
+              py: 1,
               borderRadius: "8px",
             }}
           >
@@ -489,8 +490,8 @@ const Profile = () => {
             startIcon={<Save />}
             onClick={handleSubmit}
             sx={{
-              px: 4,
-              py: 1.5,
+              px: 1,
+              py: 1,
               borderRadius: "8px",
             }}
           >

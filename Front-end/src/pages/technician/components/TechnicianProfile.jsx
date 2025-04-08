@@ -178,399 +178,6 @@ const TechnicianProfile = () => {
   }, [handleSubmit]);
 
   return (
-    // <Box sx={{ p: 1, maxWidth: "1400px", margin: "0 auto" }}>
-    //   {/* Profile Header */}
-    //   <Paper
-    //     sx={{
-    //       p: 1,
-    //       mb: 2,
-    //       borderRadius: "12px",
-    //       background:
-    //         "linear-gradient(135deg,rgb(252, 252, 252) 0%,rgb(190, 221, 245) 100%)",
-    //     }}
-    //   >
-    //     <Box
-    //       sx={{
-    //         display: "flex",
-    //         alignItems: "center",
-    //         gap: 4,
-    //         flexWrap: "wrap",
-    //       }}
-    //     >
-    //       <Box sx={{ position: "relative" }}>
-    //         <Avatar
-    //           src={`http://localhost:8000/uploads/profile/${profileImage}`}
-    //           sx={{
-    //             width: 130,
-    //             height: 130,
-    //             border: "4px solid white",
-    //             boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-    //           }}
-    //         />
-
-    //         {isEditing && (
-    //           <IconButton
-    //             component="label"
-    //             sx={{
-    //               position: "absolute",
-    //               bottom: 8,
-    //               right: 8,
-    //               bgcolor: "primary.main",
-    //               color: "white",
-    //               "&:hover": { bgcolor: "primary.dark" },
-    //               boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-    //             }}
-    //           >
-    //             <CameraAlt />
-    //             <input
-    //               type="file"
-    //               hidden
-    //               accept="image/*"
-    //               onChange={handleImageUpload}
-    //             />
-    //           </IconButton>
-    //         )}
-    //       </Box>
-
-    //       <Box sx={{ flex: 1, minWidth: "300px" }}>
-    //         <Stack
-    //           direction="row"
-    //           justifyContent="space-between"
-    //           alignItems="flex-start"
-    //         >
-    //           <Box>
-    //             <Typography
-    //               variant="h7"
-    //               component="h1"
-    //               fontWeight="600"
-    //               gutterBottom
-    //             >
-    //               {techData.tech_name}
-    //             </Typography>
-    //             <Chip
-    //               icon={techData.isPro ? <Star color="success" /> : <Person />}
-    //               label={techData.isPro ? "PRO Tech" : "Standard"}
-    //               color={techData.isPro ? "success" : "default"}
-    //               variant="outlined"
-    //               size="medium"
-    //               sx={{ fontWeight: 500 }}
-    //             />
-    //           </Box>
-
-    //           <Button
-    //             variant="outlined"
-    //             startIcon={<Edit />}
-    //             onClick={() => setIsEditing(!isEditing)}
-    //             sx={{ alignSelf: "center" }}
-    //           >
-    //             {isEditing ? "Cancel Editing" : "Edit Profile"}
-    //           </Button>
-    //         </Stack>
-    //       </Box>
-    //     </Box>
-    //   </Paper>
-
-    //   {/* Profile Sections */}
-    //   <Grid container spacing={3}>
-    //     {/* Personal Information */}
-    //     <Grid item xs={12} md={6}>
-    //       <StyledCard>
-    //         <CardContent>
-    //           <Box
-    //             sx={{
-    //               display: "flex",
-    //               justifyContent: "space-between",
-    //               alignItems: "center",
-    //               mb: 3,
-    //             }}
-    //           >
-    //             <Typography variant="h6" component="h2" fontWeight="600">
-    //               <Person sx={{ verticalAlign: "middle", mr: 1 }} />
-    //               Personal Information
-    //             </Typography>
-    //           </Box>
-
-    //           <Box component="form" onSubmit={handleSubmit}>
-    //             <Grid container spacing={2}>
-    //               <Grid item xs={12}>
-    //                 <TextField
-    //                   fullWidth
-    //                   label="Full Name"
-    //                   name="tech_name"
-    //                   value={techData.tech_name}
-    //                   onChange={handleChange}
-    //                   disabled={!isEditing}
-    //                   InputProps={{
-    //                     startAdornment: (
-    //                       <InputAdornment position="start">
-    //                         <Person />
-    //                       </InputAdornment>
-    //                     ),
-    //                   }}
-    //                 />
-    //               </Grid>
-    //               <Grid item xs={12}>
-    //                 <TextField
-    //                   fullWidth
-    //                   label="Email"
-    //                   name="tech_email"
-    //                   value={techData.tech_email}
-    //                   disabled
-    //                   InputProps={{
-    //                     startAdornment: (
-    //                       <InputAdornment position="start">
-    //                         <Email />
-    //                       </InputAdornment>
-    //                     ),
-    //                   }}
-    //                 />
-    //               </Grid>
-    //               <Grid item xs={12}>
-    //                 <TextField
-    //                   fullWidth
-    //                   label="Contact Number"
-    //                   name="tech_contact"
-    //                   value={techData.tech_contact}
-    //                   disabled={!isEditing}
-    //                   onChange={handleChange}
-    //                   InputProps={{
-    //                     startAdornment: (
-    //                       <InputAdornment position="start">
-    //                         <Phone />
-    //                       </InputAdornment>
-    //                     ),
-    //                   }}
-    //                 />
-    //               </Grid>
-    //               <Grid item xs={12}>
-    //                 <TextField
-    //                   fullWidth
-    //                   label="Experience (years)"
-    //                   name="tech_experience"
-    //                   type="number"
-    //                   value={techData.tech_experience}
-    //                   disabled={!isEditing}
-    //                   onChange={handleChange}
-    //                   InputProps={{
-    //                     startAdornment: (
-    //                       <InputAdornment position="start">
-    //                         <AccessTime />
-    //                       </InputAdornment>
-    //                     ),
-    //                   }}
-    //                 />
-    //               </Grid>
-    //               <Grid item xs={12}>
-    //                 <TextField
-    //                   fullWidth
-    //                   label="Skills (comma separated)"
-    //                   name="worksKnown"
-    //                   value={techData.worksKnown}
-    //                   disabled={!isEditing}
-    //                   onChange={handleChange}
-    //                   multiline
-    //                   rows={2}
-    //                 />
-    //               </Grid>
-    //             </Grid>
-    //           </Box>
-    //         </CardContent>
-    //       </StyledCard>
-    //     </Grid>
-
-    //     {/* Address Information */}
-    //     <Grid item xs={12} md={6}>
-    //       <StyledCard>
-    //         <CardContent>
-    //           <Typography
-    //             variant="h6"
-    //             component="h2"
-    //             fontWeight="600"
-    //             gutterBottom
-    //           >
-    //             <Home sx={{ verticalAlign: "middle", mr: 1 }} />
-    //             Address Information
-    //           </Typography>
-
-    //           <Grid container spacing={2}>
-    //             <Grid item xs={12} sm={3}>
-    //               <TextField
-    //                 fullWidth
-    //                 label="Flat/House No"
-    //                 name="flatNo"
-    //                 value={techData.tech_address.flatNo}
-    //                 disabled={!isEditing}
-    //                 onChange={(e) => handleNestedChange(e, "tech_address")}
-    //               />
-    //             </Grid>
-    //             <Grid item xs={12} sm={9}>
-    //               <TextField
-    //                 fullWidth
-    //                 label="Street"
-    //                 name="street"
-    //                 value={techData.tech_address.street}
-    //                 disabled={!isEditing}
-    //                 onChange={(e) => handleNestedChange(e, "tech_address")}
-    //               />
-    //             </Grid>
-    //             <Grid item xs={12} sm={6}>
-    //               <TextField
-    //                 fullWidth
-    //                 label="City"
-    //                 name="city"
-    //                 value={techData.tech_address.city}
-    //                 disabled={!isEditing}
-    //                 onChange={(e) => handleNestedChange(e, "tech_address")}
-    //               />
-    //             </Grid>
-    //             <Grid item xs={12} sm={4}>
-    //               <TextField
-    //                 fullWidth
-    //                 label="State"
-    //                 name="state"
-    //                 value={techData.tech_address.state}
-    //                 disabled={!isEditing}
-    //                 onChange={(e) => handleNestedChange(e, "tech_address")}
-    //               />
-    //             </Grid>
-    //             <Grid item xs={12} sm={2}>
-    //               <TextField
-    //                 fullWidth
-    //                 label="Pincode"
-    //                 name="pincode"
-    //                 value={techData.tech_address.pincode}
-    //                 disabled={!isEditing}
-    //                 onChange={(e) => handleNestedChange(e, "tech_address")}
-    //               />
-    //             </Grid>
-    //             <Grid item xs={12}>
-    //               <TextField
-    //                 fullWidth
-    //                 label="Location Coordinates"
-    //                 value={`${techData.tech_location.lat}, ${techData.tech_location.lng}`}
-    //                 disabled
-    //                 InputProps={{
-    //                   startAdornment: (
-    //                     <InputAdornment position="start">
-    //                       <LocationOn />
-    //                     </InputAdornment>
-    //                   ),
-    //                 }}
-    //               />
-    //             </Grid>
-    //           </Grid>
-    //         </CardContent>
-    //       </StyledCard>
-    //     </Grid>
-
-    //     {/* Professional Stats */}
-    //     <Grid item xs={12}>
-    //       <StyledCard>
-    //         <CardContent>
-    //           <Typography
-    //             variant="h6"
-    //             component="h2"
-    //             fontWeight="600"
-    //             gutterBottom
-    //           >
-    //             <Work sx={{ verticalAlign: "middle", mr: 1 }} />
-    //             Professional Statistics
-    //           </Typography>
-    //           <Grid container spacing={3}>
-    //             <Grid item xs={6} sm={3}>
-    //               <StatCard>
-    //                 <AttachMoney color="primary" sx={{ fontSize: 40, mb: 1 }} />
-    //                 <Typography
-    //                   variant="h5"
-    //                   color="primary.main"
-    //                   fontWeight="600"
-    //                 >
-    //                   ${technician.earnings?.toFixed(2) || "0.00"}
-    //                 </Typography>
-    //                 <Typography variant="body2" color="text.secondary">
-    //                   Total Earnings
-    //                 </Typography>
-    //               </StatCard>
-    //             </Grid>
-    //             <Grid item xs={6} sm={3}>
-    //               <StatCard>
-    //                 <Work color="secondary" sx={{ fontSize: 40, mb: 1 }} />
-    //                 <Typography variant="h5" fontWeight="600">
-    //                   {technician.jobsCompleted || 0}
-    //                 </Typography>
-    //                 <Typography variant="body2" color="text.secondary">
-    //                   Jobs Completed
-    //                 </Typography>
-    //               </StatCard>
-    //             </Grid>
-    //             <Grid item xs={6} sm={3}>
-    //               <StatCard>
-    //                 <Star color="warning" sx={{ fontSize: 40, mb: 1 }} />
-    //                 <Typography variant="h5" fontWeight="600">
-    //                   {technician.tech_ratingAvg?.toFixed(1) || "N/A"}
-    //                 </Typography>
-    //                 <Typography variant="body2" color="text.secondary">
-    //                   Average Rating
-    //                 </Typography>
-    //               </StatCard>
-    //             </Grid>
-    //             <Grid item xs={6} sm={3}>
-    //               <StatCard>
-    //                 <AccessTime color="info" sx={{ fontSize: 40, mb: 1 }} />
-    //                 <Typography variant="h5" fontWeight="600">
-    //                   {techData.tech_experience || 0}
-    //                 </Typography>
-    //                 <Typography variant="body2" color="text.secondary">
-    //                   Years Experience
-    //                 </Typography>
-    //               </StatCard>
-    //             </Grid>
-    //           </Grid>
-    //         </CardContent>
-    //       </StyledCard>
-    //     </Grid>
-    //   </Grid>
-
-    //   {/* Edit/Save Buttons - Only shown in edit mode */}
-    //   {isEditing && (
-    //     <Box
-    //       sx={{
-    //         display: "flex",
-    //         justifyContent: "flex-end",
-    //         gap: 2,
-    //         mt: 4,
-    //         position: "sticky",
-    //         bottom: 20,
-    //         zIndex: 1000,
-    //       }}
-    //     >
-    //       <Button
-    //         variant="outlined"
-    //         startIcon={<Cancel />}
-    //         onClick={handleCancel}
-    //         sx={{
-    //           px: 4,
-    //           py: 1.5,
-    //           borderRadius: "8px",
-    //         }}
-    //       >
-    //         Cancel
-    //       </Button>
-    //       <Button
-    //         variant="contained"
-    //         startIcon={<Save />}
-    //         onClick={handleSubmit}
-    //         sx={{
-    //           px: 4,
-    //           py: 1.5,
-    //           borderRadius: "8px",
-    //         }}
-    //       >
-    //         Save Changes
-    //       </Button>
-    //     </Box>
-    //   )}
-    // </Box>
     <Box sx={{ p: 1, maxWidth: "1400px", margin: "0 auto" }}>
       {/* Profile Header */}
       <Paper
@@ -586,7 +193,8 @@ const TechnicianProfile = () => {
           sx={{
             display: "flex",
             alignItems: "center",
-            gap: 4,
+            justifyContent: "flex-start",
+            gap: 2,
             flexWrap: "wrap",
           }}
         >
@@ -594,8 +202,8 @@ const TechnicianProfile = () => {
             <Avatar
               src={`http://localhost:8000/uploads/profile/technicians/${profileImage}`}
               sx={{
-                width: 130,
-                height: 130,
+                width: 100,
+                height: 100,
                 border: "4px solid white",
                 boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
               }}
@@ -625,16 +233,17 @@ const TechnicianProfile = () => {
             )}
           </Box>
 
-          <Box sx={{ flex: 1, minWidth: "300px" }}>
+          <Box sx={{ flex: 1, minWidth: "280px" }}>
             <Stack
               direction="row"
-              justifyContent="space-between"
-              alignItems="flex-start"
+              justifyContent="flex-start"
+              gap="20px"
+              alignItems="center"
             >
               <Box>
                 <Typography
                   variant="h7"
-                  component="h1"
+                  component="h5"
                   fontWeight="600"
                   gutterBottom
                 >
@@ -646,7 +255,7 @@ const TechnicianProfile = () => {
                 variant="outlined"
                 startIcon={<Edit />}
                 onClick={() => setIsEditing(!isEditing)}
-                sx={{ alignSelf: "center", mr: 3 }}
+                sx={{ alignSelf: "center" }}
               >
                 {isEditing ? "Cancel" : "Edit"}
               </Button>
@@ -658,7 +267,7 @@ const TechnicianProfile = () => {
       {/* Profile Sections */}
       <Grid container spacing={3}>
         {/* Personal Information */}
-        <Grid item xs={12} md={6} sx={{ width: "100%" }}>
+        <Grid xs={12} md={6} sx={{ width: "100%" }}>
           <StyledCard>
             <CardContent>
               <Box
@@ -677,7 +286,7 @@ const TechnicianProfile = () => {
 
               <Box component="form" onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
-                  <Grid item xs={12}>
+                  <Grid xs={12}>
                     <TextField
                       fullWidth
                       label="Full Name"
@@ -694,7 +303,7 @@ const TechnicianProfile = () => {
                       }}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid xs={12}>
                     <TextField
                       fullWidth
                       label="Email"
@@ -710,7 +319,7 @@ const TechnicianProfile = () => {
                       }}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid xs={12}>
                     <TextField
                       fullWidth
                       label="Contact Number"
@@ -734,7 +343,7 @@ const TechnicianProfile = () => {
         </Grid>
 
         {/* Address Information */}
-        <Grid item xs={12} md={6} sx={{ width: "100%" }}>
+        <Grid xs={12} md={6} sx={{ width: "100%" }}>
           <StyledCard>
             <CardContent>
               <Box
@@ -756,7 +365,7 @@ const TechnicianProfile = () => {
                 </Typography>
               </Box>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={3}>
+                <Grid xs={12} sm={3}>
                   <TextField
                     fullWidth
                     label="Flat/House No"
@@ -766,7 +375,7 @@ const TechnicianProfile = () => {
                     onChange={(e) => handleNestedChange(e, "tech_address")}
                   />
                 </Grid>
-                <Grid item xs={12} sm={9}>
+                <Grid xs={12} sm={9}>
                   <TextField
                     fullWidth
                     label="Street"
@@ -776,7 +385,7 @@ const TechnicianProfile = () => {
                     onChange={(e) => handleNestedChange(e, "tech_address")}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid xs={12} sm={6}>
                   <TextField
                     fullWidth
                     label="City"
@@ -786,7 +395,7 @@ const TechnicianProfile = () => {
                     onChange={(e) => handleNestedChange(e, "tech_address")}
                   />
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid xs={12} sm={4}>
                   <TextField
                     fullWidth
                     label="State"
@@ -796,7 +405,7 @@ const TechnicianProfile = () => {
                     onChange={(e) => handleNestedChange(e, "tech_address")}
                   />
                 </Grid>
-                <Grid item xs={12} sm={2}>
+                <Grid xs={12} sm={2}>
                   <TextField
                     fullWidth
                     label="Pincode"
@@ -806,7 +415,7 @@ const TechnicianProfile = () => {
                     onChange={(e) => handleNestedChange(e, "tech_address")}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid xs={12}>
                   <TextField
                     fullWidth
                     label="Location Coordinates"
@@ -826,7 +435,7 @@ const TechnicianProfile = () => {
           </StyledCard>
         </Grid>
         {/* security*/}
-        <Grid item xs={12} md={6} sx={{ width: "100%" }}>
+        <Grid xs={12} md={6} sx={{ width: "100%" }}>
           <StyledCard>
             <CardContent>
               <Box
@@ -848,7 +457,7 @@ const TechnicianProfile = () => {
                 </Typography>
               </Box>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={3}>
+                <Grid xs={12} sm={3}>
                   <TextField
                     fullWidth
                     label="Password"
@@ -876,9 +485,9 @@ const TechnicianProfile = () => {
         <Box
           sx={{
             display: "flex",
-            justifyContent: "flex-end",
+            justifyContent: "center",
             gap: 2,
-            mt: 4,
+            mt: 2,
             position: "sticky",
             bottom: 20,
             zIndex: 1000,
@@ -889,8 +498,8 @@ const TechnicianProfile = () => {
             startIcon={<Cancel />}
             onClick={handleCancel}
             sx={{
-              px: 4,
-              py: 1.5,
+              px: 1,
+              py: 1,
               borderRadius: "8px",
             }}
           >
@@ -901,8 +510,8 @@ const TechnicianProfile = () => {
             startIcon={<Save />}
             onClick={handleSubmit}
             sx={{
-              px: 4,
-              py: 1.5,
+              px: 1,
+              py: 1,
               borderRadius: "8px",
             }}
           >

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom"; // Changed Link to NavLink
 import UserLogout from "../UserLogout";
 
 const UserDashboard = () => {
@@ -76,37 +76,47 @@ const UserDashboard = () => {
             {/* Navigation */}
             <ul className="nav flex-column mb-3" style={{ flex: "1 1 auto" }}>
               <li className="nav-item mb-2">
-                <Link
+                <NavLink
                   to={`/my-project/user/${id}/dashboard`}
-                  className="nav-link text-white py-2 px-3 rounded d-flex align-items-center"
-                  activeClassName="active bg-primary"
+                  className={({ isActive }) =>
+                    `nav-link text-white py-2 px-3 rounded d-flex align-items-center ${
+                      isActive ? "active bg-primary" : ""
+                    }`
+                  }
                   onClick={closeSidebar}
+                  end // Add this if it's an exact match
                 >
                   <i className="bi bi-speedometer2 me-2"></i>
                   Dashboard
-                </Link>
+                </NavLink>
               </li>
               <li className="nav-item mb-2">
-                <Link
+                <NavLink
                   to={`/my-project/user/${id}/my-bookings`}
-                  className="nav-link text-white py-2 px-3 rounded d-flex align-items-center"
-                  activeClassName="active bg-primary"
+                  className={({ isActive }) =>
+                    `nav-link text-white py-2 px-3 rounded d-flex align-items-center ${
+                      isActive ? "active bg-primary" : ""
+                    }`
+                  }
                   onClick={closeSidebar}
                 >
                   <i className="bi bi-calendar-check me-2"></i>
                   My Bookings
-                </Link>
+                </NavLink>
               </li>
               <li className="nav-item mb-2">
-                <Link
+                <NavLink
                   to={`/my-project/user/${id}/profile`}
-                  className="nav-link text-white py-2 px-3 rounded d-flex align-items-center"
-                  activeClassName="active bg-primary"
+                  className={({ isActive }) =>
+                    `nav-link text-white py-2 px-3 rounded d-flex align-items-center ${
+                      isActive ? "active bg-primary" : ""
+                    }`
+                  }
                   onClick={closeSidebar}
                 >
                   <i className="bi bi-person-circle me-2"></i>
                   Profile
-                </Link>
+                </NavLink>
               </li>
             </ul>
             <UserLogout />
@@ -115,8 +125,8 @@ const UserDashboard = () => {
 
         {/* Main Content */}
         <div className="col-md-9 col-lg-10 ms-auto">
-          <div className="p-4">
-            <div className="bg-white rounded-4 shadow-sm p-4">
+          <div className="p-3">
+            <div className="bg-white rounded-4 shadow-sm p-2">
               <Outlet />
             </div>
           </div>
@@ -124,7 +134,7 @@ const UserDashboard = () => {
       </div>
 
       {/* Custom CSS */}
-      <style jsx>{`
+      <style>{`
         .nav-link:hover {
           background-color: rgba(255, 255, 255, 0.1) !important;
         }
@@ -137,7 +147,7 @@ const UserDashboard = () => {
           .sidebar {
             transform: translateX(-100%);
             transition: transform 0.3s ease-in-out;
-            width: 280px;
+            width: 260px;
             overflow-y: auto;
           }
           .sidebar.open {
@@ -145,11 +155,11 @@ const UserDashboard = () => {
           }
           .sidebar > div {
             min-height: 100vh;
-            padding-bottom: 80px; /* Space for logout button */
+            padding-bottom: 80px;
           }
           .nav {
-            max-height: 560px;
-            padding-left: 30px;
+            max-height: 490px;
+            
           }
         }
 

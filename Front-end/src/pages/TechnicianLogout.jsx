@@ -14,10 +14,7 @@ const TechnicianLogout = () => {
     }
   };
   return (
-    <button
-      onClick={handleLogout}
-      className="btn btn-outline-light w-100 mt-auto"
-    >
+    <button onClick={handleLogout} className="btn btn-outline-light w-100 ">
       <i className="bi bi-box-arrow-right me-2"></i> Logout
     </button>
   );

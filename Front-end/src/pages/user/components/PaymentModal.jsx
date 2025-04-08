@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { loadStripe } from "@stripe/stripe-js";
+
 import {
   Elements,
   CardElement,
@@ -9,9 +9,6 @@ import {
 import { toast } from "react-toastify";
 import ReviewModal from "./ReviewModel";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-
-console.log("stripe promise", stripePromise);
 const CheckoutForm = ({ booking, onSuccess, amt }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -83,11 +80,30 @@ const CheckoutForm = ({ booking, onSuccess, amt }) => {
 };
 
 const PaymentModal = ({ booking, show, onClose, onSuccess }) => {
+  const [stripePromise, setStripePromise] = useState(null);
   const [stripeReady, setStripeReady] = useState(false);
   //test review modal
   const [showReview, setShowReview] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const amt = booking.price + booking.price * 0.2;
+
+  useEffect(() => {
+    if (show) {
+      // Only load when modal is shown
+      const loadStripeAsync = async () => {
+        const { loadStripe } = await import("@stripe/stripe-js");
+        const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+        setStripePromise(stripe);
+        setStripeReady(true);
+      };
+
+      loadStripeAsync().catch((err) => {
+        console.error("Stripe loading error:", err);
+        setStripeReady(false);
+      });
+    }
+  }, [show]);
+
   useEffect(() => {
     // Verify Stripe is properly loaded
     stripePromise
@@ -127,35 +143,6 @@ const PaymentModal = ({ booking, show, onClose, onSuccess }) => {
 
   if (!show) return null;
   return (
-    // <div className="modal fade show d-block">
-    //   <div className="modal-dialog">
-    //     <div className="modal-content">
-    //       <div className="modal-header">
-    //         <h5 className="modal-title">Pay for Booking #{booking.id}</h5>
-    //         <button
-    //           type="button"
-    //           className="btn-close"
-    //           onClick={onClose}
-    //         ></button>
-    //       </div>
-    //       <div className="modal-body">
-    //         {stripeReady ? (
-    //           <Elements stripe={stripePromise}>
-    //             <CheckoutForm booking={booking} onSuccess={onSuccess} />
-    //           </Elements>
-    //         ) : (
-    //           <div className="text-center py-4">
-    //             <div className="spinner-border text-primary" role="status">
-    //               <span className="visually-hidden">Loading...</span>
-    //             </div>
-    //             <p className="mt-2">Loading payment gateway...</p>
-    //           </div>
-    //         )}
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
-
     <>
       {!showReview ? (
         <div className="modal fade show d-block">

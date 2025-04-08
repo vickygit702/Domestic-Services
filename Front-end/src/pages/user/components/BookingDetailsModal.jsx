@@ -96,22 +96,6 @@ const BookingDetailsModal = ({ booking, show, onHide }) => {
                         {new Date(booking.actualWorked.end).toLocaleDateString(
                           "en-GB"
                         )}
-
-                        {/* {new Date(
-                                    booking.actualWorked.start
-                                  ).toLocaleTimeString("en-US", {
-                                    // timeZone: "UTC",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  })}
-                                  -
-                                  {new Date(
-                                    booking.actualWorked.end
-                                  ).toLocaleTimeString("en-US", {
-                                    // timeZone: "UTC",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  })}{" "} */}
                       </>
                     ) : booking.status === "InProgress" ||
                       booking.status === "Cancelled" ||
@@ -308,10 +292,6 @@ const BookingDetailsModal = ({ booking, show, onHide }) => {
             Close
           </button>
           <div>
-            {/* <button className="btn btn-primary me-2">
-              <i className="bi bi-printer me-2"></i>
-              Print Receipt
-            </button> */}
             <button className="btn btn-success">
               <i className="bi bi-chat-text me-2"></i>
               Contact Support
@@ -319,7 +299,7 @@ const BookingDetailsModal = ({ booking, show, onHide }) => {
           </div>
         </motion.div>
       </Modal.Footer>
-      <style jsx>{`
+      <style>{`
         .premium-modal {
           --modal-border-radius: 12px;
           --primary-gradient: linear-gradient(135deg, #3a7bd5 0%, #00d2ff 100%);

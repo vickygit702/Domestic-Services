@@ -19,13 +19,19 @@ import {
   DialogContent,
   DialogActions,
   Divider,
-  Tabs,
-  Tab,
-  Box,
   Button,
   Skeleton,
   Avatar,
   Stack,
+  useMediaQuery,
+  useTheme,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Box,
+  Tab,
+  Tabs,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -39,28 +45,32 @@ const StatusChip = styled(Chip)(({ theme }) => ({
 const JobTableContainer = styled(TableContainer)(({ theme }) => ({
   borderRadius: 12,
   boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-  overflow: "hidden",
+  overflowX: "auto",
+  width: "100%",
+  [theme.breakpoints.down("sm")]: {
+    maxWidth: "calc(100vw - 32px)",
+  },
 }));
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+const MobileSelectContainer = styled(Box)(({ theme }) => ({
+  width: "100%",
+  marginBottom: theme.spacing(2),
+  [theme.breakpoints.up("sm")]: {
+    display: "none",
+  },
+}));
 
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ pt: 3 }}>{children}</Box>}
-    </div>
-  );
-}
+const TabsContainer = styled(Box)(({ theme }) => ({
+  [theme.breakpoints.down("sm")]: {
+    display: "none",
+  },
+}));
 
 const TechnicianMyJobs = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const {
     jobDetails = [],
     loading,
@@ -79,8 +89,7 @@ const TechnicianMyJobs = () => {
   const refreshJobs = useCallback(() => {
     const url = `http://localhost:8000/technician/${id}/jobs/fetch-jobs`;
     dispatch(fetchJobs(url));
-    console.log("job details", jobDetails);
-  }, []);
+  }, [dispatch, id]);
 
   useEffect(() => {
     refreshJobs();
@@ -102,7 +111,7 @@ const TechnicianMyJobs = () => {
         toast.error("Failed to update job status");
       }
     },
-    [dispatch, id]
+    [dispatch, id, refreshJobs]
   );
 
   useEffect(() => {
@@ -128,9 +137,13 @@ const TechnicianMyJobs = () => {
     }
   };
 
+  const handleTabChange = (event) => {
+    setTabValue(event.target.value);
+  };
+
   if (loading) {
     return (
-      <Box sx={{ p: 3 }}>
+      <Box sx={{ p: 2 }}>
         <Skeleton variant="text" width="30%" height={50} sx={{ mb: 2 }} />
         <Skeleton variant="rectangular" height={400} />
       </Box>
@@ -138,49 +151,85 @@ const TechnicianMyJobs = () => {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom sx={{ mb: 3, fontWeight: 600 }}>
-        My Jobs
-      </Typography>
+    <Box sx={{ p: isMobile ? 1 : 2 }}>
+      {/* Mobile Select Input */}
+      <MobileSelectContainer>
+        <FormControl fullWidth>
+          <InputLabel id="status-select-label">Job Status</InputLabel>
+          <Select
+            labelId="status-select-label"
+            value={tabValue}
+            label="Job Status"
+            onChange={handleTabChange}
+          >
+            {statusTabs.map((tab, index) => (
+              <MenuItem key={index} value={index}>
+                {tab.label} (
+                {
+                  (jobDetails || []).filter((j) => j.status === tab.value)
+                    .length
+                }
+                )
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </MobileSelectContainer>
 
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs
-          value={tabValue}
-          onChange={(e, newValue) => setTabValue(newValue)}
+      {/* Desktop Tabs */}
+      <TabsContainer>
+        <Box
+          sx={{
+            borderBottom: 1,
+            borderColor: "divider",
+            overflowX: "auto",
+            width: "100%",
+          }}
         >
-          {statusTabs.map((tab, index) => (
-            <Tab
-              key={index}
-              label={
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  {tab.label}
-                  <Chip
-                    label={
-                      (jobDetails || []).filter((j) => j.status === tab.value)
-                        .length
-                    }
-                    size="small"
-                    sx={{ ml: 1 }}
-                  />
-                </Box>
-              }
-            />
-          ))}
-        </Tabs>
-      </Box>
+          <Tabs
+            value={tabValue}
+            onChange={(e, newValue) => setTabValue(newValue)}
+            variant="scrollable"
+            scrollButtons="auto"
+          >
+            {statusTabs.map((tab, index) => (
+              <Tab
+                key={index}
+                label={
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {tab.label}
+                    <Chip
+                      label={
+                        (jobDetails || []).filter((j) => j.status === tab.value)
+                          .length
+                      }
+                      size="small"
+                      sx={{ ml: 1 }}
+                    />
+                  </Box>
+                }
+                sx={{ minWidth: "unset", px: isMobile ? 1 : 2 }}
+              />
+            ))}
+          </Tabs>
+        </Box>
+      </TabsContainer>
 
-      {statusTabs.map((tab, index) => (
-        <TabPanel key={index} value={tabValue} index={index}>
-          <JobTable
-            jobs={filteredJobs}
-            status={tab.value}
-            technicianId={id}
-            getStatusColor={getStatusColor}
-            handleStatusUpdate={handleStatusUpdate} // Add this
-            refreshJobs={refreshJobs}
-          />
-        </TabPanel>
-      ))}
+      <JobTable
+        jobs={filteredJobs}
+        status={statusTabs[tabValue].value}
+        technicianId={id}
+        getStatusColor={getStatusColor}
+        handleStatusUpdate={handleStatusUpdate}
+        refreshJobs={refreshJobs}
+        isMobile={isMobile}
+      />
     </Box>
   );
 };
@@ -190,9 +239,9 @@ const JobTable = ({
   status,
   technicianId,
   getStatusColor,
-  handleStatusUpdate, // Add this prop
+  handleStatusUpdate,
   refreshJobs,
-  // Add this prop
+  isMobile,
 }) => {
   const [open, setOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
@@ -220,16 +269,17 @@ const JobTable = ({
   return (
     <>
       <JobTableContainer component={Paper}>
-        <Table>
+        <Table sx={{ minWidth: isMobile ? 600 : "100%" }}>
           <TableHead sx={{ bgcolor: "background.default" }}>
             <TableRow>
               <TableCell sx={{ fontWeight: 600 }}>Job ID</TableCell>
-              <TableCell sx={{ fontWeight: 600 }}>Customer</TableCell>
+              {!isMobile && (
+                <TableCell sx={{ fontWeight: 600 }}>Customer</TableCell>
+              )}
               <TableCell sx={{ fontWeight: 600 }}>Service</TableCell>
-              <TableCell sx={{ fontWeight: 600 }}>Date & Time</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Date</TableCell>
 
               <TableCell sx={{ fontWeight: 600 }}>Price</TableCell>
-
               <TableCell sx={{ fontWeight: 600 }}>Status</TableCell>
               <TableCell sx={{ fontWeight: 600 }}>Actions</TableCell>
             </TableRow>
@@ -238,69 +288,90 @@ const JobTable = ({
             {jobs.map((job) => (
               <TableRow key={job.id} hover>
                 <TableCell>#{job.id.slice(-6)}</TableCell>
+                {!isMobile && (
+                  <TableCell>
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      <Avatar
+                        sx={{ bgcolor: "primary.main", width: 32, height: 32 }}
+                      >
+                        {job.user?.user_name?.charAt(0) || "U"}
+                      </Avatar>
+                      <Box>
+                        <Typography variant="body2">
+                          {job.user?.user_name || "N/A"}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          {job.user?.user_contact || "No contact"}
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </TableCell>
+                )}
                 <TableCell>
-                  <Stack direction="row" alignItems="center" spacing={2}>
-                    <Avatar sx={{ bgcolor: "primary.main" }}>
-                      {job.user?.user_name?.charAt(0) || "U"}
-                    </Avatar>
-                    <Box>
-                      <Typography>{job.user?.user_name || "N/A"}</Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {job.user?.user_contact || "No contact"}
-                      </Typography>
-                    </Box>
-                  </Stack>
+                  <Typography variant="body2" fontWeight={500}>
+                    {job.servicename}
+                  </Typography>
+                  {!isMobile && (
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ whiteSpace: "normal", wordWrap: "break-word" }}
+                    >
+                      {job.jobDetail}
+                    </Typography>
+                  )}
                 </TableCell>
                 <TableCell>
-                  <Typography fontWeight={500}>{job.servicename}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {job.jobDetail}
+                  <Typography variant="body2">
+                    {new Date(job.bookeddate.start).toLocaleDateString("en-GB")}
                   </Typography>
+                  {!isMobile && (
+                    <Typography variant="caption" color="text.secondary">
+                      {new Date(job.bookeddate.start).toLocaleTimeString(
+                        "en-US",
+                        {
+                          timeZone: "UTC",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        }
+                      )}
+                    </Typography>
+                  )}
                 </TableCell>
+
                 <TableCell>
-                  <Typography>
-                    {new Date(job.bookeddate.start).toLocaleDateString("en-GB")}{" "}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {new Date(job.bookeddate.start).toLocaleTimeString(
-                      "en-US",
-                      {
-                        timeZone: "UTC",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      }
-                    )}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography fontWeight={500}>
+                  <Typography variant="body2" fontWeight={500}>
                     {job.status === "Completed"
                       ? `$ ${job.price}`
                       : `$ ${job.est_price}`}
                   </Typography>
                   <Typography
-                    variant="body2"
+                    variant="caption"
                     color={job.paymentStatus ? "success.main" : "error.main"}
                   >
                     {job.paymentStatus ? "Paid" : "Pending"}
                   </Typography>
                 </TableCell>
+
                 <TableCell>
                   <StatusChip
-                    label={job.status}
+                    label={isMobile ? job.status.substring(0, 3) : job.status}
                     color={getStatusColor(job.status)}
+                    size={isMobile ? "small" : "medium"}
                   />
                 </TableCell>
                 <TableCell>
                   <Button
                     variant="outlined"
                     size="small"
-                    component={Link}
                     onClick={() => handleOpen(job)}
-                    // to={`/technician/${technicianId}/jobs/${job._id}/details`}
-                    sx={{ textTransform: "none" }}
+                    sx={{
+                      textTransform: "none",
+                      fontSize: isMobile ? "0.7rem" : "0.875rem",
+                      p: isMobile ? "4px 8px" : "6px 16px",
+                    }}
                   >
-                    View Details
+                    {isMobile ? "View" : "Details"}
                   </Button>
                 </TableCell>
               </TableRow>
@@ -308,80 +379,152 @@ const JobTable = ({
           </TableBody>
         </Table>
       </JobTableContainer>
-      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        maxWidth={isMobile ? "xs" : "md"}
+        fullWidth
+        fullScreen={isMobile}
+        sx={{
+          "& .MuiDialog-paper": {
+            width: isMobile ? "95%" : "100%",
+            maxWidth: isMobile ? "none" : "md",
+            margin: isMobile ? "15px" : "32px",
+            borderRadius: isMobile ? "8px" : "12px",
+          },
+        }}
+      >
         {selectedJob && (
           <>
-            <DialogTitle>
-              <Stack direction="row" alignItems="center" spacing={2}>
-                <Avatar sx={{ bgcolor: "primary.main" }}>
+            <DialogTitle
+              sx={{
+                p: isMobile ? 1.5 : 2,
+                "& .MuiStack-root": {
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: isMobile ? 1 : 2,
+                },
+              }}
+            >
+              <Stack direction="row" alignItems="flex-start" spacing={2}>
+                <Avatar
+                  sx={{
+                    bgcolor: "primary.main",
+                    width: isMobile ? 32 : 40,
+                    height: isMobile ? 32 : 40,
+                  }}
+                >
                   {selectedJob.user?.user_name?.charAt(0) || "U"}
                 </Avatar>
-                <Typography variant="h6">
-                  {selectedJob.servicename} - #{selectedJob.id.slice(-6)}
-                </Typography>
+                <Box>
+                  <Typography
+                    variant={isMobile ? "body1" : "h6"}
+                    component="div"
+                  >
+                    {selectedJob.servicename}
+                  </Typography>
+                  <Typography
+                    variant={isMobile ? "caption" : "body2"}
+                    color="text.secondary"
+                  >
+                    #{selectedJob.id.slice(-6)}
+                  </Typography>
+                </Box>
                 <StatusChip
                   label={selectedJob.status}
                   color={getStatusColor(selectedJob.status)}
-                  sx={{ ml: "auto" }}
+                  sx={{
+                    ml: isMobile ? 0 : "auto",
+                    mt: isMobile ? 1 : 0,
+                  }}
+                  size={isMobile ? "small" : "medium"}
                 />
               </Stack>
             </DialogTitle>
 
-            <DialogContent dividers>
-              <Stack spacing={3}>
+            <DialogContent dividers sx={{ p: isMobile ? 1.5 : 3 }}>
+              <Stack spacing={isMobile ? 2 : 3}>
                 <div>
-                  <Typography variant="subtitle2" color="text.secondary">
+                  <Typography
+                    variant="subtitle2"
+                    color="text.secondary"
+                    gutterBottom
+                  >
                     CUSTOMER DETAILS
                   </Typography>
-                  <Typography>
+                  <Typography variant={isMobile ? "body2" : "body1"}>
                     {selectedJob.user?.user_name || "N/A"}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography
+                    variant={isMobile ? "caption" : "body2"}
+                    color="text.secondary"
+                  >
                     {selectedJob.user?.user_email}
                   </Typography>
-                  <Typography variant="body2">
-                    {selectedJob.user?.user_contact}
+                  <Typography variant={isMobile ? "caption" : "body2"}>
+                    - {selectedJob.user?.user_contact}
                   </Typography>
                 </div>
 
-                <Divider />
+                <Divider sx={{ my: isMobile ? 1 : 2 }} />
 
                 <div>
-                  <Typography variant="subtitle2" color="text.secondary">
+                  <Typography
+                    variant="subtitle2"
+                    color="text.secondary"
+                    gutterBottom
+                  >
                     SERVICE DETAILS
                   </Typography>
-                  <Typography>{selectedJob.jobDetail}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {selectedJob.status === "Confirmed" ||
-                    selectedJob.status === "InProgress" ||
-                    selectedJob.status === "Cancelled"
-                      ? `Estimated Price: ${selectedJob.est_price.toFixed(2)}`
-                      : `Total Price: ${selectedJob.price.toFixed(2)}`}
+                  <Typography variant={isMobile ? "body2" : "body1"}>
+                    {selectedJob.jobDetail}
                   </Typography>
-                  <Chip
-                    label={
-                      selectedJob.paymentStatus ? "Paid" : "Payment Pending"
-                    }
-                    color={selectedJob.paymentStatus ? "success" : "warning"}
-                    size="small"
-                  />
+                  <Box
+                    sx={{
+                      mt: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
+                    <Typography
+                      variant={isMobile ? "caption" : "body2"}
+                      color="text.secondary"
+                    >
+                      {selectedJob.status === "Confirmed" ||
+                      selectedJob.status === "InProgress" ||
+                      selectedJob.status === "Cancelled"
+                        ? `Est. Price: $${selectedJob.est_price.toFixed(2)}`
+                        : `Price: $${selectedJob.price.toFixed(2)}`}
+                    </Typography>
+                    <Chip
+                      label={selectedJob.paymentStatus ? "Paid" : "Pending"}
+                      color={selectedJob.paymentStatus ? "success" : "warning"}
+                      size="small"
+                    />
+                  </Box>
                 </div>
 
-                <Divider />
+                <Divider sx={{ my: isMobile ? 1 : 2 }} />
 
                 <div>
-                  <Typography variant="subtitle2" color="text.secondary">
+                  <Typography
+                    variant="subtitle2"
+                    color="text.secondary"
+                    gutterBottom
+                  >
                     {selectedJob.status === "Completed"
                       ? "WORK DETAILS"
                       : "SCHEDULE"}
                   </Typography>
-                  <Typography>
+                  <Typography variant={isMobile ? "body2" : "body1"}>
                     {selectedJob.status === "Completed" ? (
                       <>
                         {new Date(
                           selectedJob.actualWorked.start
-                        ).toLocaleDateString("en-GB")}
-                        -
+                        ).toLocaleDateString("en-GB")}{" "}
                         {new Date(
                           selectedJob.actualWorked.start
                         ).toLocaleTimeString("en-US", {
@@ -391,23 +534,19 @@ const JobTable = ({
                         {" to "}
                         {new Date(
                           selectedJob.actualWorked.end
-                        ).toLocaleDateString("en-GB")}
-                        -
+                        ).toLocaleDateString("en-GB")}{" "}
                         {new Date(
                           selectedJob.actualWorked.end
                         ).toLocaleTimeString("en-US", {
                           hour: "2-digit",
                           minute: "2-digit",
-                        })}{" "}
+                        })}
                       </>
-                    ) : selectedJob.status === "InProgress" ||
-                      selectedJob.status === "Cancelled" ||
-                      selectedJob.status === "Confirmed" ? (
+                    ) : (
                       <>
                         {new Date(
                           selectedJob.bookeddate.start
-                        ).toLocaleDateString("en-GB")}
-                        -
+                        ).toLocaleDateString("en-GB")}{" "}
                         {new Date(
                           selectedJob.bookeddate.start
                         ).toLocaleTimeString("en-US", {
@@ -416,29 +555,39 @@ const JobTable = ({
                           minute: "2-digit",
                         })}
                       </>
-                    ) : null}
+                    )}
                   </Typography>
                 </div>
               </Stack>
             </DialogContent>
 
-            <DialogActions>
-              <Button onClick={handleClose}>Close</Button>
-              {selectedJob.status === "InProgress" && (
+            <DialogActions
+              sx={{
+                flexDirection: isMobile ? "column-reverse" : "row",
+                alignItems: "center",
+                justifyContent: "space-evenly",
+                gap: isMobile ? 1 : 0,
+                p: isMobile ? 1.5 : 2,
+              }}
+            >
+              <Button
+                onClick={handleClose}
+                fullWidth={isMobile}
+                size={isMobile ? "small" : "medium"}
+              >
+                Close
+              </Button>
+              {(selectedJob.status === "InProgress" ||
+                selectedJob.status === "Confirmed") && (
                 <Button
                   variant="contained"
                   onClick={() => handleStatusUpdateLocal(selectedJob)}
-                  // Add any action here
+                  fullWidth={isMobile}
+                  size={isMobile ? "small" : "medium"}
                 >
-                  Mark as Completed
-                </Button>
-              )}
-              {selectedJob.status === "Confirmed" && (
-                <Button
-                  variant="contained"
-                  onClick={() => handleStatusUpdateLocal(selectedJob)}
-                >
-                  Mark as Start
+                  {selectedJob.status === "InProgress"
+                    ? "Mark as Completed"
+                    : "Start Job"}
                 </Button>
               )}
             </DialogActions>

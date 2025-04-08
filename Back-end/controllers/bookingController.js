@@ -158,6 +158,119 @@ exports.bookService = async (req, res) => {
   }
 };
 
+exports.bookServicePremiumUser = async (req, res) => {
+  try {
+    const {
+      userId,
+      technicianid,
+      serviceName,
+      startDate,
+      duration,
+
+      workDetail,
+    } = req.body;
+
+    const user = await User.findById(userId);
+    console.log(user);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    //const dates = getBookingDate("2025-02-25T11:00:00Z", 20);
+    const dates = getBookingDate(startDate, duration);
+    if (dates === "error") {
+      return res
+        .status(404)
+        .json({ message: "Booking must start between 8 AM and 8 PM UTC" });
+    }
+    const { bookingStartTime, overallEndTime } = dates;
+    console.log(bookingStartTime);
+    // Step 1: Find available technicians for the requested service
+
+    const technician = await Technician.findById(technicianid);
+
+    if (!technician) {
+      return res.status(400).json({ message: "invalid technician detail" });
+    }
+
+    const serviceDetail = await Service.findOne({ service_name: serviceName });
+
+    let tot_price = serviceDetail.baseRate * duration;
+
+    console.log("Final Price Before Saving:", tot_price);
+    if (isNaN(tot_price) || tot_price <= 0) {
+      return res.status(400).json({ message: "Invalid price calculation" });
+    }
+
+    const newBooking = new Booking({
+      user_Id: userId,
+      tech_Id: technician._id,
+      ser_Id: serviceDetail._id,
+      perHour: serviceDetail.baseRate,
+      serviceName,
+      bookedDate: {
+        start: bookingStartTime,
+        end: overallEndTime,
+      },
+      workDetail: workDetail,
+      est_price: tot_price,
+    });
+
+    await newBooking.save();
+
+    // Step 4: Update Technician Availability
+    technician.bookedSlots.push({
+      start: bookingStartTime,
+      end: overallEndTime,
+    });
+    await selectedTechnician.save();
+
+    // 1. Get and validate the technician's phone number
+    if (!technician.tech_contact) {
+      console.error("Technician contact number is missing");
+      return; // Skip SMS if no number exists
+    }
+
+    let technicianPhone = String(technician.tech_contact); // Force convert to string
+
+    // 2. Format the number (add +91 for India)
+    technicianPhone = technicianPhone.replace(/\D/g, ""); // Remove non-digits
+
+    if (technicianPhone.length === 10) {
+      technicianPhone = `+91${technicianPhone}`; // Indian number
+    }
+    //map location
+    const lat = user.user_location.lat;
+    const lng = user.user_location.lng;
+    const googleMapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
+    // 3. Send SMS (Twilio example)
+    try {
+      const message = `New booking details:
+        Service: ${serviceName}
+        Customer: ${user.user_name}
+        Contact: ${user.user_contact}
+        Address: ${user.user_address}
+        Date: ${bookingStartTime.toUTCString()}; 
+        Work Details: ${workDetail}
+        Location:${googleMapsLink}`;
+      // await twilioClient.messages.create({
+      //   body: message,
+      //   from: process.env.TWILIO_PHONE_NUMBER,
+      //   to: technicianPhone,
+      // });
+      console.log(" SMS sent to technician successfully", message);
+    } catch (err) {
+      console.error("SMS failed:", err.message);
+    }
+    res
+      .status(201)
+      .json({ message: "Booking successful", booking: newBooking });
+  } catch (error) {
+    console.error("Booking error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 function getBookingDate(startDate, duration) {
   const bookingStartTime = new Date(startDate);
   const workStartHour = 8; // 8 AM

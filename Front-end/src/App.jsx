@@ -44,14 +44,7 @@ function App() {
         />
 
         <Route path="*" element={<NotFoundPage />} />
-        {/* <Route
-          path="/my-project/technician/:id"
-          element={
-            <TechnicianProtected>
-              <TechnicianHomePage />
-            </TechnicianProtected>
-          }
-        /> */}
+
         <Route
           path="/my-project/technician/:id"
           element={
