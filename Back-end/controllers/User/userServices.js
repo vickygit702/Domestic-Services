@@ -87,27 +87,10 @@ exports.myBookings = async (req, res) => {
         .json({ message: "No bookings found for this user." });
     }
 
-    // Format the response
-    // const formattedBookings = userBookings.map((booking) => ({
-    //   id: booking._id,
-    //   technicianid: booking.tech_Id,
-    //   servicename: booking.serviceName,
-    //   bookeddate: booking.bookedDate,
-    //   jobDetail: booking.workDetail,
-    //   status: booking.status,
-    //   paymentStatus: booking.paymentStatus,
-    //   price: booking.price,
-    //   est_price: booking.est_price,
-
-    // }));
-
     const formattedBookings = userBookings.map(formatBooking);
     return res
       .status(200)
       .json({ formattedBookings, message: "Bookings fetched successfully" });
-    // return res
-    //   .status(200)
-    //   .json({ formattedBookings, message: "Bookings fetched successfully" });
   } catch (error) {
     console.log(error);
     res
@@ -169,11 +152,7 @@ exports.submitReview = async (req, res) => {
     await Technician.findByIdAndUpdate(technicianId, {
       $inc: {
         jobsCompleted: 1,
-        // earnings: updatedBooking.price,
       },
-      // $push: {
-      //   ratings: rating
-      // }
     });
 
     // Calculate new average rating

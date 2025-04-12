@@ -2,7 +2,7 @@ const express = require("express");
 require("./utils/cronJobs");
 require("dotenv").config();
 const cors = require("cors");
-//const bodyParser = require("body-parser");
+
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const Booking = require("./models/Bookings");
 
@@ -13,7 +13,6 @@ const userRoutes = require("./routes/user/userPage");
 const bookingRoute = require("./routes/booking/booking-service");
 const techRoute = require("./routes/technician/techPage");
 const paymentRoute = require("./routes/Payment");
-//const paymentController = require("./controllers/Payment");
 
 const server = express();
 
