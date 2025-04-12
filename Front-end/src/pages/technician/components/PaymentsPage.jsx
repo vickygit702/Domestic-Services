@@ -284,9 +284,7 @@ const PaymentsPage = () => {
           <Divider sx={{ my: isMobile ? 1 : 2 }} />
 
           {/* Earnings Section */}
-          {/* <Typography variant={isMobile ? "subtitle1" : "h6"} gutterBottom>
-            EARNINGS SUMMARY
-          </Typography> */}
+
           <TableContainer>
             <Table size="small">
               <TableBody>
