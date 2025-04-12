@@ -196,6 +196,19 @@ exports.submitReview = async (req, res) => {
   }
 };
 
+exports.getAllTechDetails = async (req, res) => {
+  try {
+    const techDetails = await Technician.find({});
+    res.json({
+      success: true,
+      techDetails,
+    });
+  } catch (error) {
+    console.error("Error fetching tech details:", error);
+    res.status(500).json({ message: "Error fetching tech details" });
+  }
+};
+
 const formatBooking = (booking) => {
   const formatted = {
     id: booking._id,

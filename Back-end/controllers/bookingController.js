@@ -166,7 +166,7 @@ exports.bookServicePremiumUser = async (req, res) => {
       serviceName,
       startDate,
       duration,
-
+      userLocation,
       workDetail,
     } = req.body;
 
@@ -208,6 +208,8 @@ exports.bookServicePremiumUser = async (req, res) => {
       ser_Id: serviceDetail._id,
       perHour: serviceDetail.baseRate,
       serviceName,
+      perHour: serviceDetail.baseRate,
+
       bookedDate: {
         start: bookingStartTime,
         end: overallEndTime,
@@ -223,7 +225,7 @@ exports.bookServicePremiumUser = async (req, res) => {
       start: bookingStartTime,
       end: overallEndTime,
     });
-    await selectedTechnician.save();
+    await technician.save();
 
     // 1. Get and validate the technician's phone number
     if (!technician.tech_contact) {
@@ -240,8 +242,8 @@ exports.bookServicePremiumUser = async (req, res) => {
       technicianPhone = `+91${technicianPhone}`; // Indian number
     }
     //map location
-    const lat = user.user_location.lat;
-    const lng = user.user_location.lng;
+    const lat = userLocation.lat;
+    const lng = userLocation.lng;
     const googleMapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
     // 3. Send SMS (Twilio example)
     try {

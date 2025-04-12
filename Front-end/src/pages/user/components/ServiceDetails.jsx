@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { bookService } from "../../../redux/slices/userSlice";
-import { Modal } from "react-bootstrap";
 import { motion, AnimatePresence } from "framer-motion";
+import BookingDialogBox from "./BookingDialogBox";
 
 const categoryIcons = {
   carpentry: "bi-hammer", // or bi-ladder for woodwork
@@ -62,17 +62,11 @@ const ServiceDetails = () => {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
 
   const itemsPerPage = 6;
-
-  const [bookData, setBookData] = useState({
-    startDate: "",
-    duration: 1,
-    workDetail: "",
-  });
 
   // Decode the service name
   const formattedTitle = categoryName || "Uncategorized";
@@ -105,34 +99,17 @@ const ServiceDetails = () => {
     setIsModalOpen(true);
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setBookData({ ...bookData, [name]: value });
-  };
-
-  const handleBookingSubmit = (e) => {
-    e.preventDefault();
-    const bookingData = {
-      userId: user.id,
-      serviceName: selectedService.name,
-      startDate: bookData.startDate + ":00Z",
-      duration: parseInt(bookData.duration, 10),
-      workDetail: bookData.workDetail,
-      userLocation: {
-        lat: user.location.lat,
-        lng: user.location.lng,
-      },
-    };
+  const handleBookingSubmit = (bookingData) => {
+    console.log(bookingData);
     dispatch(bookService(bookingData));
-    setIsModalOpen(false);
   };
 
   return (
     <div className="container-fluid px-0 ">
       {/* Simplified Top Center Search */}
       <div className="container ">
-        <div className="row justify-content-center">
-          <div className="col-md-8 col-lg-8 text-center">
+        <div className=" row justify-content-center">
+          <div className="col-md-10 col-lg-10 text-center">
             <div className="luxury-search-container mb-4">
               <div className="input-group input-group-luxury">
                 <span className="input-group-text">
@@ -259,93 +236,20 @@ const ServiceDetails = () => {
       </div>
 
       {/* Ultra-Premium Booking Modal */}
-      <Modal
-        show={isModalOpen}
-        onHide={() => setIsModalOpen(false)}
-        centered
-        dialogClassName="luxury-modal"
-      >
-        <Modal.Header closeButton className="luxury-modal-header">
-          <Modal.Title className="w-100">
-            <div className="d-flex align-items-center">
-              <div className="luxury-modal-icon me-3">
-                <i className="bi bi-calendar2-check fs-3"></i>
-              </div>
-              <div>
-                <h3 className="mb-0">Book {selectedService?.name}</h3>
-                <small className="text-muted">
-                  {selectedService?.category}
-                </small>
-              </div>
-            </div>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="luxury-modal-body">
-          <form onSubmit={handleBookingSubmit}>
-            <div className="luxury-form-group mb-4">
-              <label>
-                <i className="bi bi-calendar3 me-2"></i> Date & Time
-              </label>
-              <input
-                type="datetime-local"
-                className="luxury-form-control"
-                name="startDate"
-                value={bookData.startDate}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="luxury-form-group mb-4">
-              <label>
-                <i className="bi bi-stopwatch me-2"></i> Duration (hours)
-              </label>
-              <input
-                type="number"
-                className="luxury-form-control"
-                name="duration"
-                value={bookData.duration}
-                onChange={handleChange}
-                min="1"
-                required
-              />
-            </div>
-
-            <div className="luxury-form-group mb-4">
-              <label>
-                <i className="bi bi-card-text me-2"></i> Service Details
-              </label>
-              <textarea
-                className="luxury-form-control"
-                name="workDetail"
-                rows="4"
-                value={bookData.workDetail}
-                onChange={handleChange}
-                placeholder="Describe your needs in detail..."
-              />
-            </div>
-
-            <div className="d-grid gap-3">
-              <button type="submit" className="luxury-btn luxury-btn-primary">
-                Confirm Booking <i className="bi bi-check-circle-fill ms-2"></i>
-              </button>
-              <button
-                type="button"
-                className="luxury-btn luxury-btn-secondary"
-                onClick={() => setIsModalOpen(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </Modal.Body>
-      </Modal>
+      <BookingDialogBox
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        selectedData={selectedService}
+        user={user}
+        onBookSubmit={handleBookingSubmit}
+        type="service"
+      />
 
       {/* Luxury CSS */}
       <style>{`
         :root {
-          --luxury-primary: #4ca1af;
-          --luxury-dark: #2c3e50;
+          --luxury-primary:rgb(111, 76, 175);
+          --luxury-dark:rgb(5, 67, 129);
           --luxury-light: #f8f9fa;
           --luxury-gray: #6c757d;
           --luxury-border: #e9ecef;
@@ -354,22 +258,25 @@ const ServiceDetails = () => {
 
         /* ========== Search Bar ========== */
         .luxury-search-container {
-          max-width: 700px;
-          margin: 2rem auto 3rem;
+          width: 100%;
+          margin-top: 1rem;
+          
         }
 
         .input-group-luxury {
           border-radius: 50px;
           overflow: hidden;
+          
           box-shadow: var(--luxury-shadow);
           transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         .input-group-luxury .input-group-text {
-          background: white;
+          background:white;
+          
           border: none;
           padding: 0 1.5rem;
-          color: var(--luxury-primary);
+          
         }
 
         .input-group-luxury .form-control {
@@ -405,7 +312,7 @@ const ServiceDetails = () => {
         .luxury-card-header {
           padding: 1.125rem;
           position: relative;
-          background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+          background: linear-gradient(115deg,rgb(204, 125, 244) 0%,rgb(203, 183, 151) 100%);
         }
 
         .luxury-icon {
@@ -558,72 +465,7 @@ const ServiceDetails = () => {
           color: white;
         }
 
-        /* ========== Modal ========== */
-        .luxury-modal .modal-dialog {
-          max-width: 580px;
-          margin: 1.75rem auto;
-        }
-
-        .luxury-modal .modal-content {
-          border: none;
-          border-radius: 16px;
-          overflow: hidden;
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .luxury-modal-header {
-          padding: 1.5rem 1.75rem;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-          align-items: center;
-        }
-
-        .luxury-modal-icon {
-          width: 48px;
-          height: 48px;
-          background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--luxury-primary);
-        }
-
-        .luxury-modal-body {
-          padding: 1.75rem;
-        }
-
-        .luxury-modal-footer {
-          padding: 1.25rem 1.75rem;
-          border-top: 1px solid rgba(0, 0, 0, 0.05);
-          display: flex;
-          gap: 1rem;
-        }
-
-        /* ========== Form Elements ========== */
-        .luxury-form-group {
-          margin-bottom: 1.5rem;
-        }
-
-        .luxury-form-group label {
-          display: flex;
-          align-items: center;
-          margin-bottom: 0.5rem;
-          font-weight: 500;
-          color: var(--luxury-dark);
-        }
-
-        .luxury-form-control {
-          width: 100%;
-          padding: 0.75rem 1rem;
-          border: 1px solid var(--luxury-border);
-          border-radius: 10px;
-          transition: all 0.3s ease;
-        }
-
-        .luxury-form-control:focus {
-          border-color: var(--luxury-primary);
-          box-shadow: 0 0 0 3px rgba(76, 161, 175, 0.15);
-        }
+        
 
         /* ========== Empty State ========== */
         .luxury-empty-state {
@@ -660,23 +502,7 @@ const ServiceDetails = () => {
 
         /* ========== Responsive ========== */
         @media (max-width: 768px) {
-          .luxury-search-container {
-            margin: 1.25rem auto 2rem;
-          }
-
-          .luxury-modal .modal-dialog {
-            margin: 0.5rem auto;
-          }
-
-          .luxury-modal-header,
-          .luxury-modal-body {
-            padding: 1.25rem;
-          }
-
-          .luxury-modal-footer {
-            flex-direction: column;
-            gap: 0.75rem;
-          }
+          
 
           .luxury-pagination {
             flex-wrap: wrap;

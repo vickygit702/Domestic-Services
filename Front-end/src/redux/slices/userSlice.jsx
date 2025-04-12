@@ -46,6 +46,24 @@ export const bookService = createAsyncThunk(
   }
 );
 
+export const bookServicePremiumUser = createAsyncThunk(
+  "booking/book-service-premium-user", // Action type prefix
+  async (bookingData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/service/booking/book-service-premium-user",
+        bookingData
+      ); // Use the dynamic URL
+      console.log(response.data);
+      // Return the fetched data
+      return response.data;
+    } catch (error) {
+      // Handle errors
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 // Initial state
 const initialState = {
   userBookings: [],
@@ -80,6 +98,17 @@ const userSlice = createSlice({
         state.loading = false;
       })
       .addCase(bookService.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to book service";
+      })
+      .addCase(bookServicePremiumUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(bookServicePremiumUser.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(bookServicePremiumUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to book service";
       })

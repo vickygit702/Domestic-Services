@@ -89,27 +89,23 @@ const PaymentModal = ({ booking, show, onClose, onSuccess }) => {
 
   useEffect(() => {
     if (show) {
-      // Only load when modal is shown
       const loadStripeAsync = async () => {
-        const { loadStripe } = await import("@stripe/stripe-js");
-        const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-        setStripePromise(stripe);
-        setStripeReady(true);
+        try {
+          const { loadStripe } = await import("@stripe/stripe-js");
+          const stripe = await loadStripe(
+            import.meta.env.VITE_STRIPE_PUBLIC_KEY
+          );
+          setStripePromise(stripe);
+          setStripeReady(true);
+        } catch (err) {
+          console.error("Stripe loading error:", err);
+          setStripeReady(false);
+        }
       };
 
-      loadStripeAsync().catch((err) => {
-        console.error("Stripe loading error:", err);
-        setStripeReady(false);
-      });
+      loadStripeAsync();
     }
   }, [show]);
-
-  useEffect(() => {
-    // Verify Stripe is properly loaded
-    stripePromise
-      .then(() => setStripeReady(true))
-      .catch((err) => console.error("Stripe loading error:", err));
-  }, []);
 
   //test review modal
   const handlePaymentSuccess = () => {
