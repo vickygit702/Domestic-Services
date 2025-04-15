@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Technician = require("../models/Technicians");
+const Services = require("../models/Services");
 
 exports.signupUser = async (req, res) => {
   try {
@@ -136,6 +137,21 @@ exports.loginTechnician = async (req, res) => {
     console.log(error);
     return res.status(500).json({
       message: "Error occured during logging in, please try again later",
+    });
+  }
+};
+
+exports.fetchServices = async (req, res) => {
+  try {
+    const services = await Services.find({}, "service_name");
+    const serviceNames = services.map((service) => service.service_name);
+
+    res.status(200).json({
+      services: serviceNames, // or just 'services' if you want full documents
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error occured during fetching services, please try again later",
     });
   }
 };
