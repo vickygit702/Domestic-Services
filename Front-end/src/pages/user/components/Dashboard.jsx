@@ -116,7 +116,7 @@ const Dashboard = () => {
               </div>
               <div className="luxury-badge">
                 <StarIcon
-                  sx={{ color: "#ffc107", fontSize: "0.9rem", mr: 0.5 }}
+                  sx={{ color: "#de1695", fontSize: "0.9rem", mr: 0.5 }}
                 />
                 {tech.tech_ratingAvg?.toFixed(1)} ({tech.jobsCompleted} jobs)
               </div>
@@ -140,7 +140,7 @@ const Dashboard = () => {
                       variant="outlined"
                       sx={{
                         fontSize: "0.65rem",
-                        backgroundColor: "#c4c1c0",
+                        backgroundColor: "#faf0b9",
                         borderRadius: "4px",
                         borderColor: "divider",
                         color: "text.secondary",
@@ -166,7 +166,7 @@ const Dashboard = () => {
                     setTileContent(() => tileContent);
                   }}
                 >
-                  Check Availability
+                  Availability
                 </Button>
                 <Button
                   variant="contained"
@@ -203,7 +203,7 @@ const Dashboard = () => {
             flex-direction: column;
 
             height: 100%;
-            min-width: 300px;
+            min-width: 270px;
             border: 1px solid #e0e0e0;
           }
 
@@ -450,7 +450,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Recommended Technicians */}
+      {/*  Technicians */}
       {user.usertype === "premium" && (
         <div className="row mb-4">
           <div className="col-12">
@@ -458,7 +458,7 @@ const Dashboard = () => {
               variant="h5"
               sx={{
                 textAlign: "center",
-                mb: 4,
+                mb: 3,
                 fontWeight: 700,
                 background:
                   "linear-gradient(60deg,rgb(247, 187, 35) 0%,rgb(22, 99, 230) 100%)",
@@ -467,7 +467,7 @@ const Dashboard = () => {
                 backgroundClip: "text",
               }}
             >
-              Recommended Technicians
+              Technicians Profile
             </Typography>
 
             {loadingTech ? (
@@ -486,16 +486,15 @@ const Dashboard = () => {
             ) : (
               <Grid
                 container
-                spacing={3}
+                spacing={2}
                 sx={{
-                  px: { xs: 2, sm: 1 },
+                  px: { xs: 2 },
                   py: 1,
                   justifyContent: { xs: "center", md: "flex-start" },
                 }}
               >
                 {techInfo.map((tech) => (
                   <Grid
-                    item
                     xs={12}
                     sm={6}
                     md={4}
@@ -503,9 +502,8 @@ const Dashboard = () => {
                     key={tech._id}
                     sx={{
                       display: "grid",
-                      gridTemplate: "repeat(3, 1fr)",
-                      px: { sm: 4.3 },
-                      py: { sm: 1 },
+                      gridTemplate: "repeat(4, 1fr)",
+
                       justifyContent: "flex-start",
                     }}
                   >

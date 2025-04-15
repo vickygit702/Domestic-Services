@@ -35,24 +35,42 @@ const categoryIcons = {
   "home sauna installation": "bi-house-gear",
   "home gym setup": "bi-person-fill-up",
   "home wine cellar installation": "bi-cup-straw",
-
   // or bi-plug for outlets
   painting: "bi-brush",
+  gardening: "bi-flower1",
+  "movers & packers": "bi-truck", // or bi-truck for moving
+  landscaping: "bi-tree-fill",
+  "pool maintenance": "bi-water",
+  "fence installation": "bi-border-all",
+  "gutter cleaning": "bi-house-gear",
+  "deck building": "bi-house-up",
+  "driveway paving": "bi-car-front-fill",
+  "patio construction": "bi-house-up",
+  "outdoor lighting": "bi-lightbulb",
   // or bi-pipe for pipes
   hvac: "bi-snow", // or bi-thermometer for temperature control
-  gardening: "bi-flower1",
 
   // or bi-ladder for roof access
   "appliance repair": "bi-wrench", // or bi-washing-machine for specific appliances
-  "home automation": "bi-lightbulb", // or bi-router for smart homes
-  "movers and packers": "bi-box-seam", // or bi-truck for moving
-  // represents floor tiles
-
-  landscaping: "bi-tree-fill",
-  "pool maintenance": "bi-water",
-
-  "fence installation": "bi-border-all", // represents fencing pattern
-  "gutter cleaning": "bi-cloud-rain", // represents water drainage
+  "home automation": "bi-house-gear",
+  "solar panel installation": "bi-sun",
+  "home security": "bi-lock",
+  "home theater setup": "bi-file-earmark-music",
+  "appliance installation": "bi-gear",
+  "home theater acoustics": "bi-film",
+  "yoga instructor": "bi-person-arms-up",
+  // or bi-router for smart homes
+  "personal trainer": "bi-person-square",
+  nutritionist: "bi-heart-pulse",
+  "math tutor": "bi-person-square",
+  "language tutor": "bi-person-fill-up",
+  photographer: "bi-camera",
+  videographer: "bi-camera-reels",
+  "pet grooming": "bi-clipboard2-pulse",
+  "pet sitting": "bi-house",
+  "legal consultant": "bi-person-walking",
+  "financial advisor": "bi-currency-bitcoin",
+  "business consultant": "bi-clipboard-data",
 };
 
 const ServiceDetails = () => {
@@ -312,7 +330,7 @@ const ServiceDetails = () => {
         .luxury-card-header {
           padding: 1.125rem;
           position: relative;
-          background: linear-gradient(115deg,rgb(204, 125, 244) 0%,rgb(203, 183, 151) 100%);
+          background: linear-gradient(45deg,rgb(11, 171, 163) 0%,rgb(86, 143, 230) 100%);
         }
 
         .luxury-icon {
