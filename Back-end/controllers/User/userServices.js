@@ -117,6 +117,14 @@ exports.cancelBooking = async (req, res) => {
         message: "Booking not found or doesn't belong to this user.",
       });
     }
+    const { tech_Id, bookedDate } = booking;
+    const { start, end } = bookedDate;
+
+    console.log(`techid: ${tech_Id} work dates removed from db`);
+    await Technician.updateOne(
+      { _id: tech_Id },
+      { $pull: { bookedSlots: { start, end } } }
+    );
 
     return res.status(200).json({
       success: true,
