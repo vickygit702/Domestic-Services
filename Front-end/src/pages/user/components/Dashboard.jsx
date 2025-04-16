@@ -104,7 +104,7 @@ const Dashboard = () => {
                       position: "absolute",
                       top: -4,
                       right: -18,
-                      color: "rgb(4, 129, 254)",
+                      color: "rgba(150, 160, 6, 0.82)",
 
                       borderRadius: "50%",
 
@@ -115,9 +115,7 @@ const Dashboard = () => {
                 )}
               </div>
               <div className="luxury-badge">
-                <StarIcon
-                  sx={{ color: "#de1695", fontSize: "0.9rem", mr: 0.5 }}
-                />
+                <StarIcon sx={{ color: "#fff", fontSize: "0.9rem", mr: 0.5 }} />
                 {tech.tech_ratingAvg?.toFixed(1)} ({tech.jobsCompleted} jobs)
               </div>
             </div>
@@ -129,7 +127,7 @@ const Dashboard = () => {
                   color="text.secondary"
                   sx={{ mb: 1 }}
                 >
-                  Skills:
+                  SKILLS:
                 </Typography>
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
                   {tech.worksKnown.slice(0, 3).map((skill, index) => (
@@ -140,10 +138,11 @@ const Dashboard = () => {
                       variant="outlined"
                       sx={{
                         fontSize: "0.65rem",
-                        backgroundColor: "#faf0b9",
+                        backgroundColor: "#fafafa",
                         borderRadius: "4px",
                         borderColor: "divider",
-                        color: "text.secondary",
+                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                        color: "#000",
                       }}
                     />
                   ))}
@@ -152,13 +151,19 @@ const Dashboard = () => {
               <div className="luxury-divider"></div>
               <div className="luxury-footer">
                 <Button
-                  variant="outlined"
+                  // variant="outlined"
+                  variant="contained"
                   size="small"
                   sx={{
                     textTransform: "none",
                     fontWeight: 500,
                     borderRadius: "6px",
                     flex: 1,
+                    color: "#000",
+                    background: "rgb(213, 174, 247)",
+                    "&:hover": {
+                      background: "rgb(165, 70, 249)",
+                    },
                   }}
                   onClick={() => {
                     setOpenAvailability(true);
@@ -177,11 +182,10 @@ const Dashboard = () => {
                     borderRadius: "6px",
                     flex: 1,
                     ml: 1,
-                    background:
-                      "linear-gradient(45deg, #6a11cb 0%, #2575fc 100%)",
+                    color: "#000",
+                    background: "rgb(170, 251, 161)",
                     "&:hover": {
-                      background:
-                        "linear-gradient(45deg, #5a0cb3 0%, #1a65e0 100%)",
+                      background: "rgb(32, 211, 12)",
                     },
                   }}
                   onClick={() => handleBooking(tech)}
@@ -194,7 +198,7 @@ const Dashboard = () => {
         </motion.div>
         <style jsx>{`
           .luxury-card {
-            background: white;
+            background: rgb(190, 231, 250);
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -212,6 +216,7 @@ const Dashboard = () => {
           }
 
           .luxury-card:hover {
+            background: rgb(161, 221, 249);
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
           }
@@ -240,7 +245,7 @@ const Dashboard = () => {
           }
 
           .luxury-badge {
-            background: rgba(0, 0, 0, 0.05);
+            background: rgba(252, 171, 171, 0.97);
             padding: 4px 8px;
             border-radius: 16px;
             font-size: 0.8rem;
@@ -269,7 +274,7 @@ const Dashboard = () => {
 
           .luxury-divider {
             height: 1px;
-            background: #eee;
+            background: #000;
             margin: 12px 0;
           }
 
@@ -370,7 +375,7 @@ const Dashboard = () => {
             className="card border-0 shadow-sm overflow-hidden "
             style={{
               background:
-                "linear-gradient(135deg,rgb(123, 145, 241) 0%,rgb(149, 97, 200) 100%)",
+                "linear-gradient(135deg,rgb(232, 248, 175) 0%,rgb(244, 223, 40) 100%)",
             }}
           >
             <div className="card-body p-4 ">
@@ -384,7 +389,7 @@ const Dashboard = () => {
                   <button
                     className="btn btn-light rounded-pill px-4 fw-bold"
                     style={{
-                      borderColor: "rgb(251, 255, 1) ",
+                      borderColor: "rgb(249, 5, 5) ",
                       textAlign: "center",
                       backgroundImage:
                         "linear-gradient(45deg,rgb(229, 12, 153) 0%,rgb(0, 59, 37) 100%)",
@@ -411,7 +416,7 @@ const Dashboard = () => {
               mb: 4,
               fontWeight: 700,
               background:
-                "linear-gradient(60deg,rgb(247, 187, 35) 0%,rgb(22, 99, 230) 100%)",
+                "linear-gradient(100deg,rgb(242, 65, 6) 0%,rgb(5, 93, 245) 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
@@ -461,7 +466,7 @@ const Dashboard = () => {
                 mb: 3,
                 fontWeight: 700,
                 background:
-                  "linear-gradient(60deg,rgb(247, 187, 35) 0%,rgb(22, 99, 230) 100%)",
+                  "linear-gradient(100deg,rgb(242, 65, 6) 0%,rgb(5, 93, 245) 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -589,9 +594,12 @@ const Dashboard = () => {
 
       <style>{`
         .service-card {
+        background-color:rgb(122, 243, 220);
           transition: all 0.3s ease;
         }
         .service-card:hover {
+        
+         background-color:rgb(4, 237, 194);
           transform: translateY(-5px);
           box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
         }

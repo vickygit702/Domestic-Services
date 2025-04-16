@@ -270,7 +270,8 @@ const ServiceDetails = () => {
           --luxury-dark:rgb(5, 67, 129);
           --luxury-light: #f8f9fa;
           --luxury-gray: #6c757d;
-          --luxury-border: #e9ecef;
+          --luxury-border:rgb(38, 41, 44);
+          --luxary-inside:rgb(227, 140, 239);
           --luxury-shadow: 0 4px 30px rgba(0, 0, 0, 0.07);
         }
 
@@ -361,6 +362,7 @@ const ServiceDetails = () => {
         }
 
         .luxury-card-body {
+        background: rgba(248, 174, 228, 0.95);
           padding: 1.125rem;
           flex-grow: 1;
           display: flex;
@@ -408,6 +410,7 @@ const ServiceDetails = () => {
 
         /* ========== Buttons ========== */
         .luxury-btn {
+        background-color:var(--luxary-inside);
           padding: 0.6rem 1.5rem;
           border-radius: 50px;
           border: none;
