@@ -1,8 +1,16 @@
+import React, { useState } from "react";
+import { Modal, Button } from "react-bootstrap"; // ✅ Correctly importing Modal and Button
+import { format } from "date-fns"; // ✅ Correctly importing format
+
+
+
 const BookingDetailsModal = ({ show, onHide, selectedData }) => {
   const [bookingDetails, setBookingDetails] = useState({
       serviceDate: new Date(),
       serviceDescription: "",
   });
+  const today = new Date();
+
 
   const handleSubmit = (e) => {
       e.preventDefault();
