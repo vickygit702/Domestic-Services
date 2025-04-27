@@ -7,195 +7,215 @@ const TechnicianHomePage = () => {
   const { technician } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const { id } = useParams();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth >= 768) {
-        setSidebarOpen(false);
-      }
     };
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-
-  const closeSidebar = () => {
-    if (isMobile) {
-      setSidebarOpen(false);
-    }
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
   return (
-    <div className="container-fluid px-0 min-vh-100">
-      {/* Mobile Header with Hamburger */}
-      <div
-        className="d-md-none bg-dark text-white p-3 d-flex justify-content-between align-items-center position-sticky top-0"
-        style={{ zIndex: 1000 }}
+    <div
+      className="min-vh-100"
+      style={{
+        overflowX: "hidden",
+        background:
+          "linear-gradient(135deg,rgb(55, 125, 195) 0%,rgb(232, 144, 246) 100%)",
+      }}
+    >
+      {/* Top Navigation Bar */}
+      <nav
+        className="navbar shadow-sm"
+        style={{
+          background: "rgb(255, 255, 255)",
+          position: "sticky",
+          top: 0,
+          zIndex: 1000,
+        }}
       >
-        <button className="btn btn-outline-light" onClick={toggleSidebar}>
-          <i className={`bi bi-${sidebarOpen ? "x" : "list"}`}></i>
-        </button>
-        <img
-          src={`http://localhost:8000/uploads/profile/technicians/${technician.profileImg}`}
-          alt="profile"
-          className="rounded-circle bg-white"
-          width="40"
-          height="40"
-        />
-      </div>
+        <div className="container-fluid">
+          {/* Company Logo/Name */}
+          <NavLink
+            to={`/my-project/technician/${id}/dashboard`}
+            className="navbar-brand fw-bold d-flex align-items-center"
+          >
+            <i className="bi bi-tools me-2"></i>
+            <span className="d-none d-sm-inline">Domestic Solutions</span>
+          </NavLink>
 
-      <div className="row g-0">
-        {/* Left Side Navbar */}
-        <div
-          className={`col-md-3 col-lg-2 bg-dark text-white vh-100 position-fixed sidebar ${
-            sidebarOpen ? "open" : ""
-          }`}
-          style={{ zIndex: 1000 }}
-        >
-          <div className="d-flex flex-column h-100 p-3 p-md-4 position-relative">
-            {/* Profile Image - Desktop */}
-            {!isMobile && (
-              <div className="text-center mb-4">
+          {/* Profile Dropdown */}
+          <div className="d-flex align-items-center px-md-5">
+            <div className="dropdown ">
+              <button
+                className="btn btn-transparent dropdown-toggle d-flex align-items-center"
+                onClick={toggleDropdown}
+                style={{ color: "black" }}
+              >
                 <img
                   src={`http://localhost:8000/uploads/profile/technicians/${technician.profileImg}`}
                   alt="profile"
-                  className="rounded-circle bg-white mx-auto"
-                  width="80"
-                  height="80"
+                  className="rounded-circle bg-white me-2"
+                  width="40"
+                  height="40"
                 />
-                <h5 className="mt-3 text-white">{technician.name}</h5>
+                <span className="d-none d-lg-inline">{technician.name}</span>
+                <i
+                  className={`bi bi-chevron-${
+                    dropdownOpen ? "up" : "down"
+                  } ms-1`}
+                ></i>
+              </button>
+
+              {/* Dropdown Menu */}
+              <div
+                className={`dropdown-menu dropdown-menu-end shadow-lg ${
+                  dropdownOpen ? "show" : ""
+                }`}
+                style={{
+                  border: "none",
+                  borderRadius: "10px",
+                  background: "rgba(255,255,255,0.95)",
+                  backdropFilter: "blur(10px)",
+                  minWidth: "220px",
+                }}
+              >
+                <div className="px-4 py-3 border-bottom">
+                  <h6 className="mb-0 fw-bold">{technician.name}</h6>
+                  <small className="text-muted">{technician.email}</small>
+                </div>
+                <div className="p-2">
+                  <NavLink
+                    to={`/my-project/technician/${id}/dashboard`}
+                    className="dropdown-item d-flex align-items-center py-2 rounded"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    <i className="bi bi-speedometer2 me-2 text-primary"></i>
+                    Dashboard
+                  </NavLink>
+                  <NavLink
+                    to={`/my-project/technician/${id}/my-jobs`}
+                    className="dropdown-item d-flex align-items-center py-2 rounded"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    <i className="bi bi-briefcase me-2 text-primary"></i>
+                    My Jobs
+                  </NavLink>
+                  <NavLink
+                    to={`/my-project/technician/${id}/payments`}
+                    className="dropdown-item d-flex align-items-center py-2 rounded"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    <i className="bi bi-cash-stack me-2 text-primary"></i>
+                    Payments
+                  </NavLink>
+                  <NavLink
+                    to={`/my-project/technician/${id}/profile`}
+                    className="dropdown-item d-flex align-items-center py-2 rounded"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    <i className="bi bi-person-circle me-2 text-primary"></i>
+                    Profile
+                  </NavLink>
+                </div>
+                <div className="dropdown-divider"></div>
+                <div className="px-2">
+                  <TechnicianLogout />
+                </div>
               </div>
-            )}
-
-            {/* Navigation */}
-            <ul className="nav flex-column mb-3" style={{ flex: "1 1 auto" }}>
-              <li className="nav-item mb-2">
-                <NavLink
-                  to={`/my-project/technician/${id}/dashboard`}
-                  className={({ isActive }) =>
-                    `nav-link text-white py-2 px-3 rounded d-flex align-items-center ${
-                      isActive ? "active bg-primary" : ""
-                    }`
-                  }
-                  onClick={closeSidebar}
-                >
-                  <i className="bi bi-speedometer2 me-2"></i>
-                  Dashboard
-                </NavLink>
-              </li>
-              <li className="nav-item mb-2">
-                <NavLink
-                  to={`/my-project/technician/${id}/my-jobs`}
-                  className={({ isActive }) =>
-                    `nav-link text-white py-2 px-3 rounded d-flex align-items-center ${
-                      isActive ? "active bg-primary" : ""
-                    }`
-                  }
-                  onClick={closeSidebar}
-                >
-                  <i className="bi bi-briefcase me-2"></i>
-                  My Jobs
-                </NavLink>
-              </li>
-
-              <li className="nav-item mb-2">
-                <NavLink
-                  to={`/my-project/technician/${id}/payments`}
-                  className={({ isActive }) =>
-                    `nav-link text-white py-2 px-3 rounded d-flex align-items-center ${
-                      isActive ? "active bg-primary" : ""
-                    }`
-                  }
-                  onClick={closeSidebar}
-                >
-                  <i className="bi bi-cash-stack me-2"></i>
-                  Payments
-                </NavLink>
-              </li>
-              <li className="nav-item mb-2">
-                <NavLink
-                  to={`/my-project/technician/${id}/profile`}
-                  className={({ isActive }) =>
-                    `nav-link text-white py-2 px-3 rounded d-flex align-items-center ${
-                      isActive ? "active bg-primary" : ""
-                    }`
-                  }
-                  onClick={closeSidebar}
-                >
-                  <i className="bi bi-person-circle me-2"></i>
-                  Profile
-                </NavLink>
-              </li>
-            </ul>
-            <TechnicianLogout />
+            </div>
           </div>
         </div>
+      </nav>
 
-        {/* Main Content */}
-        <div className="col-md-9 col-lg-10 ms-auto">
-          <div className="p-3">
-            <div className="bg-white rounded-4 shadow-sm p-2">
-              <Outlet />
+      {/* Main Content */}
+      <div className="container-fluid px-0">
+        <div className="row g-0">
+          {/* Main Content Area */}
+          <div className="col-12">
+            <div className="p-2 px-md-2">
+              <div
+                className="bg-white rounded-4 shadow-sm py-4"
+                style={{
+                  minHeight: "calc(100vh - 100px)",
+                  background: "rgba(255,255,255,0.9)",
+                  backdropFilter: "blur(5px)",
+                }}
+              >
+                <Outlet />
+              </div>
             </div>
+            {/* Footer */}
+            <footer
+              className="w-100 py-3"
+              style={{
+                background: "rgb(0, 0, 0)",
+                backdropFilter: "blur(10px)",
+              }}
+            >
+              <div className="container">
+                <div className="row align-items-center">
+                  <div className="col-md-6 text-center text-md-start text-white">
+                    <p className="m-0 small">
+                      © {new Date().getFullYear()} Domestic Solutions. All
+                      rights reserved.
+                    </p>
+                  </div>
+                  <div className="col-md-6 text-center text-md-end mt-2 mt-md-0">
+                    <div className="d-flex justify-content-center justify-content-md-end gap-3">
+                      <a href="#" className="text-white-50 hover-text-white">
+                        <i className="bi bi-facebook fs-5"></i>
+                      </a>
+                      <a href="#" className="text-white-50 hover-text-white">
+                        <i className="bi bi-twitter fs-5"></i>
+                      </a>
+                      <a href="#" className="text-white-50 hover-text-white">
+                        <i className="bi bi-instagram fs-5"></i>
+                      </a>
+                      <a href="#" className="text-white-50 hover-text-white">
+                        <i className="bi bi-linkedin fs-5"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </footer>
           </div>
         </div>
       </div>
 
       {/* Custom CSS */}
       <style>{`
-        .nav-link:hover {
-          background-color: rgba(255, 255, 255, 0.1) !important;
-        }
-        .nav-link.active {
-          background-color: #0d6efd !important;
+        .dropdown-item:hover, .dropdown-item:focus {
+          background-color: rgba(13, 110, 253, 0.1) !important;
+          color: #0d6efd !important;
         }
 
-        /* Mobile sidebar styles */
+        .dropdown-item.active {
+          background-color: rgba(13, 110, 253, 0.2) !important;
+          color: #0d6efd !important;
+        }
+
+        .navbar-brand:hover {
+          opacity: 0.9;
+        }
+
         @media (max-width: 767.98px) {
-          .sidebar {
-            transform: translateX(-100%);
-            transition: transform 0.3s ease-in-out;
-            width: 260px;
-            overflow-y: auto;
+          .dropdown-menu {
+            position: fixed !important;
+            top: 70px !important;
+            left: 10px !important;
+            right: 10px !important;
+            width: auto !important;
           }
-          .sidebar.open {
-            transform: translateX(0);
-          }
-          .sidebar > div {
-            min-height: 100vh;
-            // padding-bottom: 60px; /* Space for logout button */
-          }
-          .nav {
-            max-height: 490px;
-            
-          }
-        }
-
-        /* Backdrop for mobile */
-        .sidebar::after {
-          content: "";
-          position: fixed;
-          top: 0;
-          right: 0;
-          width: 100vw;
-          height: 100vh;
-          background-color: rgba(0, 0, 0, 0.5);
-          z-index: -1;
-          opacity: 0;
-          transition: opacity 0.3s ease-in-out;
-          pointer-events: none;
-        }
-
-        .sidebar.open::after {
-          opacity: 1;
-          pointer-events: auto;
         }
       `}</style>
     </div>
