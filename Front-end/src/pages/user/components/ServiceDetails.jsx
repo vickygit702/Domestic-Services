@@ -266,12 +266,12 @@ const ServiceDetails = () => {
       {/* Luxury CSS */}
       <style>{`
         :root {
-          --luxury-primary:rgb(111, 76, 175);
-          --luxury-dark:rgb(5, 67, 129);
+          --luxury-primary:rgb(156, 105, 138);
+          --luxury-dark:rgb(88, 98, 109);
           --luxury-light: #f8f9fa;
           --luxury-gray: #6c757d;
           --luxury-border:rgb(38, 41, 44);
-          --luxary-inside:rgb(227, 140, 239);
+          --luxary-inside:rgba(160, 244, 173, 0.63);
           --luxury-shadow: 0 4px 30px rgba(0, 0, 0, 0.07);
         }
 
@@ -362,7 +362,7 @@ const ServiceDetails = () => {
         }
 
         .luxury-card-body {
-        background: rgba(248, 174, 228, 0.95);
+        background: rgba(255, 255, 255, 0.9);
           padding: 1.125rem;
           flex-grow: 1;
           display: flex;
@@ -479,7 +479,7 @@ const ServiceDetails = () => {
 
         .luxury-pagination-btn.active {
           background: linear-gradient(
-            135deg,
+            65deg,
             var(--luxury-primary) 0%,
             var(--luxury-dark) 100%
           );
