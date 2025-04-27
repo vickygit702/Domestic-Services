@@ -210,6 +210,16 @@ exports.updateJobStatus = async (req, res) => {
       .json({ message: "Error occurred in server, please try again later" });
   }
 };
+// controllers/Techician/techServices.js
+exports.getAllTechnicians = async (req, res) => {
+  try {
+    const technicians = await Technician.find().select('-tech_password'); // Exclude password for security
+    res.status(200).json({ techDetails: technicians });
+  } catch (error) {
+    console.error("Error fetching technicians:", error);
+    res.status(500).json({ message: "Error fetching technicians", error: error.message });
+  }
+};
 
 const formatBooking = (job) => {
   const formatted = {

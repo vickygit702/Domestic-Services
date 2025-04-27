@@ -11,10 +11,10 @@ import UserProtected from "./Auth/UserProtected";
 import TechnicianProtected from "./Auth/TechnicianProtected";
 import Welcome from "./Welcome";
 
-import Dashboard from "./user/components/Dashboard";
-import MyBookings from "./user/components/MyBookings";
-import Profile from "./user/components/Profile";
-import ServiceDetails from "./user/components/ServiceDetails";
+import Dashboard from "./user/component/Dashboard";
+import MyBookings from "./user/component/MyBookings";
+import Profile from "./user/component/Profile";
+import ServiceDetails from "./user/component/ServiceDetails";
 
 import Payment from "./technician/components/PaymentsPage";
 

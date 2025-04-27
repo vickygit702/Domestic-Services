@@ -108,6 +108,7 @@ const TechnicianSignup = () => {
           "Carpentry",
           "HVAC",
           "Painting",
+          "massage"
         ]);
       } finally {
         setIsLoadingServices(false);

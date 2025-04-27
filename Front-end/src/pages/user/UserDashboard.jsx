@@ -1,189 +1,101 @@
 import React, { useState, useEffect } from "react";
+import { Link, NavLink, Outlet, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom"; // Changed Link to NavLink
-import UserLogout from "../UserLogout";
+import UserLogout from "../UserLogout"; // Assuming this component exists and handles logout logic
 
 const UserDashboard = () => {
+  // Retrieve user data from Redux store
   const { user } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
+  // Get the user ID from URL parameters
   const { id } = useParams();
+  // State for sidebar visibility (mobile)
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  // State to track if the view is mobile
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
+  // Effect to handle window resizing for mobile responsiveness
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth >= 768) {
+      const mobileView = window.innerWidth < 768;
+      setIsMobile(mobileView);
+      // Close sidebar automatically on larger screens
+      if (!mobileView) {
         setSidebarOpen(false);
       }
     };
-
+    // Add event listener for resize
     window.addEventListener("resize", handleResize);
+    // Cleanup listener on component unmount
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, []); // Empty dependency array means this runs once on mount and cleanup on unmount
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+  // Function to toggle the sidebar state
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
-  const closeSidebar = () => {
-    if (isMobile) {
-      setSidebarOpen(false);
-    }
-  };
+  // Default profile image path (ensure this file exists in your public folder)
+  const defaultProfileImg = '/default-user.jpg';
 
   return (
-    <div className="container-fluid px-0 min-vh-100">
-      {/* Mobile Header with Hamburger */}
-      <div
-        className="d-md-none bg-dark text-white p-3 d-flex justify-content-between align-items-center position-sticky top-0"
-        style={{ zIndex: 1000 }}
-      >
-        <button className="btn btn-outline-light" onClick={toggleSidebar}>
-          <i className={`bi bi-${sidebarOpen ? "x" : "list"}`}></i>
-        </button>
-        <img
-          src={`http://localhost:8000/uploads/profile/user/${user.profileImg}`}
-          alt="profile"
-          className="rounded-circle bg-white"
-          width="40"
-          height="40"
-        />
-      </div>
+    <div className="min-vh-100 bg-light">
+      {/* Top Navigation Bar */}
+      <nav className="navbar navbar-expand-lg bg-white shadow-sm py-3 px-4 d-flex justify-content-between align-items-center">
+        {/* Brand Logo */}
+        <div className="d-flex align-items-center gap-4">
+          <Link className="navbar-brand fw-bold fs-3 text-primary" to="/">
+            DomesticPro
+          </Link>
+        </div>
 
-      <div className="row g-0">
-        {/* Left Side Navbar */}
-        <div
-          className={`col-md-3 col-lg-2 bg-dark text-white vh-100 position-fixed sidebar ${
-            sidebarOpen ? "open" : ""
-          }`}
-          style={{ zIndex: 1000 }}
-        >
-          <div className="d-flex flex-column h-100 p-3 p-md-4 position-relative">
-            {/* Profile Image - Desktop */}
-            {!isMobile && (
-              <div className="text-center mb-4">
-                <img
-                  src={`http://localhost:8000/uploads/profile/user/${user.profileImg}`}
-                  alt="profile"
-                  className="rounded-circle bg-white mx-auto"
-                  width="80"
-                  height="80"
-                />
-              </div>
-            )}
-
-            {/* Navigation */}
-            <ul className="nav flex-column mb-3" style={{ flex: "1 1 auto" }}>
-              <li className="nav-item mb-2">
-                <NavLink
-                  to={`/my-project/user/${id}/dashboard`}
-                  className={({ isActive }) =>
-                    `nav-link text-white py-2 px-3 rounded d-flex align-items-center ${
-                      isActive ? "active bg-primary" : ""
-                    }`
-                  }
-                  onClick={closeSidebar}
-                  end // Add this if it's an exact match
-                >
-                  <i className="bi bi-speedometer2 me-2"></i>
-                  Dashboard
-                </NavLink>
-              </li>
-              <li className="nav-item mb-2">
-                <NavLink
-                  to={`/my-project/user/${id}/my-bookings`}
-                  className={({ isActive }) =>
-                    `nav-link text-white py-2 px-3 rounded d-flex align-items-center ${
-                      isActive ? "active bg-primary" : ""
-                    }`
-                  }
-                  onClick={closeSidebar}
-                >
-                  <i className="bi bi-calendar-check me-2"></i>
-                  My Bookings
-                </NavLink>
-              </li>
-              <li className="nav-item mb-2">
-                <NavLink
-                  to={`/my-project/user/${id}/profile`}
-                  className={({ isActive }) =>
-                    `nav-link text-white py-2 px-3 rounded d-flex align-items-center ${
-                      isActive ? "active bg-primary" : ""
-                    }`
-                  }
-                  onClick={closeSidebar}
-                >
-                  <i className="bi bi-person-circle me-2"></i>
-                  Profile
-                </NavLink>
+        {/* Profile Dropdown */}
+        <div className="d-flex align-items-center gap-3">
+          <div className="dropdown">
+            {/* Profile Image - Acts as dropdown toggle */}
+            <img
+              src={user?.profileImg ? `http://localhost:8000/uploads/profile/user/${user.profileImg}` : defaultProfileImg}
+              alt="Profile"
+              className="rounded-circle"
+              width="40"
+              height="40"
+              role="button"
+              id="dropdownMenuButton"
+              data-bs-toggle="dropdown" // Bootstrap attribute to toggle dropdown
+              aria-expanded="false"
+              style={{ objectFit: "cover", cursor: "pointer" }}
+              // Error handler for profile image loading
+              onError={(e) => {
+                e.target.onerror = null; // Prevent infinite loop if default also fails
+                e.target.src = defaultProfileImg; // Fallback to default image
+              }}
+            />
+            {/* Dropdown Menu */}
+            <ul className="dropdown-menu dropdown-menu-end mt-2" aria-labelledby="dropdownMenuButton">
+              <li><h6 className="dropdown-header">My Account</h6></li>
+              <li><hr className="dropdown-divider" /></li>
+              {/* Navigation Links */}
+              <li><NavLink className="dropdown-item" to={`/my-project/user/${id}/profile`}>Profile</NavLink></li>
+              <li><NavLink className="dropdown-item" to={`/my-project/user/${id}/my-bookings`}>My Bookings</NavLink></li>
+              <li><hr className="dropdown-divider" /></li>
+              {/* Logout Option - Apply text-danger to the list item */}
+              <li className="text-danger">
+                 {/* Assuming UserLogout renders an <a> or <button> that needs dropdown-item */}
+                <UserLogout className="dropdown-item" />
               </li>
             </ul>
-            <UserLogout />
           </div>
         </div>
+      </nav>
 
-        {/* Main Content */}
-        <div className="col-md-9 col-lg-10 ms-auto">
-          <div className="p-3">
-            <div className="bg-white rounded-4 shadow-sm p-2">
-              <Outlet />
-            </div>
-          </div>
-        </div>
+      {/* Main Content Area - Renders nested routes */}
+      <div className="d-flex">
+        {/* Sidebar placeholder (can be added here if needed) */}
+        {/* <aside>...</aside> */}
+        {/* Outlet renders the matched child route component */}
+        <main className="flex-grow-1 p-4"> {/* Added padding and flex-grow */}
+           <Outlet />
+        </main>
       </div>
-
-      {/* Custom CSS */}
-      <style>{`
-        .nav-link:hover {
-          background-color: rgba(255, 255, 255, 0.1) !important;
-        }
-        .nav-link.active {
-          background-color: #0d6efd !important;
-        }
-
-        /* Mobile sidebar styles */
-        @media (max-width: 767.98px) {
-          .sidebar {
-            transform: translateX(-100%);
-            transition: transform 0.3s ease-in-out;
-            width: 260px;
-            overflow-y: auto;
-          }
-          .sidebar.open {
-            transform: translateX(0);
-          }
-          .sidebar > div {
-            min-height: 100vh;
-            padding-bottom: 80px;
-          }
-          .nav {
-            max-height: 490px;
-            
-          }
-        }
-
-        /* Backdrop for mobile */
-        .sidebar::after {
-          content: "";
-          position: fixed;
-          top: 0;
-          right: 0;
-          width: 100vw;
-          height: 100vh;
-          background-color: rgba(0, 0, 0, 0.5);
-          z-index: -1;
-          opacity: 0;
-          transition: opacity 0.3s ease-in-out;
-          pointer-events: none;
-        }
-
-        .sidebar.open::after {
-          opacity: 1;
-          pointer-events: auto;
-        }
-      `}</style>
     </div>
   );
 };
+
 export default UserDashboard;

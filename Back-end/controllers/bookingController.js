@@ -4,6 +4,7 @@ const User = require("../models/User");
 const Service = require("../models/Services");
 const axios = require("axios");
 const twilio = require("twilio"); // If using Twilio
+require('dotenv').config();
 
 // Initialize Twilio client (example)
 const twilioClient = twilio(
@@ -66,7 +67,7 @@ exports.bookService = async (req, res) => {
 
     // Step 2: Call AI model to find the nearest technician
     const response = await axios.post(
-      "http://127.0.0.1:5000/find-technicians",
+      `http:${process.env.PORT}/find-technicians`,
       {
         userLocation: formattedUserLocation,
         technicians: formattedTechnician,
@@ -137,7 +138,7 @@ exports.bookService = async (req, res) => {
         Customer: ${user.user_name}
         Contact: ${user.user_contact}
         Address: ${user.user_address}
-        Date: ${bookingStartTime.toUTCString()}; 
+        Date: ${bookingStartTime.toUTCString()}
         Work Details: ${workDetail}
         Location:${googleMapsLink}`;
       // await twilioClient.messages.create({
@@ -244,7 +245,7 @@ exports.bookServicePremiumUser = async (req, res) => {
     //map location
     const lat = userLocation.lat;
     const lng = userLocation.lng;
-    const googleMapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
+    const googleMapsLink =` https://www.google.com/maps?q=${lat},${lng}`;
     // 3. Send SMS (Twilio example)
     try {
       const message = `New booking details:
@@ -252,7 +253,7 @@ exports.bookServicePremiumUser = async (req, res) => {
         Customer: ${user.user_name}
         Contact: ${user.user_contact}
         Address: ${user.user_address}
-        Date: ${bookingStartTime.toUTCString()}; 
+        Date: ${bookingStartTime.toUTCString()};
         Work Details: ${workDetail}
         Location:${googleMapsLink}`;
       // await twilioClient.messages.create({

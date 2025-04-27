@@ -13,11 +13,15 @@ const servicesSchema = new Schema({
     type: Number,
     required: true,
   },
-
   category: {
     type: String,
     required: true,
   },
+  icon: {   // New field for the service icon
+    type: String, // We will store the file path or URL
+    required: false,  // Optional
+  },
 });
 
 module.exports = mongoose.model("Services", servicesSchema);
+  

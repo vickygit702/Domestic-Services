@@ -1,0 +1,302 @@
+/* Global Styles */
+.home-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Category Section Styles */
+.category-section {
+    margin: 2rem 0;
+}
+
+.category-list {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* Responsive columns */
+}
+
+.category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    background: #f8f5ff;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+    text-decoration: none;
+    color: #333;
+}
+
+.category-item:hover {
+    transform: scale(1.05);
+}
+
+.category-icon {
+    width: 35px;
+    height: 35px;
+    margin-bottom: 0.5rem;
+}
+
+.category-name {
+    color: #6d28d9;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.category-skeleton {
+    height: 120px;
+    background: #e2e8f0;
+    border-radius: 8px;
+    animation: pulse 1.5s infinite;
+}
+
+/* Business Section Styles (for Technicians) */
+.section-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    color: #333;
+    text-align: center; /* Center the title */
+}
+
+.business-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive cards for mobile */
+}
+
+.business-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column; /* Stack image and details */
+}
+
+.business-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 6px rgba(109, 40, 217, 0.1);
+}
+
+.business-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+}
+
+.business-details {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* Space out details */
+}
+
+.category-badge {
+    display: inline-block;
+    background: #ede9fe;
+    color: #6d28d9;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+}
+
+.business-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0; /* Reduced bottom margin */
+}
+
+.contact-person {
+    color: #6d28d9;
+    font-size: 0.9rem;
+    margin-bottom: 0; /* Reduced bottom margin */
+}
+
+.business-address {
+    color: #141414;
+    font-size: 1rem;
+}
+
+.book-button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    background: #6d28d9;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-align: center; /* Ensure text is centered */
+    text-decoration: none; /* Remove default link styling */
+}
+
+.book-button:hover {
+    background: #5b21b6;
+}
+
+.book-button.outline-primary {
+    background: transparent;
+    color: #6d28d9;
+    border: 1px solid #6d28d9;
+}
+
+.book-button.outline-primary:hover {
+    background: #ede9fe;
+}
+
+.business-skeleton {
+    height: 300px;
+    background: #e2e8f0;
+    border-radius: 8px;
+    animation: pulse 1.5s infinite;
+}
+
+/* Animations */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Availability Modal Styles */
+.availability-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.availability-dot.booked {
+    background-color: #dc3545; /* Red for booked */
+}
+
+.availability-dot.available {
+    background-color: #28a745;
+} /* Green for available */
+
+/* Tablet View (min-width: 768px) */
+@media (min-width: 768px) {
+    .business-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Smaller cards on tablet */
+    }
+
+    .business-card {
+        flex-direction: row;
+        align-items: center;
+        padding: 5px;
+    }
+
+    .business-image {
+        width: 150px;
+        height: 150px;
+        border-radius: 8px; /* Keep rounded corners */
+        margin-right: 1.5rem;
+    }
+
+    .business-details {
+        padding: 1rem 0; /* Adjust padding */
+        gap: 0.75rem;
+        flex-grow: 1;
+        font: bold;
+        /* Allow details to take remaining space */
+    }
+
+    .book-button {
+        width: auto; /* Adjust button width */
+        padding: 0.5rem 1rem;
+        display: inline-block; /* Display buttons inline */
+        margin-right: 0.5rem; /* Add some space between buttons */
+    }
+
+    .category-list {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .category-icon {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 0.75rem;
+    }
+
+    .category-name {
+        font-size: 1rem;
+    }
+}
+
+/* Laptop View (min-width: 1024px) */
+@media (min-width: 1024px) {
+    .section-title {
+        font-size: 1.75rem;
+        margin-bottom: 2rem;
+    }
+
+    .business-grid {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Slightly smaller cards */
+    }
+
+    .business-image {
+        width: 200px;
+        height: 200px;
+    }
+
+    .business-details {
+        gap: 1rem;
+    }
+
+    .book-button {
+        padding: 0.75rem 1.5rem;
+    }
+
+    .category-list {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 2rem;
+    }
+
+    .category-icon {
+        width: 45px;
+        height: 45px;
+        margin-bottom: 1rem;
+    }
+
+    .category-name {
+        font-size: 1.1rem;
+    }
+}
+
+/* Desktop View (min-width: 1200px) */
+@media (min-width: 1200px) {
+    .business-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 2.5rem;
+    }
+
+    .business-card {
+        flex-direction: row;
+        width: 48%; /* Two cards per row on desktop */
+    }
+
+    .business-image {
+        width: 220px;
+        height: 220px;
+    }
+
+    .business-details {
+        gap: 1.5rem;
+    }
+
+    .book-button {
+        padding: 0.75rem 1.5rem;
+    }
+}

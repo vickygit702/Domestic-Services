@@ -14,6 +14,7 @@ const bookingRoute = require("./routes/booking/booking-service");
 const techRoute = require("./routes/technician/techPage");
 const paymentRoute = require("./routes/Payment");
 
+
 const server = express();
 
 server.post(
@@ -67,11 +68,17 @@ server.use("/service/booking", bookingRoute);
 server.use("/technician", techRoute);
 server.use("/payment", paymentRoute);
 
+// get all service details
+const serviceRoutes = require("./routes/serviceRoutes");
+server.use("/services", serviceRoutes);
+// get all technician details
+
+
 server.get("/", (req, res) => {
   res.status(200).json({ message: " server is running" });
 });
 
-server.listen(8000, () => {
+server.listen(process.env.PORT, () => {
   connectToDB();
   console.log("server is running on port 8000");
 });

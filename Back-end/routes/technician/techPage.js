@@ -3,6 +3,10 @@ const router = express.Router();
 const techController = require("../../controllers/Techician/techServices");
 const { uploadMiddleware, handleImageUpload } = require("./imageUpload");
 
+// Route to fetch all technicians
+router.get("/", techController.getAllTechnicians);
+
+// Routes for specific technician actions
 router
   .get("/:id/dashboard", techController.techDashboard)
   .get("/:id/jobs/fetch-jobs", techController.fetchJobs)
