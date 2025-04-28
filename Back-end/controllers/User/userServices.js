@@ -196,6 +196,76 @@ exports.getAllTechDetails = async (req, res) => {
   }
 };
 
+exports.getUpcomingBookings = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    console.log("Fetching upcoming bookings for user ID:", userId);
+    const upcomingBookings = await Bookings.find({
+      user_Id: userId,
+      status: "Confirmed",
+    })
+      .populate("tech_Id", "_id tech_name tech_email tech_contact")
+      .lean();
+    if (!upcomingBookings || upcomingBookings.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No upcoming bookings found for this user." });
+    }
+
+    const formattedBookings = upcomingBookings.map(formatBooking);
+    return res.status(200).json({
+      formattedBookings,
+      message: "Upcoming bookings fetched successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ message: "Error occured in server please try again later" });
+  }
+};
+
+exports.getRecentReviews = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    console.log("Fetching recent reviews for user ID:", userId);
+    const recentReviews = await Bookings.find({
+      user_Id: userId,
+      status: "Completed",
+    })
+      .populate("tech_Id", "_id tech_name tech_email tech_contact")
+      .lean();
+    if (!recentReviews || recentReviews.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No reviews found for this user." });
+    }
+
+    const formattedReviews = recentReviews.map(formatReview);
+    return res.status(200).json({
+      formattedReviews,
+      message: "Recent reviews fetched successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ message: "Error occured in server please try again later" });
+  }
+};
+
+const formatReview = (review) => {
+  const formatted = {
+    id: review._id,
+
+    technician: review.tech_Id,
+    rating: review.userRating,
+    comment: review.userReview,
+    date: review.actualWorked.end,
+  };
+  return formatted;
+};
+
 const formatBooking = (booking) => {
   const formatted = {
     id: booking._id,

@@ -27,6 +27,7 @@ const UserDashboard = () => {
     <div
       className="min-vh-100"
       style={{
+        overflowX: "hidden",
         background:
           "linear-gradient(135deg,rgb(55, 125, 195) 0%,rgb(232, 144, 246) 100%)",
       }}
