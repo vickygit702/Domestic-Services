@@ -117,7 +117,8 @@ const Dashboard = () => {
           </div>
 
           <div className="tech-card-body">
-            <h3 className="tech-name">{tech.tech_name}</h3>
+            <h5 className="tech-name">{tech.tech_name}</h5>
+
             <div className="tech-skills">
               <Typography variant="caption" className="skills-label">
                 Skills:
@@ -133,6 +134,10 @@ const Dashboard = () => {
                 ))}
               </div>
             </div>
+            <h4 className="tech-location">
+              <i className="bi bi-geo-alt-fill me-2 text-primary"></i>
+              {tech.tech_address.city}
+            </h4>
           </div>
 
           <div className="tech-card-footer">
@@ -908,7 +913,7 @@ const Dashboard = () => {
           background: rgba(0, 0, 0, 0.03);
           padding: 0.5rem 0.8rem;
           border-radius: 50px;
-          font-size: 0.9rem;
+          font-size: 0.8rem;
         }
 
         .star-icon {
@@ -920,6 +925,7 @@ const Dashboard = () => {
         .jobs-count {
           opacity: 0.7;
           margin-left: 0.3rem;
+          font-size: 0.8rem;
         }
 
         .tech-card-body {
@@ -928,9 +934,9 @@ const Dashboard = () => {
         }
 
         .tech-name {
-          font-size: 1.3rem;
+          font-size: 1rem;
           font-weight: 600;
-          margin: 0 0 1rem;
+          margin: 0 0 0.7rem;
           color: var(--dark);
         }
 
@@ -957,6 +963,13 @@ const Dashboard = () => {
           color: var(--primary) !important;
           font-size: 0.7rem !important;
           font-weight: 500 !important;
+        }
+        .tech-location {
+          text-transform: lowercase;
+          font-size: 0.9rem;
+          font-weight: 600;
+          margin: 0 0 0.2rem;
+          color: var(--dark);
         }
 
         .tech-card-footer {
