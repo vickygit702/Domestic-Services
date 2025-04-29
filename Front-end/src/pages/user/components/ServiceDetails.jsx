@@ -22,8 +22,7 @@ const categoryIcons = {
   "ceiling fan installation": "bi-fan",
   "fireplace repair": "bi-fire",
   "window cleaning": "bi-shop-window",
-  "siding repair": "bi-house-gear",
-  "home insulation": "bi-thermometer",
+
   "home renovation": "bi-house-up",
   "basement waterproofing": "bi-water",
   "home inspection": "bi-house-down",
@@ -31,11 +30,7 @@ const categoryIcons = {
   "home ventilation": "bi-fan",
   "home soundproofing": "bi-volume-up",
   "home elevator installation": "bi-arrow-up-square",
-  "home bar installation": "bi-bar-chart",
-  "home sauna installation": "bi-house-gear",
-  "home gym setup": "bi-person-fill-up",
-  "home wine cellar installation": "bi-cup-straw",
-  // or bi-plug for outlets
+
   painting: "bi-brush",
   gardening: "bi-flower1",
   "movers & packers": "bi-truck", // or bi-truck for moving
@@ -178,7 +173,8 @@ const ServiceDetails = () => {
                       <div className="luxury-divider"></div>
                       <div className="d-flex justify-content-between align-items-center">
                         <div className="luxury-price">
-                          ${service.rate}
+                          <i className="bi bi-currency-rupee"></i>
+                          {service.rate}
                           <span>/hour</span>
                         </div>
                         <button

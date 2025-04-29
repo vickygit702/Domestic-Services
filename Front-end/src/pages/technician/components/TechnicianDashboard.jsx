@@ -114,13 +114,17 @@ const TechnicianDashboard = () => {
         {[
           {
             title: "TOTAL EARNINGS",
-            value: `$${stats.totalEarnings}`,
+            value: (
+              <>
+                <i className="bi bi-currency-rupee"></i> {stats.totalEarnings}
+              </>
+            ),
             color: "success.main",
           },
           { title: "COMPLETED JOBS", value: stats.completedJobs },
           {
             title: "AVG. RATING",
-            value: `${stats.rating}/5.0`,
+            value: `${stats.rating}/5`,
             color: "warning.main",
           },
           { title: "PENDING JOBS", value: stats.pendingJobs.length || 0 },
@@ -163,7 +167,11 @@ const TechnicianDashboard = () => {
         }}
       >
         <CardContent sx={{ p: isMobile ? 1 : 2 }}>
-          <Typography variant={isMobile ? "subtitle1" : "h6"} sx={{ mb: 2 }}>
+          <Typography
+            variant={isMobile ? "subtitle1" : "h6"}
+            sx={{ mb: 2 }}
+            textAlign={"center"}
+          >
             Monthly Earnings
           </Typography>
           <Box
@@ -184,7 +192,7 @@ const TechnicianDashboard = () => {
                   legend: { display: false },
                   tooltip: {
                     callbacks: {
-                      label: (ctx) => ` $${ctx.raw.toLocaleString()}`,
+                      label: (ctx) => ` ${ctx.raw.toLocaleString()}`,
                     },
                   },
                 },
@@ -193,7 +201,7 @@ const TechnicianDashboard = () => {
                     beginAtZero: true,
                     grid: { color: theme.palette.divider },
                     ticks: {
-                      callback: (value) => `$${value.toLocaleString()}`,
+                      callback: (value) => `${value.toLocaleString()}`,
                       font: {
                         size: isMobile ? 10 : 12,
                       },

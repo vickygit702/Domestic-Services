@@ -208,7 +208,7 @@ exports.getUpcomingBookings = async (req, res) => {
       .lean();
     if (!upcomingBookings || upcomingBookings.length === 0) {
       return res
-        .status(404)
+        .status(204)
         .json({ message: "No upcoming bookings found for this user." });
     }
 

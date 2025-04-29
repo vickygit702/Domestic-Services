@@ -341,9 +341,15 @@ const JobTable = ({
 
                 <TableCell>
                   <Typography variant="body2" fontWeight={500}>
-                    {job.status === "Completed"
-                      ? `$ ${job.price}`
-                      : `$ ${job.est_price}`}
+                    {job.status === "Completed" ? (
+                      <>
+                        <i className="bi bi-currency-rupee"></i> {job.price}
+                      </>
+                    ) : (
+                      <>
+                        <i className="bi bi-currency-rupee"></i> {job.est_price}
+                      </>
+                    )}
                   </Typography>
                   <Typography
                     variant="caption"
@@ -464,7 +470,7 @@ const JobTable = ({
                     {selectedJob.user?.user_email}
                   </Typography>
                   <Typography variant={isMobile ? "caption" : "body2"}>
-                    - {selectedJob.user?.user_contact}
+                    {selectedJob.user?.user_contact}
                   </Typography>
                 </div>
 
@@ -495,9 +501,17 @@ const JobTable = ({
                     >
                       {selectedJob.status === "Confirmed" ||
                       selectedJob.status === "InProgress" ||
-                      selectedJob.status === "Cancelled"
-                        ? `Est. Price: $${selectedJob.est_price.toFixed(2)}`
-                        : `Price: $${selectedJob.price.toFixed(2)}`}
+                      selectedJob.status === "Cancelled" ? (
+                        <>
+                          Est. Price:<i className="bi bi-currency-rupee"></i>{" "}
+                          {selectedJob.est_price.toFixed(2)}
+                        </>
+                      ) : (
+                        <>
+                          Price:<i className="bi bi-currency-rupee"></i>{" "}
+                          {selectedJob.price.toFixed(2)}
+                        </>
+                      )}
                     </Typography>
                     <Chip
                       label={selectedJob.paymentStatus ? "Paid" : "Pending"}

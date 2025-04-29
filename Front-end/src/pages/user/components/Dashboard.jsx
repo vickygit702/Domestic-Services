@@ -359,8 +359,8 @@ const Dashboard = () => {
         ) : (
           <div className="technicians-grid">
             <AnimatePresence>
-              {filteredTechnicians.map((tech) => (
-                <TechCard key={tech.id} tech={tech} />
+              {filteredTechnicians.map((tech, index) => (
+                <TechCard key={index} tech={tech} />
               ))}
             </AnimatePresence>
           </div>
@@ -656,7 +656,7 @@ const Dashboard = () => {
       />
 
       {/* CSS Styles */}
-      <style jsx global>{`
+      <style>{`
         /* Previous styles remain the same, adding new styles below */
         :root {
           --primary: #6a11cb;
@@ -679,71 +679,7 @@ const Dashboard = () => {
           margin: 0 auto;
         }
 
-        /* Premium Banner */
-        .premium-banner {
-          background: var(--gradient);
-          border-radius: 16px;
-          overflow: hidden;
-          margin-bottom: 2rem;
-          box-shadow: 0 10px 30px rgba(106, 17, 203, 0.2);
-          color: white;
-        }
-
-        .premium-content {
-          display: flex;
-          align-items: center;
-          padding: 2rem;
-          position: relative;
-        }
-
-        .premium-text {
-          flex: 1;
-          z-index: 2;
-        }
-
-        .premium-text h2 {
-          font-size: 2rem;
-          font-weight: 700;
-          margin-bottom: 1rem;
-        }
-
-        .premium-text p {
-          font-size: 1.1rem;
-          margin-bottom: 1.5rem;
-          opacity: 0.9;
-        }
-
-        .upgrade-icon {
-          font-size: 2.5rem !important;
-          margin-bottom: 1rem;
-          color: rgba(255, 255, 255, 0.8);
-        }
-
-        .upgrade-btn {
-          background: white !important;
-          color: var(--primary) !important;
-          font-weight: 600 !important;
-          padding: 0.75rem 2rem !important;
-          border-radius: 50px !important;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
-          transition: all 0.3s ease !important;
-        }
-
-        .upgrade-btn:hover {
-          transform: translateY(-2px) !important;
-          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
-        }
-
-        .premium-graphic {
-          position: absolute;
-          right: 0;
-          top: 0;
-          bottom: 0;
-          width: 40%;
-          background: url("/premium-bg.svg") no-repeat right center;
-          background-size: contain;
-          opacity: 0.3;
-        }
+        
 
         /* Services Section */
         .services-section {
