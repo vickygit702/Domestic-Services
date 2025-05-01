@@ -3,7 +3,12 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchServices } from "../../../redux/slices/servicesSlice";
-import { bookServicePremiumUser } from "../../../redux/slices/userSlice";
+import {
+  bookServicePremiumUser,
+  clearMessage,
+} from "../../../redux/slices/userSlice";
+// At the top of Dashboard.jsx
+
 import {
   Card,
   Dialog,
@@ -24,7 +29,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { format, isSameDay } from "date-fns";
+import { format, isSameDay, toDate } from "date-fns";
 import StarIcon from "@mui/icons-material/Star";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import BookingDialogBox from "./BookingDialogBox";
@@ -33,6 +38,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import ReviewsIcon from "@mui/icons-material/Reviews";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -53,6 +59,7 @@ const Dashboard = () => {
   const [reviewsError, setReviewsError] = useState(null);
   const [activeTab, setActiveTab] = useState("all");
   const { user } = useSelector((state) => state.auth);
+  const { message } = useSelector((state) => state.userBooks);
   const { serviceList, categories, loading, error } = useSelector(
     (state) => state.services
   );
@@ -202,7 +209,7 @@ const Dashboard = () => {
           bookeddate: booking.bookeddate,
           status: booking.status,
         })) || [];
-      console.log(formattedBookings);
+
       setUpcomingBookings(formattedBookings);
     } catch (err) {
       setBookingsError(err.message);
@@ -227,7 +234,7 @@ const Dashboard = () => {
           comment: review.comment,
           date: review.date,
         })) || [];
-      console.log(formattedReviews);
+
       setRecentReviews(formattedReviews);
     } catch (err) {
       setReviewsError(err.message);
@@ -265,6 +272,41 @@ const Dashboard = () => {
   const handleMyBooking = () => {
     navigate(`/my-project/user/${user.id}/my-bookings`);
   };
+
+  useEffect(() => {
+    if (message) {
+      const toastConfig = {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+      };
+
+      if (typeof message === "string") {
+        toast.success(message, toastConfig);
+      } else if (message.type) {
+        switch (message.type) {
+          case "success":
+            toast.success(message.text, toastConfig);
+            break;
+          case "error":
+            toast.error(message.text, toastConfig);
+            break;
+          case "warning":
+            toast.warn(message.text, toastConfig);
+            break;
+          default:
+            toast.info(message.text, toastConfig);
+        }
+      }
+
+      // Clear the message after displaying
+      dispatch(clearMessage());
+    }
+  }, [message, dispatch]);
 
   const filteredCategory = categories.filter((service) =>
     service.toLowerCase().includes(searchQuery.toLowerCase())

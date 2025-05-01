@@ -18,6 +18,10 @@ const servicesSchema = new Schema({
     type: String,
     required: true,
   },
+  serviceIcon: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Services", servicesSchema);

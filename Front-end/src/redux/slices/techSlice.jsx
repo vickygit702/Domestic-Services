@@ -6,8 +6,7 @@ export const fetchJobs = createAsyncThunk(
   async (url, { rejectWithValue }) => {
     try {
       const response = await axios.get(url); // Use the dynamic URL
-      // Return the fetched data
-      console.log("fetch jobs", response.data);
+
       return response.data;
     } catch (error) {
       // Handle errors
@@ -48,7 +47,6 @@ const techSlice = createSlice({
       .addCase(fetchJobs.fulfilled, (state, action) => {
         state.loading = false;
         state.jobDetails = action.payload;
-        console.log("job-details", state.jobDetails);
       })
       .addCase(fetchJobs.rejected, (state, action) => {
         state.error = action.payload || "Failed to fetch services";

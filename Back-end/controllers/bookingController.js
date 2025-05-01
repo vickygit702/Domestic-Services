@@ -55,7 +55,11 @@ exports.bookService = async (req, res) => {
     });
 
     if (availableTechnicians.length === 0) {
-      return res.status(400).json({ message: "No technicians available" });
+      return res.status(400).json({
+        success: false,
+        message: "No technicians available for the selected time slot",
+        type: "warning",
+      });
     }
 
     const formattedUserLocation = [userLocation.lng, userLocation.lat];
@@ -75,10 +79,6 @@ exports.bookService = async (req, res) => {
 
     const nearestTechnician = response.data;
     const selectedTechnician = await Technician.findById(nearestTechnician.id);
-
-    if (!selectedTechnician) {
-      return res.status(400).json({ message: "invalid technician detail" });
-    }
 
     const serviceDetail = await Service.findOne({ service_name: serviceName });
 
@@ -149,12 +149,19 @@ exports.bookService = async (req, res) => {
     } catch (err) {
       console.error("SMS failed:", err.message);
     }
-    res
-      .status(201)
-      .json({ message: "Booking successful", booking: newBooking });
+    res.status(201).json({
+      success: true,
+      message: "Booking successful! Your technician will contact you soon.",
+      booking: newBooking,
+      type: "success",
+    });
   } catch (error) {
     console.error("Booking error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to process booking",
+      type: "error",
+    });
   }
 };
 
@@ -171,17 +178,15 @@ exports.bookServicePremiumUser = async (req, res) => {
     } = req.body;
 
     const user = await User.findById(userId);
-    console.log(user);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
 
     //const dates = getBookingDate("2025-02-25T11:00:00Z", 20);
     const dates = getBookingDate(startDate, duration);
     if (dates === "error") {
-      return res
-        .status(404)
-        .json({ message: "Booking must start between 8 AM and 8 PM UTC" });
+      return res.status(404).json({
+        success: false,
+        message: "Booking must start between 8 AM and 8 PM UTC",
+        type: "warning",
+      });
     }
     const { bookingStartTime, overallEndTime } = dates;
     console.log(bookingStartTime);
@@ -190,7 +195,11 @@ exports.bookServicePremiumUser = async (req, res) => {
     const technician = await Technician.findById(technicianid);
 
     if (!technician) {
-      return res.status(400).json({ message: "invalid technician detail" });
+      return res.status(400).json({
+        success: false,
+        message: "Selected technician not available",
+        type: "error",
+      });
     }
 
     const serviceDetail = await Service.findOne({ service_name: serviceName });
@@ -264,12 +273,19 @@ exports.bookServicePremiumUser = async (req, res) => {
     } catch (err) {
       console.error("SMS failed:", err.message);
     }
-    res
-      .status(201)
-      .json({ message: "Booking successful", booking: newBooking });
+    res.status(201).json({
+      success: true,
+      message: "booking confirmed! Your technician will arrive as scheduled.",
+      booking: newBooking,
+      type: "success",
+    });
   } catch (error) {
     console.error("Booking error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to process premium booking",
+      type: "error",
+    });
   }
 };
 

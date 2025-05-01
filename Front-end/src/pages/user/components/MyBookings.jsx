@@ -4,11 +4,16 @@ import { fetchBookings, cancelBookings } from "../../../redux/slices/userSlice";
 import BookingDetailsModal from "./BookingDetailsModal";
 import PaymentModal from "./PaymentModal";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const MyBookings = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  const { userBookings = [] } = useSelector((state) => state.userBooks);
+  const {
+    userBookings = [],
+    clearMessage,
+    message,
+  } = useSelector((state) => state.userBooks);
   const dispatch = useDispatch();
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -67,6 +72,40 @@ const MyBookings = () => {
     // Optionally refresh bookings
     refreshBookings();
   };
+  useEffect(() => {
+    if (message) {
+      const toastConfig = {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+      };
+
+      if (typeof message === "string") {
+        toast.success(message, toastConfig);
+      } else if (message.type) {
+        switch (message.type) {
+          case "success":
+            toast.success(message.text, toastConfig);
+            break;
+          case "error":
+            toast.error(message.text, toastConfig);
+            break;
+          case "warning":
+            toast.warn(message.text, toastConfig);
+            break;
+          default:
+            toast.info(message.text, toastConfig);
+        }
+      }
+
+      // Clear the message after displaying
+      dispatch(clearMessage());
+    }
+  }, [message, dispatch]);
 
   return (
     <div className="container-fluid px-4">

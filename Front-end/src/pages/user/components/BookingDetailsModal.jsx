@@ -16,14 +16,10 @@ const BookingDetailsModal = ({ booking, show, onHide }) => {
     );
   }
 
-  console.log(durationMs); // Duration in milliseconds
-
   // More useful formatted versions:
   const durationMinutes = Math.floor(durationMs / (1000 * 60));
   const durationHrs = (durationMs / (1000 * 60 * 60)).toFixed(2);
 
-  console.log(`Duration: ${durationMinutes} minutes`);
-  console.log(`Duration: ${durationHrs} hours`);
   const basePrice =
     booking.status === "Completed" ? booking.price : booking.est_price;
   const platformFee = basePrice * 0.2;

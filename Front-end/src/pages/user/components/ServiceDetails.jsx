@@ -5,71 +5,7 @@ import { bookService } from "../../../redux/slices/userSlice";
 import { motion, AnimatePresence } from "framer-motion";
 import BookingDialogBox from "./BookingDialogBox";
 
-const categoryIcons = {
-  carpentry: "bi-hammer", // or bi-ladder for woodwork
-  electrical: "bi-lightning",
-  plumbing: "bi-droplet",
-  roofing: "bi-house",
-  flooring: "bi-grid-1x2",
-  "window repair": "bi-window",
-  "pest control": "bi-bug",
-  "home cleaning": "bi-house-up",
-  "drywall repair": "bi-square",
-  "door installation": "bi-door-open",
-  "chimney repair": "bi-bricks",
-  "water heater repair": "bi-moisture",
-  "garage door repair": "bi-door-closed",
-  "ceiling fan installation": "bi-fan",
-  "fireplace repair": "bi-fire",
-  "window cleaning": "bi-shop-window",
-
-  "home renovation": "bi-house-up",
-  "basement waterproofing": "bi-water",
-  "home inspection": "bi-house-down",
-  "home wiring": "bi-plug",
-  "home ventilation": "bi-fan",
-  "home soundproofing": "bi-volume-up",
-  "home elevator installation": "bi-arrow-up-square",
-
-  painting: "bi-brush",
-  gardening: "bi-flower1",
-  "movers & packers": "bi-truck", // or bi-truck for moving
-  landscaping: "bi-tree-fill",
-  "pool maintenance": "bi-water",
-  "fence installation": "bi-border-all",
-  "gutter cleaning": "bi-house-gear",
-  "deck building": "bi-house-up",
-  "driveway paving": "bi-car-front-fill",
-  "patio construction": "bi-house-up",
-  "outdoor lighting": "bi-lightbulb",
-  // or bi-pipe for pipes
-  hvac: "bi-snow", // or bi-thermometer for temperature control
-
-  // or bi-ladder for roof access
-  "appliance repair": "bi-wrench", // or bi-washing-machine for specific appliances
-  "home automation": "bi-house-gear",
-  "solar panel installation": "bi-sun",
-  "home security": "bi-lock",
-  "home theater setup": "bi-file-earmark-music",
-  "appliance installation": "bi-gear",
-  "home theater acoustics": "bi-film",
-  "yoga instructor": "bi-person-arms-up",
-  // or bi-router for smart homes
-  "personal trainer": "bi-person-square",
-  nutritionist: "bi-heart-pulse",
-  "math tutor": "bi-person-square",
-  "language tutor": "bi-person-fill-up",
-  photographer: "bi-camera",
-  videographer: "bi-camera-reels",
-  "pet grooming": "bi-clipboard2-pulse",
-  "pet sitting": "bi-house",
-  "legal consultant": "bi-person-walking",
-  "financial advisor": "bi-currency-bitcoin",
-  "business consultant": "bi-clipboard-data",
-};
-
 const ServiceDetails = () => {
-  // ... [keep all existing state and logic]
   const { categoryName } = useParams();
   const { serviceList = [] } = useSelector((state) => state.services);
   const { user } = useSelector((state) => state.auth);
@@ -160,9 +96,8 @@ const ServiceDetails = () => {
                       <div className="luxury-icon">
                         <i
                           className={`bi ${
-                            categoryIcons[service.name.toLowerCase()] ||
-                            "bi-question-circle"
-                          } fs-2`}
+                            service.icons || "bi-question-circle"
+                          }`}
                         ></i>
                       </div>
                       <div className="luxury-badge">{service.category}</div>

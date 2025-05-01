@@ -31,7 +31,7 @@ const TechnicianLogin = () => {
       );
 
       const { techDetail } = response.data;
-      console.log(techDetail);
+
       if (techDetail) {
         dispatch(loginTechnicianSuccess(techDetail));
         toast.success(response.data.message);
@@ -55,7 +55,6 @@ const TechnicianLogin = () => {
     if (error) {
       console.log("Error occurred:", error);
       toast.error(error);
-      // Display error to the user (e.g., using a toast or alert)
     }
   }, [error]);
   if (loading)

@@ -78,10 +78,6 @@ const Profile = () => {
     },
   });
 
-  useEffect(() => {
-    console.log("useEffect:", user);
-  }, [dispatch, user]);
-
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;

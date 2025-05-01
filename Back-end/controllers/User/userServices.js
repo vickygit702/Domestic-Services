@@ -57,6 +57,7 @@ exports.allServices = async (req, res) => {
       desc: service.description,
       rate: service.baseRate,
       category: service.category,
+      icons: service.serviceIcon,
     }));
     const categories = [...new Set(s_List.map((service) => service.category))];
     res.status(200).json({

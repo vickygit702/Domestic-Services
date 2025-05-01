@@ -93,9 +93,6 @@ const TechnicianProfile = () => {
     isPro: technician?.techtype || false,
   });
 
-  useEffect(() => {
-    console.log(technician.profileImg);
-  }, [technician]);
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -172,10 +169,6 @@ const TechnicianProfile = () => {
     });
     setChanges({});
   };
-
-  useEffect(() => {
-    console.log(technician);
-  }, [handleSubmit]);
 
   return (
     <Box sx={{ p: 1, maxWidth: "1400px", margin: "0 auto" }}>

@@ -68,6 +68,7 @@ export const bookServicePremiumUser = createAsyncThunk(
 const initialState = {
   userBookings: [],
   loading: false,
+  message: null,
   error: null,
 };
 
@@ -75,7 +76,12 @@ const initialState = {
 const userSlice = createSlice({
   name: "userBooks",
   initialState,
-  reducers: {},
+  reducers: {
+    clearMessage: (state) => {
+      state.message = null;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchBookings.pending, (state) => {
@@ -96,10 +102,18 @@ const userSlice = createSlice({
       })
       .addCase(bookService.fulfilled, (state, action) => {
         state.loading = false;
+        state.message = {
+          text: action.payload.message,
+          type: action.payload.type || "success",
+        };
       })
       .addCase(bookService.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to book service";
+        state.message = {
+          text: action.payload?.message || "Booking failed",
+          type: "error",
+        };
+        state.error = action.payload?.message || "Failed to book service";
       })
       .addCase(bookServicePremiumUser.pending, (state) => {
         state.loading = true;
@@ -107,24 +121,39 @@ const userSlice = createSlice({
       })
       .addCase(bookServicePremiumUser.fulfilled, (state, action) => {
         state.loading = false;
+        state.message = {
+          text: action.payload.message,
+          type: action.payload.type || "success",
+        };
       })
       .addCase(bookServicePremiumUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to book service";
+        state.message = {
+          text: action.payload?.message || "Booking failed",
+          type: "error",
+        };
       })
       .addCase(cancelBookings.pending, (state) => {
         state.status = "loading";
       })
       .addCase(cancelBookings.fulfilled, (state, action) => {
         state.status = "succeeded";
-        // Optional: Update specific booking in state if needed
+        state.message = {
+          text: action.payload.message,
+          type: action.payload.type || "success",
+        };
       })
       .addCase(cancelBookings.rejected, (state, action) => {
         state.status = "failed";
+        state.message = {
+          text: action.payload?.message || "Booking failed",
+          type: "error",
+        };
         state.error = action.payload;
       });
   },
 });
 
 // Export the reducer
+export const { clearMessage } = userSlice.actions;
 export default userSlice.reducer;
