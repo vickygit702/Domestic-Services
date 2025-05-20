@@ -5,6 +5,7 @@ import BookingDetailsModal from "./BookingDetailsModal";
 import PaymentModal from "./PaymentModal";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+const backend_url = import.meta.env.VITE_BACKENDURL;
 
 const MyBookings = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const MyBookings = () => {
   const [currentBooking, setCurrentBooking] = useState(null);
 
   const refreshBookings = useCallback(() => {
-    const url = `http://localhost:8000/user/${user.id}/status-page/myBookings`;
+    const url = `${backend_url}/user/${user.id}/status-page/myBookings`;
     dispatch(fetchBookings(url));
   }, [dispatch, user.id]);
 
@@ -54,7 +55,7 @@ const MyBookings = () => {
   const handleCancelBooking = async (bookingId) => {
     if (window.confirm("Are you sure you want to cancel this booking?")) {
       try {
-        const url = `http://localhost:8000/user/${user.id}/status-page/cancel`;
+        const url = `${backend_url}/user/${user.id}/status-page/cancel`;
         await dispatch(cancelBookings({ url, bookingId })).unwrap();
         refreshBookings(); // Refresh after cancellation
       } catch (error) {

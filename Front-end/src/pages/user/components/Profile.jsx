@@ -30,6 +30,7 @@ import {
   Key,
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
+const backend_url = import.meta.env.VITE_BACKENDURL;
 
 const StyledCard = styled(Card)(({ theme }) => ({
   borderRadius: "12px",
@@ -176,7 +177,7 @@ const Profile = () => {
         >
           <Box sx={{ position: "relative" }}>
             <Avatar
-              src={`http://localhost:8000/uploads/profile/user/${profileImage}`}
+              src={`${backend_url}/uploads/profile/user/${profileImage}`}
               sx={{
                 width: 100,
                 height: 100,

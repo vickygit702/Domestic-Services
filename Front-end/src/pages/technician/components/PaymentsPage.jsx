@@ -38,6 +38,7 @@ import {
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { format } from "date-fns";
+const backend_url = import.meta.env.VITE_BACKENDURL;
 
 const PaymentsPage = () => {
   const theme = useTheme();
@@ -54,7 +55,7 @@ const PaymentsPage = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:8000/technician/${technician.id}/payments/payslips?month=${selectedMonth}&year=${selectedYear}`
+          `${backend_url}/technician/${technician.id}/payments/payslips?month=${selectedMonth}&year=${selectedYear}`
         );
         if (!response.ok) throw new Error("Failed to fetch payslips");
 

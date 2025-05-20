@@ -8,6 +8,7 @@ import {
 } from "../../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+const backend_url = import.meta.env.VITE_BACKENDURL;
 
 const TechnicianSignup = () => {
   const navigate = useNavigate();
@@ -95,7 +96,7 @@ const TechnicianSignup = () => {
       setIsLoadingServices(true);
       try {
         const response = await axios.get(
-          "http://localhost:8000/auth/api/fetch-services"
+          `${backend_url}/auth/api/fetch-services`
         );
         setServices(response.data.services); // Access the services array from response
       } catch (error) {
@@ -247,7 +248,7 @@ const TechnicianSignup = () => {
     dispatch(signupTechnicianStart());
     try {
       const response = await axios.post(
-        "http://localhost:8000/auth/api/signupTechnician",
+        `${backend_url}/auth/api/signupTechnician`,
         formData
       );
 

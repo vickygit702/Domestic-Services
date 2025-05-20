@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+const backend_url = import.meta.env.VITE_BACKENDURL;
 
 // Async Thunk to fetch services list with dynamic URL
 export const fetchBookings = createAsyncThunk(
@@ -33,7 +34,7 @@ export const bookService = createAsyncThunk(
   async (bookingData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:8000/service/booking/book-service",
+        `${backend_url}/service/booking/book-service`,
         bookingData
       ); // Use the dynamic URL
       console.log(response.data);
@@ -51,7 +52,7 @@ export const bookServicePremiumUser = createAsyncThunk(
   async (bookingData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:8000/service/booking/book-service-premium-user",
+        `${backend_url}/service/booking/book-service-premium-user`,
         bookingData
       ); // Use the dynamic URL
       console.log(response.data);

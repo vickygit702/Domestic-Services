@@ -8,6 +8,7 @@ import {
 } from "../../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+const backend_url = import.meta.env.VITE_BACKENDURL;
 
 const UserSignup = () => {
   const navigate = useNavigate();
@@ -170,7 +171,7 @@ const UserSignup = () => {
     dispatch(signupUserStart());
     try {
       const response = await axios.post(
-        "http://localhost:8000/auth/api/signupUser",
+        `${backend_url}/auth/api/signupUser`,
         formData
       );
 

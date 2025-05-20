@@ -9,6 +9,7 @@ import {
   loginUserSuccess,
 } from "../../redux/slices/authSlice";
 import { toast } from "react-toastify";
+const backend_url = import.meta.env.VITE_BACKENDURL;
 
 const UserLogin = () => {
   const [email, setEmail] = useState("");
@@ -22,13 +23,10 @@ const UserLogin = () => {
     e.preventDefault();
     dispatch(loginUserStart());
     try {
-      const response = await axios.post(
-        "http://localhost:8000/auth/api/loginUser",
-        {
-          user_email: email,
-          user_password: password,
-        }
-      );
+      const response = await axios.post(`${backend_url}/auth/api/loginUser`, {
+        user_email: email,
+        user_password: password,
+      });
 
       const { userDetail } = response.data;
       if (userDetail) {

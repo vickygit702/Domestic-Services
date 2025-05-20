@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import TechnicianLogout from "../TechnicianLogout";
+const backend_url = import.meta.env.VITE_BACKENDURL;
 
 const TechnicianHomePage = () => {
   const { technician } = useSelector((state) => state.auth);
@@ -61,7 +62,7 @@ const TechnicianHomePage = () => {
                 style={{ color: "black" }}
               >
                 <img
-                  src={`http://localhost:8000/uploads/profile/technicians/${technician.profileImg}`}
+                  src={`${backend_url}/uploads/profile/technicians/${technician.profileImg}`}
                   alt="profile"
                   className="rounded-circle bg-white me-2"
                   width="40"

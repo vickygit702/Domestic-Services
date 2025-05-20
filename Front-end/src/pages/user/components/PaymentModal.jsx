@@ -8,6 +8,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { toast } from "react-toastify";
 import ReviewModal from "./ReviewModel";
+const backend_url = import.meta.env.VITE_BACKENDURL;
 
 const CheckoutForm = ({ booking, onSuccess, amt }) => {
   const stripe = useStripe();
@@ -25,7 +26,7 @@ const CheckoutForm = ({ booking, onSuccess, amt }) => {
     try {
       // 1. Create Payment Intent (call your backend)
       const response = await fetch(
-        "http://localhost:8000/payment/create-payment-intent",
+        `${backend_url}/payment/create-payment-intent`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -118,7 +119,7 @@ const PaymentModal = ({ booking, show, onClose, onSuccess }) => {
   const handleReviewSubmit = async (reviewData) => {
     try {
       const response = await fetch(
-        "http://localhost:8000/user/status-page/submit-review",
+        `${backend_url}/user/status-page/submit-review`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

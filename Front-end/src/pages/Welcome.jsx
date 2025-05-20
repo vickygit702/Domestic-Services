@@ -40,19 +40,19 @@ const Welcome = () => {
       name: "Vignesh S",
       role: "Founder & CEO",
       bio: "Home services expert with 15+ years experience in domestic solutions.",
-      img: "http://localhost:8000/uploads/profile/user/profile-user.png",
+      img: `${backend_url}/uploads/profile/user/profile-user.png`,
     },
     {
       name: "Santhosh SK",
       role: "Operations Manager",
       bio: "Ensures seamless service delivery and customer satisfaction.",
-      img: "http://localhost:8000/uploads/profile/user/profile-user.png",
+      img: `${backend_url}/uploads/profile/user/profile-user.png`,
     },
     {
       name: "Azhagumalai P",
       role: "Tech Lead",
       bio: "Develops our platform to connect you with the best professionals.",
-      img: "http://localhost:8000/uploads/profile/user/profile-user.png",
+      img: `${backend_url}/uploads/profile/user/profile-user.png`,
     },
   ];
 

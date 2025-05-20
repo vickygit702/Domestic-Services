@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+const backend_url = import.meta.env.VITE_BACKENDURL;
 
 // Async thunk to update user profile
 export const updateUserProfile = createAsyncThunk(
@@ -7,7 +8,7 @@ export const updateUserProfile = createAsyncThunk(
   async ({ userId, updatedData }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `http://localhost:8000/user/${userId}/update-user-profile`,
+        `${backend_url}/user/${userId}/update-user-profile`,
         updatedData
       );
 
@@ -23,7 +24,7 @@ export const updateProfileImage = createAsyncThunk(
   async ({ userId, file }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/user/${userId}/upload-user-profile-image`,
+        `${backend_url}/user/${userId}/upload-user-profile-image`,
         file,
         {
           headers: {
@@ -45,7 +46,7 @@ export const updateTechProfile = createAsyncThunk(
   async ({ techId, updatedData }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `http://localhost:8000/technician/${techId}/update-tech-profile`,
+        `${backend_url}/technician/${techId}/update-tech-profile`,
         updatedData
       );
 
@@ -61,7 +62,7 @@ export const updateTechImage = createAsyncThunk(
   async ({ techId, file }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/technician/${techId}/upload-tech-profile-image`,
+        `${backend_url}/technician/${techId}/upload-tech-profile-image`,
         file,
         {
           headers: {

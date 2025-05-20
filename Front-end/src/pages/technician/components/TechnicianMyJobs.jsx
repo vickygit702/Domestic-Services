@@ -34,6 +34,7 @@ import {
   Tabs,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+const backend_url = import.meta.env.VITE_BACKENDURL;
 
 // Styled components
 const StatusChip = styled(Chip)(({ theme }) => ({
@@ -87,7 +88,7 @@ const TechnicianMyJobs = () => {
   ];
 
   const refreshJobs = useCallback(() => {
-    const url = `http://localhost:8000/technician/${id}/jobs/fetch-jobs`;
+    const url = `${backend_url}/technician/${id}/jobs/fetch-jobs`;
     dispatch(fetchJobs(url));
   }, [dispatch, id]);
 
@@ -98,7 +99,7 @@ const TechnicianMyJobs = () => {
   const handleStatusUpdate = useCallback(
     async (selectedJob) => {
       try {
-        const url = `http://localhost:8000/technician/${id}/jobs/update-job-status`;
+        const url = `${backend_url}/technician/${id}/jobs/update-job-status`;
         await dispatch(
           updateJobStatus({
             url,

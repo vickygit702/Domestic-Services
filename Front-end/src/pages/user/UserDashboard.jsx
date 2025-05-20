@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import UserLogout from "../UserLogout";
+const backend_url = import.meta.env.VITE_BACKENDURL;
 
 const UserDashboard = () => {
   const { user } = useSelector((state) => state.auth);
@@ -61,7 +62,7 @@ const UserDashboard = () => {
                 style={{ color: "black" }}
               >
                 <img
-                  src={`http://localhost:8000/uploads/profile/user/${user.profileImg}`}
+                  src={`${backend_url}/uploads/profile/user/${user.profileImg}`}
                   alt="profile"
                   className="rounded-circle bg-white me-2"
                   width="40"

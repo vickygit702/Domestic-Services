@@ -9,6 +9,7 @@ import {
   loginTechnicianFailure,
 } from "../../redux/slices/authSlice";
 import { toast } from "react-toastify";
+const backend_url = import.meta.env.VITE_BACKENDURL;
 
 const TechnicianLogin = () => {
   const [email, setEmail] = useState("");
@@ -23,7 +24,7 @@ const TechnicianLogin = () => {
     dispatch(loginTechnicianStart());
     try {
       const response = await axios.post(
-        "http://localhost:8000/auth/api/loginTechnician",
+        `${backend_url}/auth/api/loginTechnician`,
         {
           tech_email: email,
           tech_password: password,

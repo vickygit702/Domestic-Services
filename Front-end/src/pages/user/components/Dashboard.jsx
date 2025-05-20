@@ -40,6 +40,8 @@ import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import { toast } from "react-toastify";
 
+const backend_url = import.meta.env.VITE_BACKENDURL;
+
 const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -107,7 +109,7 @@ const Dashboard = () => {
           <div className="tech-card-header">
             <div className="tech-avatar">
               <img
-                src={`http://localhost:8000/uploads/profile/technicians/${tech.profileImg}`}
+                src={`${backend_url}/uploads/profile/technicians/${tech.profileImg}`}
                 alt={tech.tech_name}
               />
               {tech.isPro && (
@@ -177,7 +179,7 @@ const Dashboard = () => {
       setLoadingTech(true);
       try {
         const response = await axios.get(
-          `http://localhost:8000/user/${user.id}/services/fetchAllTechnicians`
+          `${backend_url}/user/${user.id}/services/fetchAllTechnicians`
         );
         setTechInfo(response.data.techDetails);
         setLoadingTech(false);
@@ -190,7 +192,7 @@ const Dashboard = () => {
   }, [user.id]);
 
   useEffect(() => {
-    const url = `http://localhost:8000/user/${user.id}/services/fetchAllServices`;
+    const url = `${backend_url}/user/${user.id}/services/fetchAllServices`;
     dispatch(fetchServices(url));
   }, [dispatch]);
 
@@ -199,7 +201,7 @@ const Dashboard = () => {
     setBookingsError(null);
     try {
       const response = await axios.get(
-        `http://localhost:8000/user/${user.id}/dashboard/upcoming-bookings`
+        `${backend_url}/user/${user.id}/dashboard/upcoming-bookings`
       );
       const formattedBookings =
         response.data.formattedBookings?.map((booking) => ({
@@ -224,7 +226,7 @@ const Dashboard = () => {
     setReviewsError(null);
     try {
       const response = await axios.get(
-        `http://localhost:8000/user/${user.id}/dashboard/recent-reviews`
+        `${backend_url}/user/${user.id}/dashboard/recent-reviews`
       );
       const formattedReviews =
         response.data.formattedReviews?.map((review) => ({

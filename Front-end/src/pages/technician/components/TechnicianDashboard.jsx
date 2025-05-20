@@ -13,6 +13,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+const backend_url = import.meta.env.VITE_BACKENDURL;
 
 Chart.register(...registerables);
 
@@ -47,7 +48,7 @@ const TechnicianDashboard = () => {
     const fetchDashboardData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/technician/${id}/dashboard`
+          `${backend_url}/technician/${id}/dashboard`
         );
         const data = await response.json();
         setStats(data);
