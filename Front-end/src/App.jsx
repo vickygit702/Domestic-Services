@@ -25,28 +25,35 @@ import {
   Payment,
   TechnicianProfile,
 } from "./pages/index";
+const backend_url = import.meta.env.VITE_BACKENDURL;
 
 function App() {
   const routes = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route path="/" element={<Welcome />} />
-        <Route path="/my-project/user/signup" element={<UserSignupPage />} />
-        <Route path="/my-project/user/login" element={<UserLoginPage />} />
+        <Route path={`${backend_url}/`} element={<Welcome />} />
+        <Route
+          path={`${backend_url}/my-project/user/signup`}
+          element={<UserSignupPage />}
+        />
+        <Route
+          path={`${backend_url}/my-project/user/login`}
+          element={<UserLoginPage />}
+        />
 
         <Route
-          path="/my-project/technician/signup"
+          path={`${backend_url}/my-project/technician/signup`}
           element={<TechnicianSignup />}
         />
         <Route
-          path="/my-project/technician/login"
+          path={`${backend_url}/my-project/technician/login`}
           element={<TechnicianLogin />}
         />
 
         <Route path="*" element={<NotFoundPage />} />
 
         <Route
-          path="/my-project/technician/:id"
+          path={`${backend_url}/my-project/technician/:id`}
           element={
             <TechnicianProtected>
               <TechnicianHomePage />
@@ -61,7 +68,7 @@ function App() {
         </Route>
 
         <Route
-          path="/my-project/user/:id"
+          path={`${backend_url}/my-project/user/:id`}
           element={
             <UserProtected>
               <UserDashboard />

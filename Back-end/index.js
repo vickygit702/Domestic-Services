@@ -15,6 +15,7 @@ const techRoute = require("./routes/technician/techPage");
 const paymentRoute = require("./routes/Payment");
 
 const server = express();
+const port_prod = "https://domestic-services-backend.onrender.com";
 
 server.post(
   "/payment/stripe-webhook",
@@ -58,7 +59,7 @@ server.use(
   })
 );
 
-server.use("/uploads/profile", express.static("uploads"));
+server.use(`${port_prod}/uploads/profile`, express.static("uploads"));
 
 server.use("/auth/api", authRoutes);
 server.use("/admin", adminRoutes);
