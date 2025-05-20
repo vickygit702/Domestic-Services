@@ -2,7 +2,7 @@ import React from "react";
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-const backend_url = import.meta.env.VITE_BACKENDURL;
+import { backend_url } from "../../config";
 
 // Async thunk to update user profile
 export const updateUserProfile = createAsyncThunk(

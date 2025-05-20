@@ -8,7 +8,7 @@ import {
 } from "../../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-const backend_url = import.meta.env.VITE_BACKENDURL;
+import { backend_url } from "../../config";
 
 const UserSignup = () => {
   const navigate = useNavigate();

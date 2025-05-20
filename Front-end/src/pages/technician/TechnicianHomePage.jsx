@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import TechnicianLogout from "../TechnicianLogout";
-const backend_url = import.meta.env.VITE_BACKENDURL;
+import { backend_url } from "../../config";
 
 const TechnicianHomePage = () => {
   const { technician } = useSelector((state) => state.auth);

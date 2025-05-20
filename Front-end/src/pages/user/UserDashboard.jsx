@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 import UserLogout from "../UserLogout";
-const backend_url = import.meta.env.VITE_BACKENDURL;
+import { backend_url } from "../../config";
 
 const UserDashboard = () => {
   const { user } = useSelector((state) => state.auth);

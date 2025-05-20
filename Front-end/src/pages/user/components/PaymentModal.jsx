@@ -8,7 +8,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { toast } from "react-toastify";
 import ReviewModal from "./ReviewModel";
-const backend_url = import.meta.env.VITE_BACKENDURL;
+import { backend_url } from "../../config";
 
 const CheckoutForm = ({ booking, onSuccess, amt }) => {
   const stripe = useStripe();

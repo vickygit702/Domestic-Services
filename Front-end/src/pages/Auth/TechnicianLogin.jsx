@@ -9,7 +9,7 @@ import {
   loginTechnicianFailure,
 } from "../../redux/slices/authSlice";
 import { toast } from "react-toastify";
-const backend_url = import.meta.env.VITE_BACKENDURL;
+import { backend_url } from "../../config";
 
 const TechnicianLogin = () => {
   const [email, setEmail] = useState("");

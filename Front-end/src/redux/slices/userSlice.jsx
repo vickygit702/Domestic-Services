@@ -2,7 +2,7 @@ import React from "react";
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-const backend_url = import.meta.env.VITE_BACKENDURL;
+import { backend_url } from "../../config";
 
 // Async Thunk to fetch services list with dynamic URL
 export const fetchBookings = createAsyncThunk(

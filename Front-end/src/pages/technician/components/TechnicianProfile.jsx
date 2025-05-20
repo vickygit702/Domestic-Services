@@ -38,7 +38,7 @@ import {
   AccessTime,
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
-const backend_url = import.meta.env.VITE_BACKENDURL;
+import { backend_url } from "../../../config";
 
 const StyledCard = styled(Card)(({ theme }) => ({
   borderRadius: "12px",

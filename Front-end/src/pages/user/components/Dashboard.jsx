@@ -40,7 +40,7 @@ import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import { toast } from "react-toastify";
 
-const backend_url = import.meta.env.VITE_BACKENDURL;
+import { backend_url } from "../../config";
 
 const Dashboard = () => {
   const navigate = useNavigate();

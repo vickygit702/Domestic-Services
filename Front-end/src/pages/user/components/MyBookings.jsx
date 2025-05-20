@@ -5,7 +5,7 @@ import BookingDetailsModal from "./BookingDetailsModal";
 import PaymentModal from "./PaymentModal";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-const backend_url = import.meta.env.VITE_BACKENDURL;
+import { backend_url } from "../../config";
 
 const MyBookings = () => {
   const navigate = useNavigate();

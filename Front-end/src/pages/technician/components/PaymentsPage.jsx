@@ -38,7 +38,7 @@ import {
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { format } from "date-fns";
-const backend_url = import.meta.env.VITE_BACKENDURL;
+import { backend_url } from "../../../config";
 
 const PaymentsPage = () => {
   const theme = useTheme();
