@@ -30,7 +30,7 @@ import {
   Key,
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
-import { backend_url } from "../../config";
+import { backend_url } from "../../../config";
 
 const StyledCard = styled(Card)(({ theme }) => ({
   borderRadius: "12px",
