@@ -64,8 +64,8 @@ const UserSignup = () => {
     city: /^[a-zA-Z\s]{3,30}$/,
     state: /^[a-zA-Z\s]{3,30}$/,
     pincode: /^[0-9]{6}$/,
-    lat: /^-?([0-8]?[0-9]|90)(\.[0-9]{1,10})?$/,
-    lng: /^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,10})?$/,
+    lat: /^-?([0-8]?[0-9]|90)(\.[0-9]{1,15})?$/,
+    lng: /^-?([0-9]{1,2}|1[0-7][0-9]|180)(\.[0-9]{1,15})?$/,
   };
 
   // Error messages
@@ -80,8 +80,8 @@ const UserSignup = () => {
     city: "City should be 3-30 alphabets",
     state: "State should be 3-30 alphabets",
     pincode: "Pincode should be 6 digits",
-    lat: "Please enter a valid latitude (-90 to 90)",
-    lng: "Please enter a valid longitude (-180 to 180)",
+    lat: "Please enter a valid latitude (-90 to 90) with up to 15 decimal places",
+    lng: "Please enter a valid longitude (-180 to 180) with up to 15 decimal places",
   };
 
   // Validate field
@@ -187,9 +187,9 @@ const UserSignup = () => {
 
   useEffect(() => {
     if (user?.id) {
-      navigate(`/my-project/user/${user.id}`);
+      navigate(`/my-project/user/${user.id}`, { replace: true });
     }
-  }, [user, navigate]);
+  }, [user?.id]);
 
   useEffect(() => {
     if (isInitialRender.current) {

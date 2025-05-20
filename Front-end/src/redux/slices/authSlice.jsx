@@ -95,6 +95,7 @@ const authSlice = createSlice({
     signupUserSuccess(state, action) {
       state.user = action.payload;
       state.loading = false;
+      state.isVerified = true;
     },
     signupUserFailure(state, action) {
       state.error = action.payload;
@@ -105,6 +106,7 @@ const authSlice = createSlice({
     signupTechnicianSuccess(state, action) {
       state.technician = action.payload;
       state.loading = false;
+      state.isVerified = true;
     },
     signupTechnicianFailure(state, action) {
       state.error = action.payload;
