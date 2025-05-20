@@ -30,23 +30,23 @@ function App() {
   const routes = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route path="https://domestic-services-frontend.onrender.com/" element={<Welcome />} />
-        <Route path="https://domestic-services-frontend.onrender.com/my-project/user/signup" element={<UserSignupPage />} />
-        <Route path="https://domestic-services-frontend.onrender.com/my-project/user/login" element={<UserLoginPage />} />
+        <Route path="/" element={<Welcome />} />
+        <Route path="/my-project/user/signup" element={<UserSignupPage />} />
+        <Route path="/my-project/user/login" element={<UserLoginPage />} />
 
         <Route
-          path="https://domestic-services-frontend.onrender.com/my-project/technician/signup"
+          path="/my-project/technician/signup"
           element={<TechnicianSignup />}
         />
         <Route
-          path="https://domestic-services-frontend.onrender.com/my-project/technician/login"
+          path="/my-project/technician/login"
           element={<TechnicianLogin />}
         />
 
         <Route path="*" element={<NotFoundPage />} />
 
         <Route
-          path="https://domestic-services-frontend.onrender.com/my-project/technician/:id"
+          path="/my-project/technician/:id"
           element={
             <TechnicianProtected>
               <TechnicianHomePage />
@@ -61,7 +61,7 @@ function App() {
         </Route>
 
         <Route
-          path="https://domestic-services-frontend.onrender.com/my-project/user/:id"
+          path="/my-project/user/:id"
           element={
             <UserProtected>
               <UserDashboard />
