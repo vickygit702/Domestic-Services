@@ -53,7 +53,7 @@ server.post(
 server.use(express.json());
 server.use(
   cors({
-    origin: "http://localhost:5173", // Allow requests from this origin
+    origin: "https://domestic-services-frontend.onrender.com", // Allow requests from this origin
     credentials: true, // Allow cookies and credentials
   })
 );
