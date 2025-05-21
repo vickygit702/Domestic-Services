@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
 import { toast } from "react-toastify";
-import { backend_url } from "../config";
 
 const Welcome = () => {
   // Refs for section navigation
@@ -41,19 +40,19 @@ const Welcome = () => {
       name: "Vignesh S",
       role: "Founder & CEO",
       bio: "Home services expert with 15+ years experience in domestic solutions.",
-      img: `${backend_url}/uploads/profile/user/profile-user.png`,
+      img: "http://localhost:8000/uploads/profile/user/profile-user.png",
     },
     {
       name: "Santhosh SK",
       role: "Operations Manager",
       bio: "Ensures seamless service delivery and customer satisfaction.",
-      img: `${backend_url}/uploads/profile/user/profile-user.png`,
+      img: "http://localhost:8000/uploads/profile/user/profile-user.png",
     },
     {
       name: "Azhagumalai P",
       role: "Tech Lead",
       bio: "Develops our platform to connect you with the best professionals.",
-      img: `${backend_url}/uploads/profile/user/profile-user.png`,
+      img: "http://localhost:8000/uploads/profile/user/profile-user.png",
     },
   ];
 
@@ -113,17 +112,19 @@ const Welcome = () => {
         <div className="row justify-content-center align-items-center min-vh-100">
           <div className="col-lg-10 text-center">
             {/* Hero Section */}
-            <div className="mb-5 px-3">
-              <div
-                className="d-inline-block p-3 mb-4 rounded-4"
-                style={{
-                  background:
-                    "linear-gradient(45deg, rgba(253, 49, 192, 0.15) 0%, rgba(37,117,252,0.15) 100%)",
-                }}
-              >
-                <span className="badge bg-primary bg-opacity-10 text-black fs-3 fw-bold">
-                  PREMIUM DOMESTIC SOLUTIONS
-                </span>
+            <div className="mb-5 px-3 ">
+              <div className="d-flex justify-content-center d-sm-block">
+                <div
+                  className="d-inline-block p-3 mb-4 rounded-4"
+                  style={{
+                    background:
+                      "linear-gradient(45deg, rgba(253, 49, 192, 0.15) 0%, rgba(37,117,252,0.15) 100%)",
+                  }}
+                >
+                  <span className="badge bg-primary bg-opacity-10 text-black fs-3 fw-bold text-center">
+                    PREMIUM DOMESTIC SOLUTIONS
+                  </span>
+                </div>
               </div>
 
               <p
