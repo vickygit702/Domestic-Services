@@ -132,14 +132,15 @@ exports.bookService = async (req, res) => {
     const googleMapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
     // 3. Send SMS (Twilio example)
     try {
-      const message = `New booking details:
-        Service: ${serviceName}
-        Customer: ${user.user_name}
-        Contact: ${user.user_contact}
-        Address: ${user.user_address}
-        Date: ${bookingStartTime.toUTCString()}; 
-        Work Details: ${workDetail}
-        Location:${googleMapsLink}`;
+      const message = `🆕 *New Booking Details*
+
+🛠   ${serviceName}
+👤  ${user.user_name}
+📞  ${user.user_contact}
+🏠  ${user.user_address}
+📅  ${bookingStartTime.toUTCString()}
+📝  ${workDetail}
+🧭  ${googleMapsLink}`;
       await twilioClient.messages.create({
         body: message,
         from: process.env.TWILIO_PHONE_NUMBER,
@@ -256,19 +257,16 @@ exports.bookServicePremiumUser = async (req, res) => {
     const googleMapsLink = `https://www.google.com/maps?q=${lat},${lng}`;
     // 3. Send SMS (Twilio example)
     try {
-      const message = `New booking details:
-        Service: ${serviceName}
-        Customer: ${user.user_name}
-        Contact: ${user.user_contact}
-        Address: ${user.user_address}
-        Date: ${bookingStartTime.toUTCString()}; 
-        Work Details: ${workDetail}
-        Location:${googleMapsLink}`;
-      // await twilioClient.messages.create({
-      //   body: message,
-      //   from: process.env.TWILIO_PHONE_NUMBER,
-      //   to: technicianPhone,
-      // });
+      const message = `🆕 *New Booking Details*
+
+🛠   ${serviceName}
+👤  ${user.user_name}
+📞  ${user.user_contact}
+🏠  ${user.user_address}
+📅  ${bookingStartTime.toUTCString()}
+📝  ${workDetail}
+🧭  ${googleMapsLink}`;
+
       console.log(" SMS sent to technician successfully", message);
     } catch (err) {
       console.error("SMS failed:", err.message);
