@@ -15,6 +15,7 @@ const techRoute = require("./routes/technician/techPage");
 const paymentRoute = require("./routes/Payment");
 
 const server = express();
+const port = process.env.PORT || 8000;
 
 server.post(
   "/payment/stripe-webhook",
@@ -71,7 +72,7 @@ server.get("/", (req, res) => {
   res.status(200).json({ message: " server is running" });
 });
 
-server.listen(8000, () => {
+server.listen(port, () => {
   connectToDB();
   console.log("server is running on port 8000");
 });
