@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: technician-api
+    env: python
+    buildCommand: pip install -r backend/python-model/requirements.txt
+    startCommand: gunicorn findtechnician:app
+    envVars:
+      - key: PORT
+        value: 10000 # Render uses this for internal routing
+    plan: free
+    rootDir: backend/python-model

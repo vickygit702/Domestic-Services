@@ -70,7 +70,7 @@ exports.bookService = async (req, res) => {
 
     // Step 2: Call AI model to find the nearest technician
     const response = await axios.post(
-      "http://127.0.0.1:5000/find-technicians",
+      "https://technician-api.onrender.com/find-technicians",
       {
         userLocation: formattedUserLocation,
         technicians: formattedTechnician,
