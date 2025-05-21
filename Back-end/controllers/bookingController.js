@@ -119,13 +119,14 @@ exports.bookService = async (req, res) => {
     }
 
     let technicianPhone = String(selectedTechnician.tech_contact); // Force convert to string
-
+    console.log("get mobileno :" + technicianPhone);
     // 2. Format the number (add +91 for India)
     technicianPhone = technicianPhone.replace(/\D/g, ""); // Remove non-digits
 
     if (technicianPhone.length === 10) {
       technicianPhone = `+91${technicianPhone}`; // Indian number
     }
+    console.log("after check mobileno :" + technicianPhone);
     //map location
     const lat = user.user_location.lat;
     const lng = user.user_location.lng;
@@ -266,6 +267,11 @@ exports.bookServicePremiumUser = async (req, res) => {
 📅  ${bookingStartTime.toUTCString()}
 📝  ${workDetail}
 🧭  ${googleMapsLink}`;
+      await twilioClient.messages.create({
+        body: message,
+        from: process.env.TWILIO_PHONE_NUMBER,
+        to: technicianPhone,
+      });
 
       console.log(" SMS sent to technician successfully", message);
     } catch (err) {
