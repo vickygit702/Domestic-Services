@@ -1,5 +1,6 @@
 import { Modal, Button } from "react-bootstrap";
 import { motion } from "framer-motion";
+import React from "react";
 
 const BookingDetailsModal = ({ booking, show, onHide }) => {
   if (!booking) return null;

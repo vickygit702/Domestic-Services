@@ -140,11 +140,11 @@ exports.bookService = async (req, res) => {
         Date: ${bookingStartTime.toUTCString()}; 
         Work Details: ${workDetail}
         Location:${googleMapsLink}`;
-      // await twilioClient.messages.create({
-      //   body: message,
-      //   from: process.env.TWILIO_PHONE_NUMBER,
-      //   to: technicianPhone,
-      // });
+      await twilioClient.messages.create({
+        body: message,
+        from: process.env.TWILIO_PHONE_NUMBER,
+        to: technicianPhone,
+      });
       console.log(" SMS sent to technician successfully", message);
     } catch (err) {
       console.error("SMS failed:", err.message);
