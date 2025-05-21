@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 import { toast } from "react-toastify";
+import { backend_url } from "../config";
 
 const Welcome = () => {
   // Refs for section navigation
