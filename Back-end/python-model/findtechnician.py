@@ -22,5 +22,4 @@ def find_technicians():
     details = technicians[closest_index]
     return jsonify(details)
 
-if __name__ == '__main__':
-    app.run()
+
