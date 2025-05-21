@@ -112,17 +112,30 @@ const Welcome = () => {
         <div className="row justify-content-center align-items-center min-vh-100">
           <div className="col-lg-10 text-center">
             {/* Hero Section */}
-            <div className="mb-5 px-3">
-              <div
+            <div className="mb-5 px-3 ">
+              {/* <div
                 className="d-inline-block p-3 mb-4 rounded-4"
                 style={{
                   background:
                     "linear-gradient(45deg, rgba(253, 49, 192, 0.15) 0%, rgba(37,117,252,0.15) 100%)",
                 }}
               >
-                <span className="badge bg-primary bg-opacity-10 text-black fs-3 fw-bold">
+                <span className="badge bg-primary bg-opacity-10 text-black fs-3 fw-bold text-center">
                   PREMIUM DOMESTIC SOLUTIONS
                 </span>
+              </div> */}
+              <div className="d-flex justify-content-center d-sm-block">
+                <div
+                  className="d-inline-block p-3 mb-4 rounded-4"
+                  style={{
+                    background:
+                      "linear-gradient(45deg, rgba(253, 49, 192, 0.15) 0%, rgba(37,117,252,0.15) 100%)",
+                  }}
+                >
+                  <span className="badge bg-primary bg-opacity-10 text-black fs-3 fw-bold text-center">
+                    PREMIUM DOMESTIC SOLUTIONS
+                  </span>
+                </div>
               </div>
 
               <p
